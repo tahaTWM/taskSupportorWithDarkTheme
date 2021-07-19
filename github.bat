@@ -6,8 +6,9 @@ set /p repo="Enter Repo Name : "
 git remote add %repo% https://github.com/tahaTWM/%repo%.git
 
 rem set /p id="Enter Commit Message : "
-set /p time=%date% - %time%
-git commit -m %time%
+set TM=%DATE%, %TIME%
+
+git commit -m "%TM%"
 
 set /p branch="main or master ? "
 if %branch% == main (git branch -M %branch%) 
