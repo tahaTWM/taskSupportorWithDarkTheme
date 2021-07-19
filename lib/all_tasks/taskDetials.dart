@@ -91,21 +91,20 @@ class _TaskDetailsState extends State<TaskDetails> {
                                         .toString()[0]
                                         .toUpperCase()),
                                   )
-                                : CircleAvatar(backgroundImage: NetworkImage,)
-                            // Container(
-                            //     width: 100,
-                            //     height: 100,
-                            //     padding: EdgeInsets.all(0),
-                            //     margin: EdgeInsets.all(0),
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.amber,
-                            //       shape: BoxShape.circle,
-                            //       image: DecorationImage(
-                            //         image: NetworkImage(url),
-                            //         fit: BoxFit.contain,
-                            //       ),
-                            //     ),
-                            //   ),
+                                : Container(
+                                    width: 100,
+                                    height: 100,
+                                    padding: EdgeInsets.all(0),
+                                    margin: EdgeInsets.all(0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage(url),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
                             title: Text(
                               _history[index]["firstName"],
                               overflow: TextOverflow.ellipsis,

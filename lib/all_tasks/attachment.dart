@@ -19,7 +19,8 @@ import '../main.dart';
 
 class Attachment extends StatefulWidget {
   int taskID;
-  Attachment(this.taskID);
+  String prority;
+  Attachment(this.taskID, this.prority);
   @override
   _AttachmentState createState() => _AttachmentState();
 }
@@ -135,52 +136,94 @@ class _AttachmentState extends State<Attachment> {
           child: res != null
               ? ListView.builder(
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      onLongPress: () {
-                        print(res[index]["id"].toString() + "\n");
-                        print(res[index]["path"].toString().split('/')[3]);
-                        _confirmDelete(
-                            context,
-                            res[index]["id"],
-                            int.parse(
-                                res[index]["path"].toString().split('/')[3]));
-                      },
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "${MyApp.url}${res[index]["user_avatar"]}"),
-                      ),
-                      title: Text(
-                        res[index]["firstName"] +
-                            " " +
-                            res[index]["secondName"],
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      subtitle: Text(
-                        res[index]["name"],
-                      ),
-                      // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
-                      // overflow: TextOverflow.ellipsis,
-                      // ),
-                      trailing: res[index]["attachment_type"] == "IMAGE"
-                          ? InkWell(
-                              onTap: () => showDialog(
-                                  context: context,
-                                  builder: (_) => ImageDialog(
-                                      "${MyApp.url}${res[index]["path"]}")),
-                              child: Image.network(
-                                  "${MyApp.url}${res[index]["path"]}"),
-                            )
-                          : IconButton(
-                              onPressed: () async {
-                                final url = "${MyApp.url}${res[index]["path"]}";
-                                final file = await loadNetwork(url);
-                                openPDF(context, file);
-                              },
-                              icon: Icon(CupertinoIcons.paperclip),
+                    var url = "${MyApp.url}${res[index]["user_avatar"]}";
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.only(
+                              bottom: 5, left: 10, right: 10, top: 5),
+                          onLongPress: () {
+                            print(res[index]["id"].toString() + "\n");
+                            print(res[index]["path"].toString().split('/')[3]);
+                            _confirmDelete(
+                                context,
+                                res[index]["id"],
+                                int.parse(res[index]["path"]
+                                    .toString()
+                                    .split('/')[3]));
+                          },
+                          leading: url.split(':')[2].toString().contains('null')
+                              ? Container(
+                                  padding: EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 2,
+                                      color: widget.prority == "URGENT"
+                                          ? Color.fromRGBO(248, 135, 135, 1)
+                                          : Color.fromRGBO(46, 204, 113, 1),
+                                    ),
+                                    color: Colors.grey.withOpacity(0.2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(res[index]["firstName"][0]
+                                      .toString()
+                                      .toUpperCase()),
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  padding: EdgeInsets.all(0),
+                                  margin: EdgeInsets.all(0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: NetworkImage(url),
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                          title: Text(
+                            res[index]["firstName"] +
+                                " " +
+                                res[index]["secondName"],
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
                             ),
+                          ),
+                          subtitle: Text(
+                            res[index]["name"],
+                          ),
+                          // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
+                          // overflow: TextOverflow.ellipsis,
+                          // ),
+                          trailing: res[index]["attachment_type"] == "IMAGE"
+                              ? InkWell(
+                                  onTap: () => showDialog(
+                                      context: context,
+                                      builder: (_) => ImageDialog(
+                                          "${MyApp.url}${res[index]["path"]}")),
+                                  child: Image.network(
+                                      "${MyApp.url}${res[index]["path"]}"),
+                                )
+                              : IconButton(
+                                  onPressed: () async {
+                                    final url =
+                                        "${MyApp.url}${res[index]["path"]}";
+                                    final file = await loadNetwork(url);
+                                    openPDF(context, file);
+                                  },
+                                  icon: Icon(CupertinoIcons.paperclip),
+                                ),
+                        ),
+                        Divider(
+                          //  color:Colors.black,
+                          thickness: 1,
+                          indent: 50,
+                          endIndent: 50,
+                        )
+                      ],
                     );
                   },
                   itemCount: res.length,
@@ -195,7 +238,7 @@ class _AttachmentState extends State<Attachment> {
   //image picker
   //select betwen camera and storage
 
-  void _showPicker(context) async {
+  _showPicker(context) async {
     await Permission.storage.request();
     showModalBottomSheet(
         context: context,
@@ -269,15 +312,13 @@ class _AttachmentState extends State<Attachment> {
                         FilePickerResult result =
                             await FilePicker.platform.pickFiles(
                           type: FileType.custom,
-                          allowedExtensions: ['pdf'],
+                          allowedExtensions: ['pdf', 'doc', 'docx'],
                         );
 
                         if (result != null) {
                           File file2 = File(result.files.single.path);
-                          // _confromUploadImageOrFile(context, file2);
-                          uploadimage(context, file2);
-                        } else {
-                          Navigator.of(context).pop();
+                          _confromUploadImageOrFile(context, file2);
+                          // uploadimage(context, file2);
                         }
                         // FilePickerResult file2 =
                         //     await FilePicker.platform.pickFiles(
@@ -308,35 +349,36 @@ class _AttachmentState extends State<Attachment> {
     var _image = (await ImagePicker.pickImage(
       source: ImageSource.gallery,
     ));
-    _confromUploadImageOrFile(context, _image);
+    if (_image != null) _confromUploadImageOrFile(context, _image);
   }
 
   _imgFromCamera(BuildContext context) async {
     // ignore: deprecated_member_use
     var _image = (await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50));
-    _confromUploadImageOrFile(context, _image);
+    if (_image != null) _confromUploadImageOrFile(context, _image);
   }
 
-  _confromUploadImageOrFile(BuildContext context, File file) {
+  _confromUploadImageOrFile(BuildContext context, File file1) {
     return showDialog(
         context: context,
         builder: (contect) {
           return AlertDialog(
-            title: Text("Upload Image"),
+            title: Text("Upload Attachment"),
             content: Text(
-              "Are Sure You want to upload this Attachment Image?",
+              "Are Sure You want to upload this Attachment?",
               overflow: TextOverflow.ellipsis,
+              maxLines: 4,
             ),
             actions: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
-                  uploadimage(context, file);
+                  uploadimage(context, file1);
                   Navigator.pop(context);
                 },
                 child: Text("Yes"),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text("No"),
               ),
@@ -349,8 +391,6 @@ class _AttachmentState extends State<Attachment> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     if (_file != null) {
-      print("---------------------");
-      print(lookupMimeType(_file.path));
       var fileType = lookupMimeType(_file.path);
       // if (fileType.split('/')[0] == "image") {
       var imageBytes = _file.readAsBytesSync();
@@ -449,14 +489,14 @@ class _AttachmentState extends State<Attachment> {
               overflow: TextOverflow.ellipsis,
             ),
             actions: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   _deleteAttachment(id, folderID);
                   Navigator.pop(context);
                 },
                 child: Text("Yes"),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text("No"),
               ),

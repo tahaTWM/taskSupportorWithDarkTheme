@@ -32,7 +32,7 @@ class _NewLoginForTestingState extends State<NewLoginForTesting> {
               ),
               SizedBox(height: 20),
               // ignore: deprecated_member_use
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => _logIn(),
                 child: Text("Login"),
               ),
@@ -68,6 +68,5 @@ class _NewLoginForTestingState extends State<NewLoginForTesting> {
 
     await pref.setString(
         "userAvatar", jsonResponse['data']['user_avatar'].toString());
-
   }
 }

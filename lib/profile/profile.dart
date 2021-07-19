@@ -832,7 +832,7 @@ class _ProfileState extends State<Profile> {
               overflow: TextOverflow.ellipsis,
             ),
             actions: [
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   setState(() {
                     image = _image;
@@ -842,7 +842,7 @@ class _ProfileState extends State<Profile> {
                 },
                 child: Text("Yes"),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text("No"),
               ),

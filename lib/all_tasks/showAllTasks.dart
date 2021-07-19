@@ -684,8 +684,8 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Attachment(
-                                          newListReversed[index]["taskId"],
-                                        )));
+                                        newListReversed[index]["taskId"],
+                                        newListReversed[index]["prority"])));
                           },
                           child: Row(
                             children: [
