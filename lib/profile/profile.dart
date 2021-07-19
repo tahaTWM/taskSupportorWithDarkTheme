@@ -271,7 +271,7 @@ class _ProfileState extends State<Profile> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.45,
                           height: MediaQuery.of(context).size.height * 0.04,
-                          color: Colors.grey.withOpacity(0.6),
+                          color: Colors.grey.withOpacity(0.1),
                           child: Center(
                             child: Icon(
                               Icons.image,

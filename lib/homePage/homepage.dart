@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                   width: width < 400 ? 33 : 40,
                                   height: width < 400 ? 33 : 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.3),
+                                    color: Colors.grey.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(50),
                                     border: Border.all(
                                       width: 1,
@@ -428,7 +428,7 @@ class _HomePageState extends State<HomePage> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.grey.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
                                 width: 2.3,

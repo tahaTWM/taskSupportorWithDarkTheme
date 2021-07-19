@@ -880,7 +880,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withOpacity(0.1),
                   ),
                   child: Center(
                     child: TextField(

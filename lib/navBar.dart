@@ -91,8 +91,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _navBarItemList.add(buildNavBarItem(_iconList[i], _textList[i], i));
     }
 
-    return Row(
-      children: _navBarItemList,
+    return Container(
+      child: Row(
+        children: _navBarItemList,
+      ),
     );
   }
 
@@ -108,11 +110,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       child: Container(
         height: width < 400 ? 50 : 60,
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          color: Colors.grey.withOpacity(0.1),
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(20),
+          //   topRight: Radius.circular(20),
+          // ),
         ),
         width: MediaQuery.of(context).size.width / _iconList.length,
         child: Column(

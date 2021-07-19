@@ -66,25 +66,46 @@ class _TaskDetailsState extends State<TaskDetails> {
                   itemCount: _history.length,
                   itemBuilder: (BuildContext context, int index) {
                     var url = "${MyApp.url}${_history[index]["user_avatar"]}";
-
                     return Column(
                       children: [
                         ListTile(
                             contentPadding: EdgeInsets.only(
-                                bottom: 10, left: 10, right: 10, top: 5),
-                            leading: url.contains("null")
+                                bottom: 5, left: 10, right: 10, top: 5),
+                            leading: url
+                                    .split(':')[2]
+                                    .toString()
+                                    .contains('null')
                                 ? Container(
-                                    padding: EdgeInsets.all(10),
-                                    decoration:
-                                        BoxDecoration(shape: BoxShape.circle),
+                                    padding: EdgeInsets.all(14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 2,
+                                        color: widget.prority == "URGENT"
+                                            ? Color.fromRGBO(248, 135, 135, 1)
+                                            : Color.fromRGBO(46, 204, 113, 1),
+                                      ),
+                                      color: Colors.grey.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
                                     child: Text(_history[index]["firstName"]
                                         .toString()[0]
                                         .toUpperCase()),
                                   )
-                                : CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "${MyApp.url}${_history[index]["user_avatar"]}"),
-                                  ),
+                                : CircleAvatar(backgroundImage: NetworkImage,)
+                            // Container(
+                            //     width: 100,
+                            //     height: 100,
+                            //     padding: EdgeInsets.all(0),
+                            //     margin: EdgeInsets.all(0),
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.amber,
+                            //       shape: BoxShape.circle,
+                            //       image: DecorationImage(
+                            //         image: NetworkImage(url),
+                            //         fit: BoxFit.contain,
+                            //       ),
+                            //     ),
+                            //   ),
                             title: Text(
                               _history[index]["firstName"],
                               overflow: TextOverflow.ellipsis,
