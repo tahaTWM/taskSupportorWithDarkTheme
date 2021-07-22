@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/widgets.dart';
 import '../canlendar/craeteNewTask.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
 import '../main.dart';
 
 // ignore: must_be_immutable
@@ -615,6 +614,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // task name
                               Flexible(
                                 child: Text(
                                   newListReversed[index]["title"],
@@ -625,6 +625,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              // task creation date
                               Text(
                                 timeago.format(newDateTime),
                                 style: TextStyle(
@@ -663,21 +664,33 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                     padding: const EdgeInsets.only(top: 30, bottom: 10),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.group_outlined,
-                          // color:Color.fromRGBO(158, 158, 158, 1),
-                          size: 25,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          newListReversed[index]["taskMembers"]
-                              .length
-                              .toString(),
-                          style: TextStyle(
-                              // color:Color.fromRGBO(158, 158, 158, 1),
-                              fontSize: 18),
+                        // task members
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.group_outlined,
+                                  // color:Color.fromRGBO(158, 158, 158, 1),
+                                  size: 25,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  newListReversed[index]["taskMembers"]
+                                      .length
+                                      .toString(),
+                                  style: TextStyle(
+                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         SizedBox(width: 30),
+                        // task attachment
                         InkWell(
                           onTap: () async {
                             Navigator.push(
@@ -687,21 +700,24 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                         newListReversed[index]["taskId"],
                                         newListReversed[index]["prority"])));
                           },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.attachment_rounded,
-                                // color:Color.fromRGBO(158, 158, 158, 1),
-                                size: 25,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Attachment",
-                                style: TextStyle(
-                                    // color:Color.fromRGBO(158, 158, 158, 1),
-                                    fontSize: 18),
-                              ),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.attachment_rounded,
+                                  // color:Color.fromRGBO(158, 158, 158, 1),
+                                  size: 25,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Attachment",
+                                  style: TextStyle(
+                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],

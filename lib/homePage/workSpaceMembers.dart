@@ -66,8 +66,10 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                       margin: EdgeInsets.all(15),
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                          //  color:Color.fromRGBO(243, 246, 255, 1),
-                          borderRadius: BorderRadius.circular(10)),
+                        //  color:Color.fromRGBO(243, 246, 255, 1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.lightBlue, width: 2),
+                      ),
                       child: Center(
                         child: TextFormField(
                           autofocus: keyboard,

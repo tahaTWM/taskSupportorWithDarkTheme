@@ -24,6 +24,7 @@ class MyApp extends StatefulWidget {
   // static String url = "http://192.168.1.106:100";
 
   static bool mode = false;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -49,20 +50,17 @@ class _MyAppState extends State<MyApp> {
           headline6: TextStyle(color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
-            titleTextStyle: TextStyle(color: Colors.black),
-            textTheme: TextTheme(
-              bodyText1: TextStyle(color: Colors.black),
-              bodyText2: TextStyle(color: Colors.black),
-            ),
-            // back buttom of appbar
-            iconTheme: IconThemeData(color: Colors.black)),
-        bottomAppBarColor: Colors.black,
+          titleTextStyle: TextStyle(color: Colors.black),
+          textTheme: TextTheme(
+            bodyText1: TextStyle(color: Colors.black),
+            bodyText2: TextStyle(color: Colors.black),
+          ),
+          // back buttom of appbar
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
 
-        bottomAppBarTheme: BottomAppBarTheme(color: Colors.black),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(backgroundColor: Colors.black),
-        bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black),
-        backgroundColor: Colors.black,
+        buttonTheme: ButtonThemeData(
+            buttonColor: Colors.blue, textTheme: ButtonTextTheme.primary),
 
         // shadowColor: Colors.grey[300],
         iconTheme: IconThemeData(color: Colors.blue),

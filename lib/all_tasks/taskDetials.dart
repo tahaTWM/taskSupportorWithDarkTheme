@@ -21,15 +21,17 @@ class TaskDetails extends StatefulWidget {
   _TaskDetailsState createState() => _TaskDetailsState();
 }
 
-class _TaskDetailsState extends State<TaskDetails> {
+class _TaskDetailsState extends State<TaskDetails>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
+  TabController _tabController;
 
   var _history = [];
   var _timeSort = [];
-
   @override
   void initState() {
     _showHistory(widget.taskID);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 

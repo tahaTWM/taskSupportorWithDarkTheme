@@ -54,6 +54,7 @@ class _ProfileState extends State<Profile> {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
   var imagePath;
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -371,7 +372,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: width > 400 ? 90 : 30,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () => bottomsheet(context, "Edit Account"),
                 child: Container(
                   child: Column(
@@ -381,8 +382,13 @@ class _ProfileState extends State<Profile> {
                         width: width - 100,
                         height: MediaQuery.of(context).size.height * 0.06,
                         decoration: BoxDecoration(
-                            //  color: Color.fromRGBO(0, 82, 205, 0.1),
-                            borderRadius: BorderRadius.circular(30)),
+                          //  color: Color.fromRGBO(0, 82, 205, 0.1),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.blue,
+                          ),
+                        ),
                         child: Center(
                             child: Text(
                           "Edit Account",
@@ -396,7 +402,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(
                 height: width > 400 ? 30 : 20,
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () => bottomsheet(context, "Change Password"),
                 child: Container(
                   child: Column(
@@ -406,8 +412,13 @@ class _ProfileState extends State<Profile> {
                         width: width - 100,
                         height: MediaQuery.of(context).size.height * 0.06,
                         decoration: BoxDecoration(
-                            //  color: Color.fromRGBO(0, 82, 205, 0.1),
-                            borderRadius: BorderRadius.circular(30)),
+                          //  color: Color.fromRGBO(0, 82, 205, 0.1),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.blue,
+                          ),
+                        ),
                         child: Center(
                             child: Text(
                           "Change Password",
@@ -505,7 +516,7 @@ class _ProfileState extends State<Profile> {
       return showAdaptiveActionSheet(
         context: context,
         title: const Text('Change Password'),
-        bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
+        // bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
         actions: <BottomSheetAction>[
           // ignore: missing_required_param
           BottomSheetAction(
@@ -528,7 +539,13 @@ class _ProfileState extends State<Profile> {
                     ),
                 decoration: InputDecoration(
                   hintText: "Enter Old Password",
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   icon: Icon(
                     Icons.vpn_key_outlined,
                     //  color: Color.fromRGBO(0, 82, 205, 1),
@@ -559,7 +576,13 @@ class _ProfileState extends State<Profile> {
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Enter New Password",
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   icon: Icon(
                     Icons.vpn_key,
                     //  color: Color.fromRGBO(0, 82, 205, 1),
@@ -590,7 +613,13 @@ class _ProfileState extends State<Profile> {
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Confirm New Password",
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   icon: Icon(
                     Icons.vpn_key,
                     //  color: Color.fromRGBO(0, 82, 205, 1),
@@ -616,7 +645,7 @@ class _ProfileState extends State<Profile> {
       return showAdaptiveActionSheet(
         context: context,
         title: const Text('Edit Profile'),
-        bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
+        // bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
         actions: <BottomSheetAction>[
           // ignore: missing_required_param
           BottomSheetAction(
@@ -638,7 +667,13 @@ class _ProfileState extends State<Profile> {
                     //  color: Color.fromRGBO(0, 82, 205, 1),
                     ),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   icon: Icon(
                     Icons.person_rounded,
                     //  color: Color.fromRGBO(0, 82, 205, 1),
@@ -667,7 +702,13 @@ class _ProfileState extends State<Profile> {
                     //  color: Color.fromRGBO(0, 82, 205, 1),
                     ),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   icon: Icon(
                     Icons.person_rounded,
                     //  color: Color.fromRGBO(0, 82, 205, 1),
@@ -861,43 +902,65 @@ class _ProfileState extends State<Profile> {
     };
     var response = null, jsonResponse = null;
     var url = Uri.parse("${MyApp.url}/user/password/reset");
-    if (newPassword == confirmPassword) {
-      response = http.post(url,
-          headers: requestHeaders,
-          body: jsonEncode(<String, String>{
-            "oldPassword": oldPassword,
-            "newPassword": newPassword,
-          }));
-      jsonResponse = json.decode(response.body);
+    if (oldPassword != null && oldPassword.isNotEmpty) {
+      if (newPassword == confirmPassword) {
+        response = http.post(url,
+            headers: requestHeaders,
+            body: jsonEncode(<String, String>{
+              "oldPassword": oldPassword,
+              "newPassword": newPassword,
+            }));
+        jsonResponse = json.decode(response.body);
 
-      if (jsonResponse["successful"]) {
-        scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+        if (jsonResponse["successful"]) {
+          scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+              duration: Duration(seconds: 5),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Password is updated",
+                    style: TextStyle(
+                        //  color: Colors.white,
+                        fontFamily: "RubikL",
+                        fontSize: w > 400 ? 20 : 17),
+                  ),
+                  Icon(
+                    Icons.check,
+                    //  color: Colors.green,
+                  ),
+                ],
+              )));
+        }
+        if (!jsonResponse["successful"]) {
+          scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+              duration: Duration(seconds: 5),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    jsonResponse["message"],
+                    style: TextStyle(
+                        //  color: Colors.white,
+                        fontFamily: "RubikL",
+                        fontSize: w > 400 ? 20 : 17),
+                  ),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.yellow,
+                  ),
+                ],
+              )));
+        }
+      } else {
+        scaffoldMessengerKey.currentState.showSnackBar(
+          SnackBar(
             duration: Duration(seconds: 5),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Password is updated",
-                  style: TextStyle(
-                      //  color: Colors.white,
-                      fontFamily: "RubikL",
-                      fontSize: w > 400 ? 20 : 17),
-                ),
-                Icon(
-                  Icons.check,
-                  //  color: Colors.green,
-                ),
-              ],
-            )));
-      }
-      if (!jsonResponse["successful"]) {
-        scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
-            duration: Duration(seconds: 5),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  jsonResponse["message"],
+                  "Input password Error",
                   style: TextStyle(
                       //  color: Colors.white,
                       fontFamily: "RubikL",
@@ -905,19 +968,22 @@ class _ProfileState extends State<Profile> {
                 ),
                 Icon(
                   Icons.warning_amber_rounded,
-                  //  color: Colors.yellow,
+                  color: Colors.yellow,
                 ),
               ],
-            )));
+            ),
+          ),
+        );
       }
     } else {
-      scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+      scaffoldMessengerKey.currentState.showSnackBar(
+        SnackBar(
           duration: Duration(seconds: 5),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Input password Error",
+                "Old password is plank",
                 style: TextStyle(
                     //  color: Colors.white,
                     fontFamily: "RubikL",
@@ -925,10 +991,12 @@ class _ProfileState extends State<Profile> {
               ),
               Icon(
                 Icons.warning_amber_rounded,
-                //  color: Colors.yellow,
+                color: Colors.yellow,
               ),
             ],
-          )));
+          ),
+        ),
+      );
     }
   }
 
