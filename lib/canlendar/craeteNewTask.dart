@@ -279,7 +279,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
             style: Theme.of(context).textTheme.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 24,
-                  //  color:Colors.black,
+                  // color: Theme.of(context).primaryColorDark,
                 ),
             controller: _textEditingControllerTitle,
             keyboardType: TextInputType.text,
@@ -323,7 +323,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                     //  color:Color.fromRGBO(0, 104, 255, 1),
                     ),
               ),
-              focusColor: Color.fromRGBO(0, 104, 255, 1),
+              // focusColor: Color.fromRGBO(0, 104, 255, 1),
             ),
             onChanged: (str) {
               // To do

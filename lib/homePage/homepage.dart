@@ -453,20 +453,10 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Row(
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            SharedPreferences _pref =
-                                await SharedPreferences.getInstance();
-                            // _pref.setBool("star$index", star = !star);
-                            // print(star);
-                            // print(index);
-                            _getStarBool();
-                          },
-                          child: Icon(
-                            Icons.star_border_rounded,
-                            size: width > 400 ? 50 : 25,
-                            // color:  Color.fromRGBO(132, 132, 132, 1),
-                          ),
+                        Icon(
+                          Icons.star_border_rounded,
+                          size: width > 400 ? 50 : 25,
+                          // color:  Color.fromRGBO(132, 132, 132, 1),
                         ),
                         SizedBox(width: 10),
                         PopupMenuButton(
@@ -1041,15 +1031,5 @@ class _HomePageState extends State<HomePage> {
     if (!jsonResponse["successful"]) {
       print(jsonResponse["successful"]);
     }
-  }
-
-  _getStarBool(int index) async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    // print(_pred.getBool("star$index"));
-    // return _pred.getBool("star$index") == null
-    //     ? false
-    //     : _pred.getBool("star$index");
-    print(_pref.getBool("star${index}"));
-    print(_pref.getKeys());
   }
 }

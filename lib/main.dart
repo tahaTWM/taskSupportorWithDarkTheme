@@ -60,7 +60,9 @@ class _MyAppState extends State<MyApp> {
         ),
 
         buttonTheme: ButtonThemeData(
-            buttonColor: Colors.blue, textTheme: ButtonTextTheme.primary),
+          buttonColor: Colors.blue,
+        ),
+        buttonColor: Colors.black,
 
         // shadowColor: Colors.grey[300],
         iconTheme: IconThemeData(color: Colors.blue),
@@ -75,6 +77,9 @@ class _MyAppState extends State<MyApp> {
           bodyText2: TextStyle(color: Colors.black),
           button: TextStyle(color: Colors.yellow),
           subtitle1: TextStyle(color: Colors.black),
+          headline6: TextStyle(color: Colors.black),
+          subtitle2: TextStyle(color: Colors.black),
+          caption: TextStyle(color: Colors.black),
         ),
       ),
       darkTheme: ThemeData.dark()

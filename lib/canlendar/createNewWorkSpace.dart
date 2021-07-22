@@ -317,7 +317,7 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
               borderRadius: BorderRadius.circular(50),
               border: Border.all(
                 width: 1,
-                //  color:Color.fromRGBO(0, 104, 255, 1),
+                color: Color.fromRGBO(0, 104, 255, 1),
               ),
             ),
             width: double.infinity,
