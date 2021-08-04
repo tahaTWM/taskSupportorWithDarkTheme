@@ -455,7 +455,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Icon(
                           Icons.star_border_rounded,
-                          size: width > 400 ? 50 : 25,
+                          size: 35,
                           // color:  Color.fromRGBO(132, 132, 132, 1),
                         ),
                         SizedBox(width: 10),
@@ -465,7 +465,7 @@ class _HomePageState extends State<HomePage> {
                                   BorderRadius.all(Radius.circular(15.0))),
                           icon: Icon(
                             Icons.more_horiz,
-                            size: width > 400 ? 40 : 25,
+                            size: 35,
                             // color:  Color.fromRGBO(132, 132, 132, 1),
                           ),
                           itemBuilder: (context) => [
@@ -477,7 +477,7 @@ class _HomePageState extends State<HomePage> {
                                     listOfWorkspace[index]["role"] == "employer"
                                         ? Icons.delete
                                         : Icons.logout,
-                                    size: width > 400 ? 30 : 20,
+                                    size: 30,
                                     // color:  Color.fromRGBO(158, 158, 158, 1),
                                   ),
                                   SizedBox(width: 12),
@@ -486,7 +486,7 @@ class _HomePageState extends State<HomePage> {
                                         ? "Delete"
                                         : "Leave",
                                     style: TextStyle(
-                                      fontSize: width > 400 ? 20 : 16,
+                                      fontSize: 20,
                                       fontFamily: "RubicB",
                                     ),
                                   )
@@ -500,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Icon(
                                           Icons.edit,
-                                          size: width > 400 ? 30 : 20,
+                                          size: 30,
                                           // color:
                                           // Color.fromRGBO(158, 158, 158, 1),
                                         ),
@@ -508,7 +508,7 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           "Edit",
                                           style: TextStyle(
-                                            fontSize: width > 400 ? 20 : 16,
+                                            fontSize: 20,
                                             fontFamily: "RubicB",
                                           ),
                                         )
@@ -521,14 +521,14 @@ class _HomePageState extends State<HomePage> {
                               child: Row(children: [
                                 Icon(
                                   Icons.add_circle_rounded,
-                                  size: width > 400 ? 30 : 20,
+                                  size: 30,
                                   // color:  Color.fromRGBO(158, 158, 158, 1),
                                 ),
                                 SizedBox(width: 12),
                                 Text(
                                   "Add Memeber",
                                   style: TextStyle(
-                                    fontSize: width > 400 ? 20 : 16,
+                                    fontSize: 20,
                                     fontFamily: "RubicB",
                                   ),
                                 ),
