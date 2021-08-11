@@ -24,7 +24,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       child: ScaffoldMessenger(
         key: scaffoldMessengerKey,
         child: Scaffold(
-          backgroundColor: Color.fromRGBO(243, 246, 255, 1),
+          // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
           body: Center(
             child: Container(
               padding: EdgeInsets.all(25),
@@ -49,8 +49,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                           "Workspacer",
                           style: TextStyle(
-                              fontSize: 42,
-                              color: Color.fromRGBO(62, 128, 255, 1)),
+                            fontSize: 42,
+                            // color: Color.fromRGBO(62, 128, 255, 1),
+                          ),
                         )),
                       ],
                     ),
@@ -63,9 +64,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           child: Text(
                             "Email",
                             style: TextStyle(
-                                fontSize: 22,
-                                fontFamily: "Rubik",
-                                color: Colors.black),
+                              fontSize: 22,
+                              fontFamily: "Rubik",
+                              // color: Colors.black,
+                            ),
                           ),
                         ),
                         Container(
@@ -74,7 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             style: TextStyle(
                               fontSize: 24,
                               fontFamily: "Rubik",
-                              color: Colors.black,
+                              // color: Colors.black,
                             ),
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -115,8 +117,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         SizedBox(height: 20),
                         Container(
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 82, 204, 1),
-                              borderRadius: BorderRadius.circular(10)),
+                            color: Colors.grey.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           width: double.infinity,
                           height: 60,
                           // ignore: deprecated_member_use
@@ -128,20 +131,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                               "Reset Password",
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: "RubikB",
-                                  color: Colors.white),
+                                fontSize: 22,
+                                fontFamily: "RubikB",
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(height: 10),
                         Container(
                           decoration: BoxDecoration(
-                              color: Color.fromRGBO(216, 229, 255, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Color.fromRGBO(0, 104, 255, 1))),
+                            color: Colors.grey.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           width: double.infinity,
                           height: 60,
                           // ignore: deprecated_member_use
@@ -153,9 +154,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                               "Back to LogIn",
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: "Rubik",
-                                  color: Color.fromRGBO(62, 128, 255, 1)),
+                                fontSize: 22,
+                                fontFamily: "Rubik",
+                              ),
                             ),
                           ),
                         ),

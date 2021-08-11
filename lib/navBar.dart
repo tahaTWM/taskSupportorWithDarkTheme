@@ -19,7 +19,7 @@ class _NavBarState extends State<NavBar> {
     _selectedItem = 0;
     super.initState();
     contents.add(HomePage(widget.fristName));
-    contents.add(Profile());
+    contents.add(Profile(widget.fristName));
     // contents.add(Profile());
     // contents.add(Profile());
     // contents.add(Profile());

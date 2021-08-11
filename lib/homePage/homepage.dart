@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -10,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 import '../navBar.dart';
 import '../homePage/workSpaceMembers.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
@@ -51,6 +47,8 @@ class _HomePageState extends State<HomePage> {
   bool theme = false;
 
   bool star = false;
+
+  bool imageFound = false;
 
   @override
   void initState() {
@@ -100,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              userAvatar.toString().contains("null")
+                              imageFound == false
                                   ? Container(
                                       width: width > 400 ? 60 : 40,
                                       height: width > 400 ? 60 : 40,
@@ -134,15 +132,25 @@ class _HomePageState extends State<HomePage> {
                                           if (loadingProgress == null)
                                             return child;
                                           return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes
-                                                  : null,
+                                            child: Container(
+                                              width: width > 400 ? 60 : 40,
+                                              height: width > 400 ? 60 : 40,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all()),
+                                              child: Center(
+                                                child: Text(
+                                                  widget.firstName
+                                                      .toString()
+                                                      .split('')[0]
+                                                      .toUpperCase(),
+                                                  style: TextStyle(
+                                                    fontSize: 26,
+                                                    // color:  Colors.black,
+                                                    fontFamily: "CCB",
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           );
                                         },
@@ -794,10 +802,16 @@ class _HomePageState extends State<HomePage> {
 
   checkWorkSpaces() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      userAvatar = sharedPreferences.getString("userAvatar");
-    });
-
+    if (sharedPreferences.getString("userAvatar") != null) {
+      setState(() {
+        imageFound = true;
+        userAvatar = sharedPreferences.getString("userAvatar");
+      });
+    } else {
+      setState(() {
+        imageFound = false;
+      });
+    }
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")

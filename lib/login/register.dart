@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../login/forgotPassword.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
 import 'logn.dart';
@@ -37,7 +34,7 @@ class _Register extends State<Register> {
       child: ScaffoldMessenger(
         key: scaffoldMessengerKey,
         child: Scaffold(
-          backgroundColor: Color.fromRGBO(243, 246, 255, 1),
+          // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.fromLTRB(25, 15, 25, 10),
@@ -61,8 +58,9 @@ class _Register extends State<Register> {
                       child: Text(
                     "Workspacer",
                     style: TextStyle(
-                        fontSize: w > 400 ? 35 : 25,
-                        color: Color.fromRGBO(62, 128, 255, 1)),
+                      fontSize: w > 400 ? 35 : 25,
+                      // color: Color.fromRGBO(62, 128, 255, 1),
+                    ),
                   )),
                   SizedBox(height: 10),
                   lebel(padding, "First Name"),
@@ -101,8 +99,9 @@ class _Register extends State<Register> {
                   SizedBox(height: 15),
                   Container(
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(0, 82, 204, 1),
-                        borderRadius: BorderRadius.circular(10)),
+                      color: Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     width: double.infinity,
                     height: 60,
                     // ignore: deprecated_member_use
@@ -116,19 +115,19 @@ class _Register extends State<Register> {
                       child: Text(
                         "Register",
                         style: TextStyle(
-                            fontSize: 22,
-                            fontFamily: "Rubik",
-                            color: Colors.white),
+                          fontSize: 22,
+                          fontFamily: "Rubik",
+                          // color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(216, 229, 255, 1),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            width: 1, color: Color.fromRGBO(0, 104, 255, 1))),
+                      color: Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     width: double.infinity,
                     height: 60,
                     // ignore: deprecated_member_use
@@ -140,9 +139,9 @@ class _Register extends State<Register> {
                       child: Text(
                         "Back to LogIn",
                         style: TextStyle(
-                            fontSize: 22,
-                            fontFamily: "Rubik",
-                            color: Color.fromRGBO(62, 128, 255, 1)),
+                          fontSize: 22,
+                          fontFamily: "Rubik",
+                        ),
                       ),
                     ),
                   ),
@@ -160,8 +159,10 @@ class _Register extends State<Register> {
       padding: padding,
       child: Text(
         text,
-        style:
-            TextStyle(fontSize: 22, fontFamily: "Rubik", color: Colors.black),
+        style: TextStyle(
+          fontSize: 22,
+          fontFamily: "Rubik",
+        ),
       ),
     );
   }
@@ -172,7 +173,7 @@ class _Register extends State<Register> {
       style: TextStyle(
         fontSize: w < 400 ? 19 : 24,
         fontFamily: "Rubik",
-        color: Colors.black,
+        // color: Colors.black,
       ),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(15),

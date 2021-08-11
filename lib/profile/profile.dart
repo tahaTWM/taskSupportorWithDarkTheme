@@ -17,6 +17,8 @@ import 'package:mime/mime.dart';
 import '../navBar.dart';
 
 class Profile extends StatefulWidget {
+  String fn;
+  Profile(this.fn);
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -26,9 +28,9 @@ class _ProfileState extends State<Profile> {
   bool showAllEventSwitch = false;
   bool emailNotifSwitch = false;
   var profileName = '';
-  var fName = '';
-  var sName = '';
-  var email = '';
+  String fName = '';
+  String sName = '';
+  String email = '';
   TextEditingController textEditingControllerFName = TextEditingController();
   TextEditingController textEditingControllerSName = TextEditingController();
   TextEditingController textEditingControllerEmail = TextEditingController();
@@ -53,7 +55,9 @@ class _ProfileState extends State<Profile> {
 
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
-  var imagePath;
+  var imagePath = "";
+
+  bool imageFound = false;
 
   @override
   Widget build(BuildContext context) {
@@ -215,55 +219,46 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Stack(
                   children: [
-                    if (imagePath == "null")
-                      image == null
-                          ? Container(
+                    imageFound == false
+                        ? Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            height: MediaQuery.of(context).size.width * 0.45,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(),
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.fn[0],
+                                style: TextStyle(
+                                    fontSize: width > 400 ? 80 : 40,
+                                    fontFamily: "CCB"),
+                              ),
+                            ))
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              "${MyApp.url}$imagePath",
                               width: MediaQuery.of(context).size.width * 0.45,
                               height: MediaQuery.of(context).size.width * 0.45,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  fName[0].toUpperCase(),
-                                  style: TextStyle(
-                                      fontSize: width > 400 ? 80 : 40,
-                                      fontFamily: "CCB"),
-                                ),
-                              ))
-                          : Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.45,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(width: 2),
-                              ),
-                              child: Image.file(image),
-                            )
-                    else
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          "${MyApp.url}$imagePath",
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          height: MediaQuery.of(context).size.width * 0.45,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes
-                                    : null,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -272,7 +267,7 @@ class _ProfileState extends State<Profile> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.45,
                           height: MediaQuery.of(context).size.height * 0.04,
-                          color: Colors.grey.withOpacity(0.1),
+                          color: Colors.grey.withOpacity(0.4),
                           child: Center(
                             child: Icon(
                               Icons.image,
@@ -501,6 +496,17 @@ class _ProfileState extends State<Profile> {
                     title: new Text('Camera'),
                     onTap: () {
                       _imgFromCamera(context);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  new ListTile(
+                    leading: new Icon(Icons.remove, color: Colors.red),
+                    title: new Text(
+                      'Remove profile Image',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () {
+                      _removeimage();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -762,6 +768,17 @@ class _ProfileState extends State<Profile> {
     var response = null;
     var jsonResponse = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    if (sharedPreferences.getString("userAvatar") != null) {
+      setState(() {
+        imageFound = true;
+        imagePath = sharedPreferences.getString("userAvatar");
+      });
+    } else {
+      setState(() {
+        imageFound = false;
+      });
+    }
     List<dynamic> list = sharedPreferences.getStringList("firstSecond");
     email = sharedPreferences.getString("email");
     setState(() {
@@ -1066,5 +1083,28 @@ class _ProfileState extends State<Profile> {
         ));
       }
     }
+  }
+
+  _removeimage() async {
+    var response = null;
+    var jsonResponse = null;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+
+    var url = Uri.parse("${MyApp.url}/user/avatar");
+    response = await http.delete(
+      url,
+      headers: requestHeaders,
+    );
+    jsonResponse = await json.decode(response.body);
+    print(jsonResponse);
+    setState(() {
+      name();
+      sharedPreferences.remove("userAvatar");
+    });
   }
 }

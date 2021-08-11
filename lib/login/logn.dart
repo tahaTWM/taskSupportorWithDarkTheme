@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -282,10 +283,10 @@ class _Logn extends State<Logn> {
                 decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.blue,
-                  ),
+                  // border: Border.all(
+                  //   width: 1,
+                  //   color: Colors.blue,
+                  // ),
                 ),
                 width: double.infinity,
                 height: 60,
@@ -293,8 +294,12 @@ class _Logn extends State<Logn> {
                 child: FlatButton(
                   onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Register()));
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Register(),
+                        ),
+                        (route) => true);
                   },
                   child: Text(
                     "Create a free account",
@@ -311,10 +316,23 @@ class _Logn extends State<Logn> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotPassword())),
+                    onTap: () {
+                      // Toast.show(
+                      //   "Toast plugin app",
+                      //   context,
+                      //   duration: Toast.LENGTH_SHORT,
+                      //   gravity: Toast.BOTTOM,
+                      //   backgroundColor: Colors.lightBlue,
+                      //   textColor: Colors.black,
+                      //   backgroundRadius: 20,
+                      // );
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPassword(),
+                          ),
+                          (route) => true);
+                    },
                     child: Text(
                       "Forgot Password",
                       style: TextStyle(
@@ -399,14 +417,14 @@ class _Logn extends State<Logn> {
 
       await sharedPreferences.setString("email", _eMail.text);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavBar(
-            jsonResponse['data']["firstName"],
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavBar(
+              jsonResponse['data']["firstName"],
+            ),
           ),
-        ),
-      );
+          (route) => true);
     }
 
     if (!jsonResponse["successful"]) {
