@@ -247,15 +247,25 @@ class _ProfileState extends State<Profile> {
                                   ImageChunkEvent loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes
-                                        : null,
-                                  ),
-                                );
+                                    child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            fName[0].toUpperCase(),
+                                            style: TextStyle(
+                                                fontSize: width > 400 ? 80 : 40,
+                                                fontFamily: "CCB"),
+                                          ),
+                                        )));
                               },
                             ),
                           ),

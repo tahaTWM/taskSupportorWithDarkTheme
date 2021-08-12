@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:app2/all_tasks/attachment.dart';
-import 'package:app2/all_tasks/taskDetials.dart';
+import 'package:app2/all_tasks/taskAttachment.dart';
+import 'package:app2/all_tasks/taskHistory.dart';
 import 'package:app2/homePage/workSpaceMembers.dart';
 import 'package:cupertino_radio_choice/cupertino_radio_choice.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/widgets.dart';
 import '../canlendar/craeteNewTask.dart';
@@ -597,7 +594,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TaskDetails(
+                          builder: (context) => TaskHistory(
                             title: newListReversed[index]["title"],
                             prority: newListReversed[index]["prority"],
                             taskID: newListReversed[index]["taskId"],

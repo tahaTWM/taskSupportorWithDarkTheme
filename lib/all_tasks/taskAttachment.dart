@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app2/all_tasks/pdeView.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -152,7 +151,7 @@ class _AttachmentState extends State<Attachment> {
                                     .toString()
                                     .split('/')[3]));
                           },
-                          leading: url.split(':')[2].toString().contains('null')
+                          leading: url.contains('null')
                               ? Container(
                                   padding: EdgeInsets.all(14),
                                   decoration: BoxDecoration(

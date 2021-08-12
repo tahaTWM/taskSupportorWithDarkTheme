@@ -419,13 +419,28 @@ class _HomePageState extends State<HomePage> {
                                   ImageChunkEvent loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes
-                                        : null,
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        width: 2.3,
+                                        color: Colors.blue.withOpacity(0.8),
+                                      ),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      listOfWorkspace[index]["workspaceName"]
+                                          .toString()
+                                          .split('')[0]
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w600),
+                                    )),
                                   ),
                                 );
                               },
@@ -763,17 +778,31 @@ class _HomePageState extends State<HomePage> {
                                                     if (loadingProgress == null)
                                                       return child;
                                                     return Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        value: loadingProgress
-                                                                    .expectedTotalBytes !=
-                                                                null
-                                                            ? loadingProgress
-                                                                    .cumulativeBytesLoaded /
-                                                                loadingProgress
-                                                                    .expectedTotalBytes
-                                                            : null,
-                                                      ),
+                                                      child: Container(
+                                                          width: 50,
+                                                          height: 50,
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border:
+                                                                Border.all(),
+                                                          ),
+                                                          child: Center(
+                                                              child: Text(listOfWorkspace[0]
+                                                                              [
+                                                                              "users"]
+                                                                          [
+                                                                          index]
+                                                                      [
+                                                                      "firstName"]
+                                                                  .toString()
+                                                                  .split('')[0]
+                                                                  .toUpperCase()
+                                                                  .toUpperCase()))),
                                                     );
                                                   },
                                                 ),

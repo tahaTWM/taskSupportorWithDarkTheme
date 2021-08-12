@@ -15,10 +15,10 @@ void main() {
 
 class MyApp extends StatefulWidget {
   // lan ip
-  static String url = "http://192.168.1.2:100";
+  // static String url = "http://192.168.1.2:100";
 
   //nogrok ip
-  // static String url = "http://a8592df906d6.ngrok.io";
+  static String url = "https://ordinary-fish-33.loca.lt";
 
   //wifi ip
   // static String url = "http://192.168.1.106:100";

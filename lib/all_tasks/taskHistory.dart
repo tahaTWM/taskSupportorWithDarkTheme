@@ -10,18 +10,18 @@ import 'package:http/http.dart' as http;
 
 import 'package:timeago/timeago.dart' as timeago;
 
-class TaskDetails extends StatefulWidget {
+class TaskHistory extends StatefulWidget {
   String title;
   String prority;
   int taskID;
 
-  TaskDetails({@required this.title, @required this.prority, this.taskID});
+  TaskHistory({@required this.title, @required this.prority, this.taskID});
 
   @override
-  _TaskDetailsState createState() => _TaskDetailsState();
+  _TaskHistoryState createState() => _TaskHistoryState();
 }
 
-class _TaskDetailsState extends State<TaskDetails>
+class _TaskHistoryState extends State<TaskHistory>
     with SingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   TabController _tabController;
@@ -73,10 +73,7 @@ class _TaskDetailsState extends State<TaskDetails>
                         ListTile(
                             contentPadding: EdgeInsets.only(
                                 bottom: 5, left: 10, right: 10, top: 5),
-                            leading: url
-                                    .split(':')[2]
-                                    .toString()
-                                    .contains('null')
+                            leading: url.contains('null')
                                 ? Container(
                                     padding: EdgeInsets.all(14),
                                     decoration: BoxDecoration(
