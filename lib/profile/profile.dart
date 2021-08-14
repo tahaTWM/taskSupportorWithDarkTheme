@@ -80,11 +80,11 @@ class _ProfileState extends State<Profile> {
           actions: [
             Container(
               decoration: BoxDecoration(
-                //  color: Colors.white,
+                color: Colors.grey.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(18),
               ),
               padding: EdgeInsets.symmetric(horizontal: 5),
-              margin: EdgeInsets.only(right: 10, top: 7),
+              margin: EdgeInsets.only(right: 10, top: 7, bottom: 2),
               child: PopupMenuButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),

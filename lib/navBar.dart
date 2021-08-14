@@ -1,3 +1,4 @@
+import 'package:app2/notification/notification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import 'profile/profile.dart';
@@ -6,7 +7,9 @@ import './homePage/homepage.dart';
 
 class NavBar extends StatefulWidget {
   String fristName;
+
   NavBar(this.fristName);
+
   @override
   _NavBarState createState() => _NavBarState();
 }
@@ -14,15 +17,14 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _selectedItem;
   List<Widget> contents = [];
+
   @override
   Future<void> initState() {
     _selectedItem = 0;
     super.initState();
     contents.add(HomePage(widget.fristName));
+    contents.add(Notifications());
     contents.add(Profile(widget.fristName));
-    // contents.add(Profile());
-    // contents.add(Profile());
-    // contents.add(Profile());
   }
 
   @override
@@ -32,10 +34,12 @@ class _NavBarState extends State<NavBar> {
       bottomNavigationBar: CustomBottomNavigationBar(
         iconList: [
           Typicons.th_large_outline,
+          Icons.notifications_active_outlined,
           Icons.person_outline,
         ],
         textList: [
           "Workspaces",
+          "Notifications",
           "Profile",
         ],
         onChange: (indx) {
@@ -100,6 +104,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   Widget buildNavBarItem(IconData icon, String text, int index) {
     var width = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         widget.onChange(index);
@@ -125,7 +130,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               // color: index == _selectedIndex
               //     ? Color.fromRGBO(0, 82, 205, 1)
               //     : Colors.grey,
-              size: width < 400 ? 18 : 25,
+              size: width < 400 ? 22 : 28,
             ),
             Text(
               text,
@@ -133,7 +138,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   // color: index == _selectedIndex
                   //     ? Color.fromRGBO(0, 82, 205, 1)
                   //     : Colors.grey,
-                  fontSize: width < 400 ? 14 : 20),
+                  fontSize: width < 400 ? 14 : 18),
             ),
           ],
         ),

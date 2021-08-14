@@ -1,5 +1,3 @@
-import 'package:app2/all_tasks/showAllTasks.dart';
-import 'package:app2/homePage/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,10 +13,10 @@ void main() {
 
 class MyApp extends StatefulWidget {
   // lan ip
-  // static String url = "http://192.168.1.2:100";
+  static String url = "http://192.168.1.2:100";
 
   //nogrok ip
-  static String url = "https://ordinary-fish-33.loca.lt";
+  // static String url = "https://ordinary-fish-33.loca.lt";
 
   //wifi ip
   // static String url = "http://192.168.1.106:100";
