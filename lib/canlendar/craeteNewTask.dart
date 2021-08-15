@@ -14,6 +14,7 @@ class CreateNewTask extends StatefulWidget {
   int role;
   String taskTitke;
   String content;
+  String prority;
 
   CreateNewTask(
     this.title,
@@ -23,6 +24,7 @@ class CreateNewTask extends StatefulWidget {
     this.role,
     this.taskTitke,
     this.content,
+    this.prority,
   );
 
   @override
@@ -48,7 +50,8 @@ class _CreateNewTaskState extends State<CreateNewTask> {
     'urgent'
   ];
 
-  String _selectedPriorty = priorty.keys.first;
+  // String _selectedPriorty = priorty.keys.first;
+  String _selectedPriorty = priorty.keys.last;
 
   void onStatusPriorty(String priortyKey) {
     setState(() {
@@ -81,6 +84,13 @@ class _CreateNewTaskState extends State<CreateNewTask> {
     if (widget.title == "Edit Task") {
       _textEditingControllerTitle.text = widget.taskTitke;
       _textEditingControllerContent.text = widget.content;
+    }
+    if (widget.prority != null) {
+      if (widget.prority == "URGENT") {
+        _selectedPriorty = priorty.keys.last;
+      }
+    } else {
+      _selectedPriorty = priorty.keys.first;
     }
     super.initState();
   }
@@ -411,7 +421,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
       CupertinoRadioChoice(
         choices: priorty,
         onChange: onStatusPriorty,
-        initialKeyValue: 'low',
+        initialKeyValue: "NORMAL",
       ),
     ];
     return Container(

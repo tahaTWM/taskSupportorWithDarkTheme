@@ -58,40 +58,32 @@ class _MyAppState extends State<MyApp> {
         ),
 
         buttonTheme: ButtonThemeData(
-          buttonColor: Colors.blue,
-        ),
-        buttonColor: Colors.black,
+          buttonColor: Color.fromRGBO(0, 82, 205, 1),
 
+        ),
+        buttonColor: Colors.red,
+        textButtonTheme: TextButtonThemeData(),
         // shadowColor: Colors.grey[300],
-        iconTheme: IconThemeData(color: Colors.blue),
+        iconTheme: IconThemeData(
+          color: Color.fromRGBO(0, 82, 205, 1),
+        ),
 
         textTheme: TextTheme(
           headline1: TextStyle(color: Colors.black),
           headline2: TextStyle(color: Colors.black),
-          headline3: TextStyle(color: Colors.yellow),
-          headline4: TextStyle(color: Colors.orange),
-          headline5: TextStyle(color: Colors.pink),
-          bodyText1: TextStyle(color: Colors.red),
           bodyText2: TextStyle(color: Colors.black),
-          button: TextStyle(color: Colors.yellow),
           subtitle1: TextStyle(color: Colors.black),
           headline6: TextStyle(color: Colors.black),
           subtitle2: TextStyle(color: Colors.black),
           caption: TextStyle(color: Colors.black),
         ),
       ),
-      darkTheme: ThemeData.dark()
-      // .copyWith(
-      //   primaryColorLight: Colors.black,
-      //   primaryColor: Colors.red,
-      //   accentColor: Colors.white,
-      //   // shadowColor: Colors.grey[300],
-      //   textTheme: TextTheme(
-      //     bodyText1: TextStyle(color: Colors.white),
-      //     bodyText2: TextStyle(color: Colors.white),
-      //   ),
-      // )
-      ,
+      darkTheme: ThemeData.dark().copyWith(
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 82, 205, 1)),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Color.fromRGBO(0, 82, 205, 1),
+        ),
+      ),
       home: tokenFound == true ? NavBar(fName) : Logn(),
       debugShowCheckedModeBanner: false,
     );

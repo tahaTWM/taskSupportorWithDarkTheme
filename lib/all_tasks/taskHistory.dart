@@ -71,8 +71,7 @@ class _TaskHistoryState extends State<TaskHistory>
                     return Column(
                       children: [
                         ListTile(
-                            contentPadding: EdgeInsets.only(
-                                bottom: 5, left: 10, right: 10, top: 5),
+                            contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 2),
                             leading: url.contains('null')
                                 ? Container(
                                     padding: EdgeInsets.all(14),
@@ -96,7 +95,6 @@ class _TaskHistoryState extends State<TaskHistory>
                                     padding: EdgeInsets.all(0),
                                     margin: EdgeInsets.all(0),
                                     decoration: BoxDecoration(
-                                      color: Colors.amber,
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                         image: NetworkImage(url),
@@ -121,6 +119,7 @@ class _TaskHistoryState extends State<TaskHistory>
                                           _history[index]["new_task_status"]
                                       : "Added Attachment to The task",
                               // overflow: TextOverflow.ellipsis,
+                              // maxLines: 3,
                             ),
                             trailing: Text(timeago.format(DateTime.parse(
                                 _history[index]["actionCreationDate"])))),

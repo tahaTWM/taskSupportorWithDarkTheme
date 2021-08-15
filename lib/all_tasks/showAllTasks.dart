@@ -197,6 +197,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                           null,
                                           null,
                                           null,
+                                          null,
                                         ),
                                       ),
                                     );
@@ -557,6 +558,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                       newListReversed[index]["isTaskOwner"],
                                       newListReversed[index]["title"],
                                       newListReversed[index]["content"],
+                                      newListReversed[index]["prority"],
                                     ),
                                   ),
                                 );
