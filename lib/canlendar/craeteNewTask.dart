@@ -50,8 +50,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
     'urgent'
   ];
 
-  // String _selectedPriorty = priorty.keys.first;
-  String _selectedPriorty = priorty.keys.last;
+  String _selectedPriorty = priorty.keys.first;
 
   void onStatusPriorty(String priortyKey) {
     setState(() {
@@ -84,13 +83,6 @@ class _CreateNewTaskState extends State<CreateNewTask> {
     if (widget.title == "Edit Task") {
       _textEditingControllerTitle.text = widget.taskTitke;
       _textEditingControllerContent.text = widget.content;
-    }
-    if (widget.prority != null) {
-      if (widget.prority == "URGENT") {
-        _selectedPriorty = priorty.keys.last;
-      }
-    } else {
-      _selectedPriorty = priorty.keys.first;
     }
     super.initState();
   }

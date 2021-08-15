@@ -80,11 +80,11 @@ class _ProfileState extends State<Profile> {
           actions: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(18),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              margin: EdgeInsets.only(right: 10, top: 7, bottom: 2),
+              padding: EdgeInsets.symmetric(horizontal: 1),
+              margin: EdgeInsets.only(right: 5, top: 5, bottom: 2),
               child: PopupMenuButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -207,7 +207,7 @@ class _ProfileState extends State<Profile> {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 clipBehavior: Clip.hardEdge,
@@ -291,16 +291,16 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: width > 400 ? 30 : 10,
-              ),
+              // SizedBox(
+              //   height: width > 400 ? 30 : 10,
+              // ),
               Text(
                 fName + " " + sName,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: width > 400 ? 50 : 20,
-              ),
+              // SizedBox(
+              //   height: width > 400 ? 50 : 20,
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -374,65 +374,69 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: width > 400 ? 90 : 30,
-              ),
-              GestureDetector(
-                onTap: () => bottomsheet(context, "Edit Account"),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        width: width - 100,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                          //  color: Color.fromRGBO(0, 82, 205, 0.1),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "Edit Account",
-                          style: TextStyle(fontSize: width > 400 ? 24 : 20),
-                        )),
-                      )
-                    ],
+              // SizedBox(
+              //   height: width > 400 ? 90 : 30,
+              // ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => bottomsheet(context, "Edit Account"),
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            width: width - 100,
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            decoration: BoxDecoration(
+                              //  color: Color.fromRGBO(0, 82, 205, 0.1),
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                width: 1,
+                                color: Color.fromRGBO(22, 208, 204, 1),
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "Edit Account",
+                              style: TextStyle(fontSize: width > 400 ? 24 : 20),
+                            )),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: width > 400 ? 30 : 20,
-              ),
-              GestureDetector(
-                onTap: () => bottomsheet(context, "Change Password"),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        width: width - 100,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                          //  color: Color.fromRGBO(0, 82, 205, 0.1),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "Change Password",
-                          style: TextStyle(fontSize: width > 400 ? 24 : 20),
-                        )),
-                      )
-                    ],
+                  SizedBox(
+                    height: width > 400 ? 30 : 20,
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () => bottomsheet(context, "Change Password"),
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            width: width - 100,
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            decoration: BoxDecoration(
+                              //  color: Color.fromRGBO(0, 82, 205, 0.1),
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                width: 1,
+                                color: Color.fromRGBO(22, 208, 204, 1),
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "Change Password",
+                              style: TextStyle(fontSize: width > 400 ? 24 : 20),
+                            )),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -804,16 +808,20 @@ class _ProfileState extends State<Profile> {
       "token": sharedPreferences.getString("token")
     };
 
-    var url = Uri.parse("${MyApp.url}/");
-    response = await http.get(
-      url,
-      headers: requestHeaders,
-    );
-    jsonResponse = await json.decode(response.body);
-    setState(() {
-      workspaces = jsonResponse["assignedWorkspaces"].toString();
-      tasks = jsonResponse["assignedTasks"].toString();
-    });
+    try {
+      var url = Uri.parse("${MyApp.url}/");
+      response = await http.get(
+        url,
+        headers: requestHeaders,
+      );
+      jsonResponse = await json.decode(response.body);
+      setState(() {
+        workspaces = jsonResponse["assignedWorkspaces"].toString();
+        tasks = jsonResponse["assignedTasks"].toString();
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   siginOut() async {

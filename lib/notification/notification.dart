@@ -29,9 +29,81 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("List Selection"),
+        elevation: 0,
+        title: Text(
+          "Notifications",
+          style: TextStyle(
+              //  color: Colors.black,
+              ),
+        ),
+        centerTitle: true,
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 1),
+            margin: EdgeInsets.only(right: 5, top: 5, bottom: 2),
+            child: PopupMenuButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              icon: Icon(
+                Icons.more_vert,
+                size: width > 400 ? 30 : 20,
+                //  color: Colors.blue,
+              ),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                    value: 1,
+                    child: Text(
+                      "Make it as read",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "RubicB",
+                      ),
+                    )),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text(
+                    "Clear all",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: "RubicB",
+                    ),
+                  ),
+                ),
+              ],
+              onSelected: (item) {
+                switch (item) {
+                  case 1:
+                    {
+                      for (var i = 0; i < list.length; i++) {
+                        setState(() {
+                          list[i].isSelected = !list[i].isSelected;
+                        });
+                      }
+                    }
+                    break;
+                  case 2:
+                    {
+                      setState(() {
+                        list = [];
+                      });
+                    }
+                    break;
+                }
+              },
+            ),
+          )
+        ],
+        iconTheme: IconThemeData(
+          // color: Colors.blue,
+          size: 28,
+        ),
       ),
       body: ListView.builder(
         itemCount: list.length,
@@ -61,13 +133,13 @@ class _NotificationsState extends State<Notifications> {
             : Colors.transparent,
         child: ListTile(
           contentPadding:
-              EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 5),
+              EdgeInsets.only(bottom: 5, left: 10, right: 15, top: 5),
           leading: Container(
             padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 2,
-                color: Color.fromRGBO(46, 204, 113, 1),
+                color: Color.fromRGBO(22, 208, 204, 1),
               ),
               color: Colors.grey.withOpacity(0.2),
               shape: BoxShape.circle,
@@ -85,10 +157,11 @@ class _NotificationsState extends State<Notifications> {
             "name2",
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: Checkbox(
-            value: list[index].isSelected,
-            onChanged: (bool _value) {},
-          ),
+          trailing: Text("time"),
+          //  Checkbox(
+          //   value: list[index].isSelected,
+          //   onChanged: (bool _value) {},
+          // ),
         ),
       ),
     );
