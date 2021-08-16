@@ -313,11 +313,11 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
           Container(
             margin: EdgeInsets.only(top: 20),
             decoration: BoxDecoration(
-              //  color:Color.fromRGBO(216, 229, 255, 1),
+              color: Color.fromRGBO(49, 91, 169, 1),
               borderRadius: BorderRadius.circular(50),
               border: Border.all(
                 width: 1,
-                color: Color.fromRGBO(0, 104, 255, 1),
+                color: Color.fromRGBO(49, 91, 169, 1),
               ),
             ),
             width: double.infinity,
@@ -335,7 +335,7 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
                 style: TextStyle(
                   fontSize: 22,
                   fontFamily: "Rubik",
-                  //  color:Color.fromRGBO(62, 128, 255, 1),
+                  color: Colors.white,
                 ),
               ),
             ),

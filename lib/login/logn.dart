@@ -49,7 +49,7 @@ class _Logn extends State<Logn> {
           padding: EdgeInsets.all(25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // logo
               Padding(
@@ -72,19 +72,20 @@ class _Logn extends State<Logn> {
                 ),
               )),
               // email lable
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  "Email",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontFamily: "Rubik",
-                    // color: Colors.black,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 10),
+              //   child: Text(
+              //     "Email",
+              //     style: TextStyle(
+              //       fontSize: 22,
+              //       fontFamily: "Rubik",
+              //       // color: Colors.black,
+              //     ),
+              //   ),
+              // ),
               // enter email
               Container(
+                margin: EdgeInsets.only(top: 30),
                 width: MediaQuery.of(context).size.width - 20,
                 child: new TextFormField(
                   style: TextStyle(
@@ -96,7 +97,7 @@ class _Logn extends State<Logn> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      hintText: "Enter your email address"),
+                      hintText: "Email"),
                   controller: _eMail,
                   validator: (value) {
                     if (value != null && value.isNotEmpty) {
@@ -113,17 +114,17 @@ class _Logn extends State<Logn> {
               ),
               SizedBox(height: 20),
               // password lable
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  "Password",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontFamily: "Rubik",
-                    // color: Colors.black,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 10),
+              //   child: Text(
+              //     "Password",
+              //     style: TextStyle(
+              //       fontSize: 22,
+              //       fontFamily: "Rubik",
+              //       // color: Colors.black,
+              //     ),
+              //   ),
+              // ),
               // enter password
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -142,7 +143,7 @@ class _Logn extends State<Logn> {
                               // color: Colors.red,
                               ),
                         ),
-                        hintText: "Enter your password",
+                        hintText: "Password",
                         suffixIcon: InkWell(
                           onTap: () {
                             setState(() {
@@ -194,7 +195,7 @@ class _Logn extends State<Logn> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               // remember email and forgot password
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -256,9 +257,9 @@ class _Logn extends State<Logn> {
               // Login button
               Container(
                 decoration: BoxDecoration(
-                  // color: Color.fromRGBO(0, 82, 204, 1),
-                  color: Colors.grey.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromRGBO(49, 91, 169, 1),
+                  // color: Colors.grey.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 width: double.infinity,
                 height: 60,
@@ -306,12 +307,12 @@ class _Logn extends State<Logn> {
                     style: TextStyle(
                       fontSize: 22,
                       fontFamily: "Rubik",
-                      // color: Color.fromRGBO(62, 128, 255, 1),
+                      // color: Color.fromRGBO(49, 91, 169, 1),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 17),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

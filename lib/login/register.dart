@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
@@ -62,21 +63,21 @@ class _Register extends State<Register> {
                       // color: Color.fromRGBO(62, 128, 255, 1),
                     ),
                   )),
-                  SizedBox(height: 10),
-                  lebel(padding, "First Name"),
-                  textField(_firstName, false),
-                  SizedBox(height: 10),
-                  lebel(padding, "Second Name"),
-                  textField(_secondName, false),
-                  SizedBox(height: 10),
-                  lebel(padding, "Email"),
-                  textField(_eMail, false),
-                  SizedBox(height: 10),
-                  lebel(padding, 'Password'),
-                  textField(_passWord, true),
-                  SizedBox(height: 10),
-                  lebel(padding, 'Confirm Password'),
-                  textField(_confPassword, true),
+                  SizedBox(height: 20),
+                  // lebel(padding, "First Name"),
+                  textField(_firstName, false, "First Name", false),
+                  SizedBox(height: 20),
+                  // lebel(padding, "Second Name"),
+                  textField(_secondName, false, "Second Name", false),
+                  SizedBox(height: 20),
+                  // lebel(padding, "Email"),
+                  textField(_eMail, false, "Email", true),
+                  SizedBox(height: 20),
+                  // lebel(padding, 'Password'),
+                  textField(_passWord, true, "Password", false),
+                  SizedBox(height: 20),
+                  // lebel(padding, 'Confirm Password'),
+                  textField(_confPassword, true, "Confirm Password", false),
 
                   // Padding(
                   //   padding: const EdgeInsets.fromLTRB(0, 12, 0, 5),
@@ -99,7 +100,7 @@ class _Register extends State<Register> {
                   SizedBox(height: 15),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Color.fromRGBO(49, 91, 169, 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     width: double.infinity,
@@ -117,7 +118,7 @@ class _Register extends State<Register> {
                         style: TextStyle(
                           fontSize: 22,
                           fontFamily: "Rubik",
-                          // color: Colors.white,
+                          // color: Color.fromRGBO(49, 91, 169, 1),
                         ),
                       ),
                     ),
@@ -141,6 +142,7 @@ class _Register extends State<Register> {
                         style: TextStyle(
                           fontSize: 22,
                           fontFamily: "Rubik",
+                          // color: Color.fromRGBO(49, 91, 169, 1),
                         ),
                       ),
                     ),
@@ -154,36 +156,43 @@ class _Register extends State<Register> {
     );
   }
 
-  Padding lebel(EdgeInsets padding, String text) {
-    return Padding(
-      padding: padding,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 22,
-          fontFamily: "Rubik",
-        ),
-      ),
-    );
-  }
+  // Padding lebel(EdgeInsets padding, String text) {
+  //   return Padding(
+  //     padding: padding,
+  //     child: Text(
+  //       text,
+  //       style: TextStyle(
+  //         fontSize: 22,
+  //         fontFamily: "Rubik",
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget textField(TextEditingController controller, bool obscure) {
+  Widget textField(
+    TextEditingController controller,
+    bool obscure,
+    String hint,
+    bool email,
+  ) {
     var w = MediaQuery.of(context).size.width;
-    return TextField(
+    return TextFormField(
       style: TextStyle(
         fontSize: w < 400 ? 19 : 24,
         fontFamily: "Rubik",
         // color: Colors.black,
       ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(15),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: new BorderSide(color: Colors.black),
-        ),
-      ),
+          contentPadding: EdgeInsets.all(15),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: new BorderSide(color: Colors.black),
+          ),
+          hintText: hint),
       controller: controller,
       obscureText: obscure,
+      maxLength: obscure == true ? 16 : null,
+      keyboardType: email == true ? TextInputType.emailAddress : null,
     );
   }
 

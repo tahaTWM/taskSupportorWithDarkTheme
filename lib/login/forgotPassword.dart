@@ -133,6 +133,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               style: TextStyle(
                                 fontSize: 22,
                                 fontFamily: "RubikB",
+                                color: Color.fromRGBO(49, 91, 169, 1),
                               ),
                             ),
                           ),
@@ -156,6 +157,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               style: TextStyle(
                                 fontSize: 22,
                                 fontFamily: "Rubik",
+                                color: Color.fromRGBO(49, 91, 169, 1),
                               ),
                             ),
                           ),

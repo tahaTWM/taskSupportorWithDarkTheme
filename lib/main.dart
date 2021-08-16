@@ -15,10 +15,10 @@ void main() {
 
 class MyApp extends StatefulWidget {
   // lan ip
-  // static String url = "http://192.168.1.2:100";
+  static String url = "http://192.168.1.2:100";
 
   //nogrok ip
-  static String url = "https://strange-earwig-28.loca.lt";
+  // static String url = "https://splendid-dolphin-71.loca.lt";
 
   //wifi ip
   // static String url = "http://192.168.1.106:100";
@@ -70,14 +70,14 @@ class _MyAppState extends State<MyApp> {
         ),
 
         buttonTheme: ButtonThemeData(
-          buttonColor: Color.fromRGBO(22, 208, 204, 1),
-          textTheme: ButtonTextTheme.normal,
+          buttonColor: Color.fromRGBO(49, 91, 169, 1),
+          textTheme: ButtonTextTheme.primary,
         ),
 
         buttonColor: Colors.black,
         // shadowColor: Colors.grey[300],
         iconTheme: IconThemeData(
-          color: Color.fromRGBO(22, 208, 204, 1),
+          color: Color.fromRGBO(49, 91, 169, 1),
         ),
 
         textTheme: TextTheme(
@@ -93,10 +93,14 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark().copyWith(
         appBarTheme: AppBarTheme(
           brightness: Brightness.dark,
+          systemOverlayStyle:
+              SystemUiOverlayStyle(statusBarColor: Colors.white),
         ),
-        iconTheme: IconThemeData(color: Color.fromRGBO(22, 208, 204, 1)),
+        iconTheme: IconThemeData(
+          color: Color.fromRGBO(49, 91, 169, 1),
+        ),
         buttonTheme: ButtonThemeData(
-          buttonColor: Color.fromRGBO(22, 208, 204, 1),
+          buttonColor: Color.fromRGBO(49, 91, 169, 1),
         ),
       ),
       home: tokenFound == true ? NavBar(fName) : Logn(),

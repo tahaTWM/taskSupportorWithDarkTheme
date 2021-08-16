@@ -393,7 +393,7 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 width: 1,
-                                color: Color.fromRGBO(22, 208, 204, 1),
+                                color: Color.fromRGBO(49, 91, 169, 1),
                               ),
                             ),
                             child: Center(
@@ -423,7 +423,7 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 width: 1,
-                                color: Color.fromRGBO(22, 208, 204, 1),
+                                color: Color.fromRGBO(49, 91, 169, 1),
                               ),
                             ),
                             child: Center(

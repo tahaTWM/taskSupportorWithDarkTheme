@@ -43,7 +43,7 @@ class _NotificationsState extends State<Notifications> {
         actions: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withOpacity(0.1),
               borderRadius: BorderRadius.circular(18),
             ),
             padding: EdgeInsets.symmetric(horizontal: 1),
@@ -104,6 +104,7 @@ class _NotificationsState extends State<Notifications> {
           // color: Colors.blue,
           size: 28,
         ),
+        leading: Container(),
       ),
       body: ListView.builder(
         itemCount: list.length,

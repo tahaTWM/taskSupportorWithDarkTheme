@@ -11,7 +11,7 @@ import '../navBar.dart';
 import '../homePage/workSpaceMembers.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import '../all_tasks/showAllTasks.dart';
-import '../canlendar/createNewWorkSpace.dart';
+import '../creation/createNewWorkSpace.dart';
 import '../main.dart';
 
 // ignore: must_be_immutable
@@ -50,6 +50,8 @@ class _HomePageState extends State<HomePage> {
 
   bool imageFound = false;
 
+  bool likeIt = false;
+
   @override
   void initState() {
     _searchForMember.clear();
@@ -60,8 +62,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var i = 1;
-
     // Timer.periodic(Duration(seconds: 3), (timer) {
     //   print(++i);
     //   // setState(() {
@@ -168,8 +168,8 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 child: Image(
                                     image: AssetImage("asset/logo2.png"),
-                                    width: 55,
-                                    height: 55),
+                                    width: 45,
+                                    height: 45),
                               ),
                             ],
                           ),
@@ -507,11 +507,23 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.star_border_rounded,
-                          size: 35,
-                          // color:  Color.fromRGBO(132, 132, 132, 1),
-                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                likeIt = !likeIt;
+                              });
+                            },
+                            icon: likeIt == false
+                                ? Icon(
+                                    Icons.star_border_rounded,
+                                    size: 30,
+                                    // color:  Color.fromRGBO(132, 132, 132, 1),
+                                  )
+                                : Icon(
+                                    Icons.star_rounded,
+                                    size: 30,
+                                    // color:  Color.fromRGBO(132, 132, 132, 1),
+                                  )),
                         SizedBox(width: 10),
                         PopupMenuButton(
                           shape: RoundedRectangleBorder(
@@ -877,42 +889,46 @@ class _HomePageState extends State<HomePage> {
       "token": sharedPreferences.getString("token")
     };
     var jsonResponse = null;
-    var url = Uri.parse("${MyApp.url}/workspaces");
+    try {
+      var url = Uri.parse("${MyApp.url}/workspaces");
 
-    var response = await http.get(
-      url,
-      headers: requestHeaders,
-    );
-    jsonResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
-      if (!jsonResponse["successful"]) {
-        print("No work space found");
-        setState(() {
-          notWorkspacefound = false;
-        });
-      } else {
-        setState(() {
-          notWorkspacefound = true;
-          // ignore: unnecessary_statements
-          if (jsonResponse['data'] != null) {
-            if (listOfWorkspace != null) {
-              if (listOfWorkspace != jsonResponse['data']) {
+      var response = await http.get(
+        url,
+        headers: requestHeaders,
+      );
+      jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        if (!jsonResponse["successful"]) {
+          print("No work space found");
+          setState(() {
+            notWorkspacefound = false;
+          });
+        } else {
+          setState(() {
+            notWorkspacefound = true;
+            // ignore: unnecessary_statements
+            if (jsonResponse['data'] != null) {
+              if (listOfWorkspace != null) {
+                if (listOfWorkspace != jsonResponse['data']) {
+                  setState(() {
+                    listOfWorkspace = jsonResponse['data'];
+                  });
+                }
+              } else {
                 setState(() {
                   listOfWorkspace = jsonResponse['data'];
                 });
               }
-            } else {
-              setState(() {
-                listOfWorkspace = jsonResponse['data'];
-              });
-            }
-          } else
-            listOfWorkspace = [];
-        });
+            } else
+              listOfWorkspace = [];
+          });
+        }
+      } else if (response.statusCode == 400) {
+        print(jsonResponse["error"]);
+      } else {
+        print("undefine Case!!");
       }
-    } else if (response.statusCode == 400) {
-      print(jsonResponse["error"]);
-    } else {
+    } catch (e) {
       print("undefine Case!!");
     }
   }
@@ -936,22 +952,26 @@ class _HomePageState extends State<HomePage> {
 
     // ignore: avoid_init_to_null
     var jsonResponse = null;
-    var url = Uri.parse("${MyApp.url}/workspace/delete/$id");
-    var response = await http.delete(
-      url,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        "token": sharedPreferences.getString("token"),
-      },
-    );
-    jsonResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
-      print(jsonResponse["success"]);
-      setState(() {
-        checkWorkSpaces();
-      });
-    } else if (response.statusCode == 400) {
-      print(jsonResponse["error"]);
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/delete/$id");
+      var response = await http.delete(
+        url,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "token": sharedPreferences.getString("token"),
+        },
+      );
+      jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        print(jsonResponse["success"]);
+        setState(() {
+          checkWorkSpaces();
+        });
+      } else if (response.statusCode == 400) {
+        print(jsonResponse["error"]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -959,22 +979,26 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // ignore: avoid_init_to_null
     var jsonResponse = null;
-    var url = Uri.parse("${MyApp.url}/workspace/leave/$id");
-    var response = await http.delete(
-      url,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        "token": sharedPreferences.getString("token"),
-      },
-    );
-    jsonResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
-      print(jsonResponse["success"]);
-      setState(() {
-        checkWorkSpaces();
-      });
-    } else if (response.statusCode == 400) {
-      print(jsonResponse["error"]);
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/leave/$id");
+      var response = await http.delete(
+        url,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "token": sharedPreferences.getString("token"),
+        },
+      );
+      jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        print(jsonResponse["success"]);
+        setState(() {
+          checkWorkSpaces();
+        });
+      } else if (response.statusCode == 400) {
+        print(jsonResponse["error"]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -985,18 +1009,25 @@ class _HomePageState extends State<HomePage> {
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")
     };
-    var url = Uri.parse("${MyApp.url}/workspace/invite");
-    await http.post(
-      url,
-      headers: requestHeaders,
-      body: jsonEncode(
-        <String, dynamic>{"workspaceId": workspaceId, "employeeId": employeeID},
-      ),
-    );
-    Navigator.pop(context);
-    setState(() {
-      checkWorkSpaces();
-    });
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/invite");
+      await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, dynamic>{
+            "workspaceId": workspaceId,
+            "employeeId": employeeID
+          },
+        ),
+      );
+      Navigator.pop(context);
+      setState(() {
+        checkWorkSpaces();
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   //select betwen camera and storage
@@ -1079,31 +1110,35 @@ class _HomePageState extends State<HomePage> {
   _addWorkSpace(int worksoaceID, BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonResponse;
-    if (image != null) {
-      var imageBytes = image.readAsBytesSync();
-      var request = http.MultipartRequest(
-          "POST", Uri.parse("${MyApp.url}/workspace/avatar/$worksoaceID"));
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          "workspaceAvatar",
-          imageBytes,
-          filename: basename(image.path),
-          contentType: new MediaType('image', 'jpg'),
-        ),
-      );
-      request.headers.addAll({"token": sharedPreferences.getString("token")});
-      final response = await request.send();
-      final resSTR = await response.stream.bytesToString();
-      jsonResponse = json.decode(resSTR);
-    }
-    if (jsonResponse["successful"]) {
-      var list = sharedPreferences.getStringList("firstSecond");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
-    }
+    try {
+      if (image != null) {
+        var imageBytes = image.readAsBytesSync();
+        var request = http.MultipartRequest(
+            "POST", Uri.parse("${MyApp.url}/workspace/avatar/$worksoaceID"));
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            "workspaceAvatar",
+            imageBytes,
+            filename: basename(image.path),
+            contentType: new MediaType('image', 'jpg'),
+          ),
+        );
+        request.headers.addAll({"token": sharedPreferences.getString("token")});
+        final response = await request.send();
+        final resSTR = await response.stream.bytesToString();
+        jsonResponse = json.decode(resSTR);
+      }
+      if (jsonResponse["successful"]) {
+        var list = sharedPreferences.getStringList("firstSecond");
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
+      }
 
-    if (!jsonResponse["successful"]) {
-      print(jsonResponse["successful"]);
+      if (!jsonResponse["successful"]) {
+        print(jsonResponse["successful"]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
