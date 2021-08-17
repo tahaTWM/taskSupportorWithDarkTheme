@@ -1,7 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -273,7 +271,7 @@ class _Logn extends State<Logn> {
                     style: TextStyle(
                       fontSize: 22,
                       fontFamily: "RubikB",
-                      // color: Colors.white,
+                      color: Colors.white,
                     ),
                   ),
                 ),

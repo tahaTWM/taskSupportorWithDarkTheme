@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:flutter/services.dart';
 
 import 'login/logn.dart';
 import 'navBar.dart';
@@ -89,6 +88,8 @@ class _MyAppState extends State<MyApp> {
           subtitle2: TextStyle(color: Colors.black),
           caption: TextStyle(color: Colors.black),
         ),
+        // dividerTheme: DividerThemeData(color: Colors.black),
+        dividerColor: Colors.black,
       ),
       darkTheme: ThemeData.dark().copyWith(
         appBarTheme: AppBarTheme(
@@ -102,6 +103,8 @@ class _MyAppState extends State<MyApp> {
         buttonTheme: ButtonThemeData(
           buttonColor: Color.fromRGBO(49, 91, 169, 1),
         ),
+        // dividerTheme: DividerThemeData(color: Colors.white),
+        dividerColor: Colors.white,
       ),
       home: tokenFound == true ? NavBar(fName) : Logn(),
       debugShowCheckedModeBanner: false,

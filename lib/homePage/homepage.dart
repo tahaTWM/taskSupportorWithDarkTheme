@@ -168,8 +168,8 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 child: Image(
                                     image: AssetImage("asset/logo2.png"),
-                                    width: 45,
-                                    height: 45),
+                                    width: width > 350 ? 50 : 45,
+                                    height: width > 350 ? 50 : 45),
                               ),
                             ],
                           ),
@@ -441,54 +441,60 @@ class _HomePageState extends State<HomePage> {
                             .contains("null")
                         ?
                         // Container()
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              "${MyApp.url}${listOfWorkspace[index]['workspaceAvatar']}",
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(50),
-                                      border: Border.all(
-                                        width: 2.3,
-                                        color: Colors.blue.withOpacity(0.8),
+                        Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(width: 2, color: Colors.white),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network(
+                                "${MyApp.url}${listOfWorkspace[index]['workspaceAvatar']}",
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                          width: 2.3,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                      child: Center(
+                                          child: Text(
+                                        listOfWorkspace[index]["workspaceName"]
+                                            .toString()
+                                            .split('')[0]
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600),
+                                      )),
                                     ),
-                                    child: Center(
-                                        child: Text(
-                                      listOfWorkspace[index]["workspaceName"]
-                                          .toString()
-                                          .split('')[0]
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                  ),
-                                );
-                              },
-                              fit: BoxFit.cover,
-                              width: 40,
-                              height: 40,
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
                             ),
                           )
                         : Container(
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.grey.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
-                                width: 2.3,
-                                color: Colors.blue.withOpacity(0.8),
+                                width: 2,
+                                color: Colors.white,
                               ),
                             ),
                             child: Center(
@@ -772,94 +778,100 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           child: Container(
-                            width: width * 0.28,
-                            height: width > 400
-                                ? MediaQuery.of(context).size.height * 0.07
-                                : MediaQuery.of(context).size.height * 0.06,
-                            child: listOfWorkspace[index]['users'].length !=
-                                    null
-                                ? ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (BuildContext bc, int index) {
-                                      return listOfWorkspace[workspaceIndex]
-                                                      ["users"][index]
-                                                  ["user_avatar"] ==
-                                              null
-                                          ? Container(
-                                              width: 50,
-                                              height: 50,
-                                              margin: EdgeInsets.only(right: 5),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(),
-                                              ),
-                                              child: Center(
-                                                  child: Text(listOfWorkspace[0]
-                                                              ["users"][index]
-                                                          ["firstName"]
-                                                      .toString()
-                                                      .split('')[0]
-                                                      .toUpperCase()
-                                                      .toUpperCase())))
-                                          : Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50.0),
-                                                child: Image.network(
-                                                  "${MyApp.url}${listOfWorkspace[workspaceIndex]["users"][index]["user_avatar"]}",
-                                                  fit: BoxFit.fill,
-                                                  // width: width > 400 ? 55 : 48,
-                                                  // height: width > 400 ? 55 : 48,
-                                                  loadingBuilder:
-                                                      (BuildContext context,
-                                                          Widget child,
-                                                          ImageChunkEvent
-                                                              loadingProgress) {
-                                                    if (loadingProgress == null)
-                                                      return child;
-                                                    return Center(
-                                                      child: Container(
-                                                          width: 50,
-                                                          height: 50,
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  right: 5),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            border:
-                                                                Border.all(),
-                                                          ),
-                                                          child: Center(
-                                                              child: Text(listOfWorkspace[0]
-                                                                              [
-                                                                              "users"]
-                                                                          [
-                                                                          index]
-                                                                      [
-                                                                      "firstName"]
-                                                                  .toString()
-                                                                  .split('')[0]
-                                                                  .toUpperCase()
-                                                                  .toUpperCase()))),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                    },
-                                    itemCount: listOfWorkspace[workspaceIndex]
-                                            ["users"]
-                                        .length,
-                                  )
-                                : Container(),
+                            width: MediaQuery.of(context).size.width * 0.27,
+                            height: MediaQuery.of(context).size.width * 0.15,
+                            // color: Colors.red,
+                            child: memberStack(
+                                listOfWorkspace[index]["users"], context),
                           ),
                         ),
-                      ),
+                      )
+                      //           ? MediaQuery.of(context).size.height * 0.07
+                      //           : MediaQuery.of(context).size.height * 0.06,
+                      //       child: listOfWorkspace[index]['users'].length !=
+                      //               null
+                      //           ? ListView.builder(
+                      //               physics: BouncingScrollPhysics(),
+                      //               scrollDirection: Axis.horizontal,
+                      //               itemBuilder: (BuildContext bc, int index) {
+                      //                 return listOfWorkspace[workspaceIndex]
+                      //                                 ["users"][index]
+                      //                             ["user_avatar"] ==
+                      //                         null
+                      //                     ? Container(
+                      //                         width: 50,
+                      //                         height: 50,
+                      //                         margin: EdgeInsets.only(right: 5),
+                      //                         decoration: BoxDecoration(
+                      //                           shape: BoxShape.circle,
+                      //                           border: Border.all(),
+                      //                         ),
+                      //                         child: Center(
+                      //                             child: Text(listOfWorkspace[0]
+                      //                                         ["users"][index]
+                      //                                     ["firstName"]
+                      //                                 .toString()
+                      //                                 .split('')[0]
+                      //                                 .toUpperCase()
+                      //                                 .toUpperCase())))
+                      //                     : Padding(
+                      //                         padding: const EdgeInsets.only(
+                      //                             left: 5),
+                      //                         child: ClipRRect(
+                      //                           borderRadius:
+                      //                               BorderRadius.circular(50.0),
+                      //                           child: Image.network(
+                      //                             "${MyApp.url}${listOfWorkspace[workspaceIndex]["users"][index]["user_avatar"]}",
+                      //                             fit: BoxFit.fill,
+                      //                             // width: width > 400 ? 55 : 48,
+                      //                             // height: width > 400 ? 55 : 48,
+                      //                             loadingBuilder:
+                      //                                 (BuildContext context,
+                      //                                     Widget child,
+                      //                                     ImageChunkEvent
+                      //                                         loadingProgress) {
+                      //                               if (loadingProgress == null)
+                      //                                 return child;
+                      //                               return Center(
+                      //                                 child: Container(
+                      //                                     width: 50,
+                      //                                     height: 50,
+                      //                                     margin:
+                      //                                         EdgeInsets.only(
+                      //                                             right: 5),
+                      //                                     decoration:
+                      //                                         BoxDecoration(
+                      //                                       shape:
+                      //                                           BoxShape.circle,
+                      //                                       border:
+                      //                                           Border.all(),
+                      //                                     ),
+                      //                                     child: Center(
+                      //                                         child: Text(listOfWorkspace[0]
+                      //                                                         [
+                      //                                                         "users"]
+                      //                                                     [
+                      //                                                     index]
+                      //                                                 [
+                      //                                                 "firstName"]
+                      //                                             .toString()
+                      //                                             .split('')[0]
+                      //                                             .toUpperCase()
+                      //                                             .toUpperCase()))),
+                      //                               );
+                      //                             },
+                      //                           ),
+                      //                         ),
+                      //                       );
+                      //               },
+                      //               itemCount: listOfWorkspace[workspaceIndex]
+                      //                       ["users"]
+                      //                   .length,
+                      //             )
+                      //           : Container(),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -1140,5 +1152,120 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Widget memberStack(List list, BuildContext context) {
+    if (list.length > 3) {
+      return Stack(
+        children: <Widget>[
+          positioned(list: list, index: 0, left: 0, right: null),
+          positioned(list: list, index: 1, left: 25, right: null),
+          positioned(list: list, index: 2, left: 50, right: null),
+          Positioned(
+            left: 53,
+            right: null,
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(shape: BoxShape.circle),
+              child: Center(
+                child: Text(
+                  "+" + (list.length - 3).toString(),
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    if (list.length == 1) {
+      return Stack(
+        children: <Widget>[
+          positioned(list: list, index: 0, left: 0, right: null),
+        ],
+      );
+    }
+    if (list.length == 2) {
+      return Stack(
+        children: [
+          positioned(list: list, index: 0, left: 0, right: null),
+          positioned(list: list, index: 1, left: 25, right: null),
+        ],
+      );
+    }
+    if (list.length == 3) {
+      return Stack(
+        children: [
+          positioned(list: list, index: 0, left: 0, right: null),
+          positioned(list: list, index: 1, left: 25, right: null),
+          positioned(list: list, index: 2, left: 50, right: null),
+        ],
+      );
+    }
+  }
+
+  Positioned positioned({
+    List list,
+    double left,
+    double right,
+    int index,
+  }) {
+    return Positioned(
+      left: left,
+      right: right,
+      child: Container(
+        child: list[index]["user_avatar"] == null
+            ? Container(
+                width: 50,
+                height: 50,
+                margin: EdgeInsets.only(right: 5),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(),
+                    color: Colors.grey.withOpacity(0.6)),
+                child: Center(
+                    child: Text(list[index]["firstName"]
+                        .toString()
+                        .split('')[0]
+                        .toUpperCase()
+                        .toUpperCase())))
+            : Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 1, color: Colors.white)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50.0),
+                  child: Image.network(
+                    "${MyApp.url}${list[index]["user_avatar"]}",
+                    // fit: BoxFit.fill,
+                    width: 50,
+                    height: 50,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: Container(
+                            width: 50,
+                            height: 50,
+                            margin: EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(),
+                            ),
+                            child: Center(
+                                child: Text(listOfWorkspace[0]["users"][index]
+                                        ["firstName"]
+                                    .toString()
+                                    .split('')[0]
+                                    .toUpperCase()
+                                    .toUpperCase()))),
+                      );
+                    },
+                  ),
+                ),
+              ),
+      ),
+    );
   }
 }
