@@ -631,88 +631,100 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                       itemBuilder: (context, index) {
                         var image =
                             listOfWorkspaceMembers[index]["user_avatar"];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: image == null
-                                    ? Container(
-                                        width: w > 400 ? 60 : 40,
-                                        height: w > 400 ? 60 : 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(),
+                        return listOfWorkspaceMembers[index]["isAccepted"] == 1
+                            ? listOfWorkspaceMembers[index]["role"] !=
+                                    "employer"
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: image == null
+                                              ? Container(
+                                                  width: w > 400 ? 60 : 40,
+                                                  height: w > 400 ? 60 : 40,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      listOfWorkspaceMembers[
+                                                                  index]
+                                                              ["firstName"][0]
+                                                          .toString()
+                                                          .toUpperCase(),
+                                                      style: TextStyle(
+                                                          fontFamily: "CCB",
+                                                          fontSize: 24),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Image.network(
+                                                  "${MyApp.url}$image",
+                                                  fit: BoxFit.cover,
+                                                  width: w > 400 ? 60 : 40,
+                                                  height: w > 400 ? 60 : 40,
+                                                  loadingBuilder:
+                                                      (BuildContext context,
+                                                          Widget child,
+                                                          ImageChunkEvent
+                                                              loadingProgress) {
+                                                    if (loadingProgress == null)
+                                                      return child;
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                         ),
-                                        child: Center(
+                                        Flexible(
                                           child: Text(
-                                            listOfWorkspaceMembers[index]
-                                                    ["firstName"][0]
-                                                .toString()
-                                                .toUpperCase(),
+                                            "${listOfWorkspaceMembers[index]['firstName']} ${listOfWorkspaceMembers[index]['secondName']}",
                                             style: TextStyle(
-                                                fontFamily: "CCB",
-                                                fontSize: 24),
+                                              fontSize: w > 400 ? 22 : 18,
+                                              //  color:Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                      )
-                                    : Image.network(
-                                        "${MyApp.url}$image",
-                                        fit: BoxFit.cover,
-                                        width: w > 400 ? 60 : 40,
-                                        height: w > 400 ? 60 : 40,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                              ),
-                              Flexible(
-                                child: Text(
-                                  "${listOfWorkspaceMembers[index]['firstName']} ${listOfWorkspaceMembers[index]['secondName']}",
-                                  style: TextStyle(
-                                    fontSize: w > 400 ? 22 : 18,
-                                    //  color:Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              IconButton(
-                                  icon: addMemberToTask,
-                                  onPressed: () {
-                                    Map member;
-                                    if (!memberOfTask.contains(
-                                        listOfWorkspaceMembers[index]
-                                            ["userId"])) {
-                                      member = {
-                                        "userId": listOfWorkspaceMembers[index]
-                                            ["userId"]
-                                      };
-                                      member.forEach((key, value) {
-                                        memberOfTask.add(member);
-                                      });
-                                    }
-                                  })
-                            ],
-                          ),
-                        );
+                                        IconButton(
+                                            icon: addMemberToTask,
+                                            onPressed: () {
+                                              Map member;
+                                              if (!memberOfTask.contains(
+                                                  listOfWorkspaceMembers[index]
+                                                      ["userId"])) {
+                                                member = {
+                                                  "userId":
+                                                      listOfWorkspaceMembers[
+                                                          index]["userId"]
+                                                };
+                                                member.forEach((key, value) {
+                                                  memberOfTask.add(member);
+                                                });
+                                              }
+                                            })
+                                      ],
+                                    ),
+                                  )
+                                : Container()
+                            : Container();
                       },
                       itemCount: listOfWorkspaceMembers.length,
                     ),
@@ -767,6 +779,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
       headers: requestHeaders,
     );
     jsonResponse = json.decode(response.body);
+    print(jsonResponse);
     setState(() {
       if (widget.workspaceId != null) {
         listOfWorkspaceMembers = jsonResponse["data"];
