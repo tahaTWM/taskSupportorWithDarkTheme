@@ -299,7 +299,6 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
       headers: requestHeaders,
     );
     jsonResponse = json.decode(response.body);
-    print(jsonResponse);
     setState(() {
       listOfWorkspaceMembers = widget.title == "Add Member to Task"
           ? jsonResponse["data"]

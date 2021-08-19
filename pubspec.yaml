@@ -16,19 +16,22 @@ dependencies:
   custom_dialog_box: null
   dialog: ^0.7.2+1
   email_validator: ^2.0.1
-  file_picker: null
+  file_picker: 1.10.0
+  firebase_analytics: null
+  firebase_core: null
+  firebase_messaging: 10.0.4
   flappy_search_bar: ^1.7.2
   flutter:
     sdk: flutter
   flutter_linkify: ^5.0.2
+  flutter_local_notifications: null
   flutter_pdfview: ^1.1.0
   flutter_slidable: ^0.6.0
-  fluttertoast: ^8.0.8
   font_awesome_flutter: null
   get: ^4.1.4
   getwidget: ^1.2.4
   http: ^0.13.3
-  image_picker: ^0.6.6+5
+  image_picker: 0.6.5+3
   image_viewer: ^1.5.0
   intl: null
   lottie: ^1.0.1

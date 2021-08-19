@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:app2/all_tasks/pdeView.dart';
+import './pdeView.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,200 +36,207 @@ class _AttachmentState extends State<Attachment> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
-        appBar: AppBar(
+    return ScaffoldMessenger(
+      key: scaffoldMessengerKey,
+      child: Scaffold(
           // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
-          elevation: 0,
-          title: Text(
-            "Attachments",
-          ),
-          actions: [
-            Container(
-              decoration: BoxDecoration(
-                //  color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 2),
-              margin: EdgeInsets.only(right: 10, top: 7),
-              child: PopupMenuButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                icon: Icon(
-                  Icons.more_vert,
-                  size: 26,
-                  //  color: Colors.blue,
+          appBar: AppBar(
+            // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
+            elevation: 0,
+            title: Text(
+              "Attachments",
+            ),
+            actions: [
+              Container(
+                decoration: BoxDecoration(
+                  //  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
                 ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Row(
-                      children: [
-                        Icon(
-                          CupertinoIcons.paperclip,
-                          size: 30,
-                          ////  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Add Attachment",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
+                padding: EdgeInsets.symmetric(horizontal: 2),
+                margin: EdgeInsets.only(right: 10, top: 7),
+                child: PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  icon: Icon(
+                    Icons.more_vert,
+                    size: 26,
+                    //  color: Colors.blue,
                   ),
-                  PopupMenuItem(
-                    value: 2,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.cancel_outlined,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Cancel",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: [
+                          Icon(
+                            CupertinoIcons.paperclip,
+                            size: 30,
+                            ////  color: Color.fromRGBO(158, 158, 158, 1),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-                onSelected: (item) {
-                  switch (item) {
-                    case 1:
-                      {
-                        _showPickerFileOrImage(context);
-                      }
-                      break;
-                    case 2:
-                      {
-                        setState(() {
-                          upload = true;
-                        });
-                      }
-
-                      break;
-                  }
-                },
-              ),
-            )
-          ],
-          iconTheme: IconThemeData(
-            //  color: Colors.blue,
-            size: 28,
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: res != null
-              ? ListView.builder(
-                  itemBuilder: (context, index) {
-                    var url = "${MyApp.url}${res[index]["user_avatar"]}";
-                    return Column(
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.only(
-                              bottom: 5, left: 10, right: 10, top: 5),
-                          onLongPress: () {
-                            print(res[index]["id"].toString() + "\n");
-                            print(res[index]["path"].toString().split('/')[3]);
-                            _confirmDelete(
-                                context,
-                                res[index]["id"],
-                                int.parse(res[index]["path"]
-                                    .toString()
-                                    .split('/')[3]));
-                          },
-                          leading: url.contains('null')
-                              ? Container(
-                                  padding: EdgeInsets.all(14),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 2,
-                                      color: widget.prority == "URGENT"
-                                          ? Color.fromRGBO(248, 135, 135, 1)
-                                          : Color.fromRGBO(46, 204, 113, 1),
-                                    ),
-                                    color: Colors.grey.withOpacity(0.2),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Text(res[index]["firstName"][0]
-                                      .toString()
-                                      .toUpperCase()),
-                                )
-                              : Container(
-                                  width: 100,
-                                  height: 100,
-                                  padding: EdgeInsets.all(0),
-                                  margin: EdgeInsets.all(0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: NetworkImage(url),
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                          title: Text(
-                            res[index]["firstName"] +
-                                " " +
-                                res[index]["secondName"],
-                            overflow: TextOverflow.ellipsis,
+                          SizedBox(width: 12),
+                          Text(
+                            "Add Attachment",
                             style: TextStyle(
-                              decoration: TextDecoration.underline,
+                              fontSize: 20,
+                              fontFamily: "RubicB",
                             ),
+                          )
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.cancel_outlined,
+                            size: 30,
+                            //  color: Color.fromRGBO(158, 158, 158, 1),
                           ),
-                          subtitle: Text(
-                            res[index]["name"],
-                          ),
-                          // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
-                          // overflow: TextOverflow.ellipsis,
-                          // ),
-                          trailing: res[index]["attachment_type"] == "IMAGE"
-                              ? InkWell(
-                                  onTap: () => showDialog(
-                                      context: context,
-                                      builder: (_) => ImageDialog(
-                                          "${MyApp.url}${res[index]["path"]}")),
-                                  child: Image.network(
-                                      "${MyApp.url}${res[index]["path"]}"),
-                                )
-                              : IconButton(
-                                  onPressed: () async {
-                                    final url =
-                                        "${MyApp.url}${res[index]["path"]}";
-                                    final file = await loadNetwork(url);
-                                    openPDF(context, file);
-                                  },
-                                  icon: Icon(CupertinoIcons.paperclip),
-                                ),
-                        ),
-                        Divider(
-                          //  color:Colors.black,
-                          thickness: 1,
-                          indent: 50,
-                          endIndent: 50,
-                        )
-                      ],
-                    );
+                          SizedBox(width: 12),
+                          Text(
+                            "Cancel",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: "RubicB",
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                  onSelected: (item) {
+                    switch (item) {
+                      case 1:
+                        {
+                          _showPickerFileOrImage(context);
+                        }
+                        break;
+                      case 2:
+                        {
+                          setState(() {
+                            upload = true;
+                          });
+                        }
+
+                        break;
+                    }
                   },
-                  itemCount: res.length,
-                )
-              : Center(
-                  child: Text("No Attachment Found"),
                 ),
-        ));
+              )
+            ],
+            iconTheme: IconThemeData(
+              //  color: Colors.blue,
+              size: 28,
+            ),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: res != null
+                ? ListView.builder(
+                    itemBuilder: (context, index) {
+                      var url = "${MyApp.url}${res[index]["user_avatar"]}";
+                      return Column(
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.only(
+                                bottom: 5, left: 10, right: 10, top: 5),
+                            onLongPress: () {
+                              print(res[index]["id"].toString() + "\n");
+                              print(
+                                  res[index]["path"].toString().split('/')[3]);
+                              _confirmDelete(
+                                  context,
+                                  res[index]["id"],
+                                  int.parse(res[index]["path"]
+                                      .toString()
+                                      .split('/')[3]));
+                            },
+                            leading: url.contains('null')
+                                ? Container(
+                                    padding: EdgeInsets.all(14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 2,
+                                        color: widget.prority == "URGENT"
+                                            ? Color.fromRGBO(248, 135, 135, 1)
+                                            : Color.fromRGBO(46, 204, 113, 1),
+                                      ),
+                                      color: Colors.grey.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(res[index]["firstName"][0]
+                                        .toString()
+                                        .toUpperCase()),
+                                  )
+                                : Container(
+                                    width: 100,
+                                    height: 100,
+                                    padding: EdgeInsets.all(0),
+                                    margin: EdgeInsets.all(0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage(url),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                            title: Text(
+                              res[index]["firstName"] +
+                                  " " +
+                                  res[index]["secondName"],
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            subtitle: Text(
+                              res[index]["name"],
+                            ),
+                            // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
+                            // overflow: TextOverflow.ellipsis,
+                            // ),
+                            trailing: res[index]["attachment_type"] == "IMAGE"
+                                ? InkWell(
+                                    onTap: () => showDialog(
+                                        context: context,
+                                        builder: (_) => ImageDialog(
+                                            "${MyApp.url}${res[index]["path"]}")),
+                                    child: Image.network(
+                                        "${MyApp.url}${res[index]["path"]}"),
+                                  )
+                                : IconButton(
+                                    onPressed: () async {
+                                      final url =
+                                          "${MyApp.url}${res[index]["path"]}";
+                                      final file = await loadNetwork(url);
+                                      openPDF(context, file);
+                                    },
+                                    icon: Icon(CupertinoIcons.paperclip),
+                                  ),
+                          ),
+                          Divider(
+                            //  color:Colors.black,
+                            thickness: 1,
+                            indent: 50,
+                            endIndent: 50,
+                          )
+                        ],
+                      );
+                    },
+                    itemCount: res.length,
+                  )
+                : Center(
+                    child: Text("No Attachment Found"),
+                  ),
+          )),
+    );
   }
 
   //this function to add attachment to task
@@ -297,6 +303,7 @@ class _AttachmentState extends State<Attachment> {
   }
 
   _showPickerFileOrImage(context) {
+    int time = 10;
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -308,24 +315,56 @@ class _AttachmentState extends State<Attachment> {
                       leading: new Icon(Icons.insert_drive_file),
                       title: new Text('File'),
                       onTap: () async {
-                        FilePickerResult result =
-                            await FilePicker.platform.pickFiles(
+                        List<File> result = await FilePicker.getMultiFile(
                           type: FileType.custom,
-                          allowedExtensions: ['pdf', 'doc', 'docx'],
+                          allowedExtensions: ['pdf'],
                         );
-
+                        print(result.single);
                         if (result != null) {
-                          File file2 = File(result.files.single.path);
-                          _confromUploadImageOrFile(context, file2);
-                          // uploadimage(context, file2);
+                          File file2 = File(result.single.absolute.path);
+                          // _confromUploadImageOrFile(context, file2);
+                          if (result.single.path != null) {
+                            scaffoldMessengerKey.currentState.showSnackBar(
+                              SnackBar(
+                                action: SnackBarAction(
+                                  label: "Yes",
+                                  onPressed: () => uploadimage(context, file2),
+                                ),
+                                duration: Duration(seconds: time),
+                                content: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Confirm to upload this Attachment?",
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    ButtonTheme(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 15),
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      minWidth: 0,
+                                      height: 0,
+                                      // ignore: deprecated_member_use
+                                      child: FlatButton(
+                                          shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(10),
+                                          ),
+                                          onPressed: () => scaffoldMessengerKey
+                                              .currentState
+                                              .clearSnackBars(),
+                                          child: Text(
+                                              'No')), //your original button
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
                         }
-                        // FilePickerResult file2 =
-                        //     await FilePicker.platform.pickFiles(
-                        //   type: FileType.custom,
-                        //   allowedExtensions: ['jpg', 'pdf', 'doc'],
-                        // );
-                        // print(file2.paths.toString());
-
                         Navigator.of(context).pop();
                       }),
                   new ListTile(

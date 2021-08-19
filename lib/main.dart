@@ -1,15 +1,40 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 import 'login/logn.dart';
 import 'navBar.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+  print(message.data);
+}
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'Firebase_app', // id
+  'High Importance Notifications', // title
+  'This channel is used for important notifications.', // description
+  importance: Importance.high,
+);
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
   // SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 }
 
 class MyApp extends StatefulWidget {
@@ -36,6 +61,36 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _getTheme();
     checkLoginStatus();
+    var initialzationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initialzationSettingsAndroid);
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message.data);
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                icon: android.smallIcon,
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+    });
     super.initState();
   }
 
@@ -78,7 +133,11 @@ class _MyAppState extends State<MyApp> {
         iconTheme: IconThemeData(
           color: Color.fromRGBO(49, 91, 169, 1),
         ),
-
+        dialogTheme: DialogTheme(
+            contentTextStyle: TextStyle(color: Colors.black),
+            titleTextStyle: TextStyle(color: Colors.black),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
         textTheme: TextTheme(
           headline1: TextStyle(color: Colors.black),
           headline2: TextStyle(color: Colors.black),
@@ -87,6 +146,8 @@ class _MyAppState extends State<MyApp> {
           headline6: TextStyle(color: Colors.black),
           subtitle2: TextStyle(color: Colors.black),
           caption: TextStyle(color: Colors.black),
+          bodyText1: TextStyle(color: Colors.black),
+          overline: TextStyle(color: Colors.black),
         ),
         // dividerTheme: DividerThemeData(color: Colors.black),
         dividerColor: Colors.black,
@@ -133,7 +194,7 @@ class _MyAppState extends State<MyApp> {
 
   _getTheme() async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
-    MyApp.mode = await _pref.getBool("mode");
+    MyApp.mode = _pref.getBool("mode");
     if (MyApp.mode != null) {
       setState(() {
         MyApp.mode

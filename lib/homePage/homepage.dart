@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:toast/toast.dart';
+
+import '../login/logn.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -46,17 +49,17 @@ class _HomePageState extends State<HomePage> {
 
   bool theme = false;
 
-  bool star = false;
-
   bool imageFound = false;
 
   bool likeIt = false;
+
+  TextEditingController _fName = TextEditingController();
 
   @override
   void initState() {
     _searchForMember.clear();
     checkWorkSpaces();
-
+    Logn.getToken();
     super.initState();
   }
 
@@ -515,20 +518,24 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         IconButton(
                             onPressed: () {
-                              setState(() {
-                                likeIt = !likeIt;
-                              });
+                              listOfWorkspace[index]["isFavorite"] == 0
+                                  ? _setFavorite(
+                                      listOfWorkspace[index]["workspaceId"],
+                                      context)
+                                  : _deleteFavorite(
+                                      listOfWorkspace[index]["workspaceId"],
+                                      context);
                             },
-                            icon: likeIt == false
+                            icon: listOfWorkspace[index]["isFavorite"] == 0
                                 ? Icon(
                                     Icons.star_border_rounded,
                                     size: 30,
-                                    // color:  Color.fromRGBO(132, 132, 132, 1),
+                                    // color: Color.fromRGBO(255, 215, 0, 1),
                                   )
                                 : Icon(
                                     Icons.star_rounded,
                                     size: 30,
-                                    // color:  Color.fromRGBO(132, 132, 132, 1),
+                                    color: Color.fromRGBO(255, 195, 17, 1),
                                   )),
                         SizedBox(width: 10),
                         PopupMenuButton(
@@ -549,7 +556,7 @@ class _HomePageState extends State<HomePage> {
                                     listOfWorkspace[index]["role"] == "employer"
                                         ? Icons.delete
                                         : Icons.logout,
-                                    size: 30,
+                                    size: 20,
                                     // color:  Color.fromRGBO(158, 158, 158, 1),
                                   ),
                                   SizedBox(width: 12),
@@ -558,7 +565,7 @@ class _HomePageState extends State<HomePage> {
                                         ? "Delete"
                                         : "Leave",
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontFamily: "RubicB",
                                     ),
                                   )
@@ -572,7 +579,7 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Icon(
                                           Icons.edit,
-                                          size: 30,
+                                          size: 20,
                                           // color:
                                           // Color.fromRGBO(158, 158, 158, 1),
                                         ),
@@ -580,7 +587,7 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           "Edit",
                                           style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 18,
                                             fontFamily: "RubicB",
                                           ),
                                         )
@@ -593,29 +600,60 @@ class _HomePageState extends State<HomePage> {
                               child: Row(children: [
                                 Icon(
                                   Icons.add_circle_rounded,
-                                  size: 30,
+                                  size: 20,
                                   // color:  Color.fromRGBO(158, 158, 158, 1),
                                 ),
                                 SizedBox(width: 12),
                                 Text(
                                   "Add Memeber",
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontFamily: "RubicB",
                                   ),
                                 ),
                               ]),
-                            )
+                            ),
+                            listOfWorkspace[index]["role"] == "employer"
+                                ? PopupMenuItem(
+                                    value: 4,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.remove,
+                                          size: 20,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(width: 12),
+                                        Text(
+                                          "Remove Image",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: "RubicB",
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : null,
                           ],
                           onSelected: (item) {
                             switch (item) {
                               case 1:
                                 {
                                   listOfWorkspace[index]["role"] == "employer"
-                                      ? delete(
+                                      ? _confirmDeleteOrleaveWorkspace(
+                                          context,
+                                          "delete",
+                                          listOfWorkspace[index]
+                                              ["workspaceName"],
                                           listOfWorkspace[index]["workspaceId"])
-                                      : leave(listOfWorkspace[index]
-                                          ["workspaceId"]);
+                                      : _confirmDeleteOrleaveWorkspace(
+                                          context,
+                                          "leave",
+                                          listOfWorkspace[index]
+                                              ["workspaceName"],
+                                          listOfWorkspace[index]
+                                              ["workspaceId"]);
                                 }
                                 break;
                               case 2:
@@ -645,6 +683,11 @@ class _HomePageState extends State<HomePage> {
                                               "Add Member to Workspace",
                                               null,
                                             )));
+                                break;
+                              case 4:
+                                _removeWorkspaceImage(
+                                    listOfWorkspace[index]["workspaceId"],
+                                    context);
                                 break;
                             }
                           },
@@ -1141,9 +1184,12 @@ class _HomePageState extends State<HomePage> {
         jsonResponse = json.decode(resSTR);
       }
       if (jsonResponse["successful"]) {
-        var list = sharedPreferences.getStringList("firstSecond");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
+        // var list = sharedPreferences.getStringList("firstSecond");
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
+        setState(() {
+          checkWorkSpaces();
+        });
       }
 
       if (!jsonResponse["successful"]) {
@@ -1171,7 +1217,7 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: Text(
                   "+" + (list.length - 3).toString(),
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
             ),
@@ -1223,13 +1269,16 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(),
-                    color: Colors.grey.withOpacity(0.6)),
+                    color: Colors.grey.withOpacity(0.7)),
                 child: Center(
-                    child: Text(list[index]["firstName"]
-                        .toString()
-                        .split('')[0]
-                        .toUpperCase()
-                        .toUpperCase())))
+                    child: Text(
+                  list[index]["firstName"]
+                      .toString()
+                      .split('')[0]
+                      .toUpperCase()
+                      .toUpperCase(),
+                  style: TextStyle(color: Colors.white),
+                )))
             : Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -1269,5 +1318,207 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- 
+  _confirmDeleteOrleaveWorkspace(
+    BuildContext context,
+    String _delete,
+    String workspace,
+    int id,
+  ) async {
+    SharedPreferences _pred = await SharedPreferences.getInstance();
+    return _delete == "delete"
+        ? showDialog(
+            context: context,
+            builder: (contect) {
+              return AlertDialog(
+                title: Text("Upload Attachment"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RichText(
+                      text: new TextSpan(
+                        style: TextStyle(
+                            color: !_pred.getBool('mode')
+                                ? Colors.black
+                                : Colors.white),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Enter Your First Name to Delete this '),
+                          TextSpan(
+                            text: workspace,
+                            style: new TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(text: ' workspace?\n'),
+                          TextSpan(text: '\nEnter your First Name: '),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      // width: MediaQuery.of(context).size.width - 20,
+                      child: new TextFormField(
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          hintText: "First Name",
+                        ),
+                        controller: _fName,
+                      ),
+                    )
+                  ],
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      var fName = _pred.getStringList("firstSecond");
+                      if (_fName.text.toLowerCase() == fName[0].toLowerCase()) {
+                        delete(id);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("Yes"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("No"),
+                  ),
+                ],
+              );
+            })
+        : showDialog(
+            context: context,
+            builder: (contect) {
+              return AlertDialog(
+                title: Text("Upload Attachment"),
+                content: Text(
+                  "Are Sure You want to Leave ${workspace} workspace?",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      leave(id);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Yes"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("No"),
+                  ),
+                ],
+              );
+            });
+  }
+
+  _setFavorite(int id, BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var jsonResponse = null;
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/favorite");
+      var response = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, dynamic>{
+            "workspaceId": id,
+          },
+        ),
+      );
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse["successful"]) {
+        Toast.show(
+          jsonResponse["message"],
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+        setState(() {
+          checkWorkSpaces();
+        });
+        setState(() {
+          checkWorkSpaces();
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _deleteFavorite(int id, BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var jsonResponse = null;
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/favorite/delete/$id");
+      var response = await http.delete(
+        url,
+        headers: requestHeaders,
+      );
+      jsonResponse = json.decode(response.body);
+
+      if (jsonResponse["successful"]) {
+        Toast.show(
+          jsonResponse["message"],
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        setState(() {
+          checkWorkSpaces();
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _removeWorkspaceImage(int id, BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+    try {
+      var url = Uri.parse("${MyApp.url}/workspace/avatar/$id");
+      var response = await http.delete(
+        url,
+        headers: requestHeaders,
+      );
+      var jsonResponse = json.decode(response.body);
+
+      if (jsonResponse["successful"]) {
+        Toast.show(
+          jsonResponse["message"],
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        setState(() {
+          checkWorkSpaces();
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

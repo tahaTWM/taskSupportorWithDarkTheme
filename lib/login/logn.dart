@@ -1,4 +1,6 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +12,32 @@ import 'forgotPassword.dart';
 import 'register.dart';
 
 class Logn extends StatefulWidget {
+  static getToken() async {
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+
+    String token = await _firebaseMessaging.getToken();
+    print(token);
+  }
+
   @override
   State<StatefulWidget> createState() {
     return new _Logn();
@@ -415,7 +443,7 @@ class _Logn extends State<Logn> {
           "userAvatar", jsonResponse['data']['user_avatar'].toString());
 
       await sharedPreferences.setString("email", _eMail.text);
-
+      getToken();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -467,5 +495,31 @@ class _Logn extends State<Logn> {
             ],
           ));
     scaffoldMessengerKey.currentState.showSnackBar(snakbar);
+  }
+
+  getToken() async {
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+
+    String token = await _firebaseMessaging.getToken();
+    print(token);
   }
 }

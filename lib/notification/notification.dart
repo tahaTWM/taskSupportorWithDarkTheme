@@ -1,4 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../main.dart';
 
 class ListItem<T> {
   bool isSelected = false; //Selection property to highlight or not
@@ -349,5 +354,22 @@ class _NotificationsState extends State<Notifications> {
         ),
       ],
     );
+  }
+
+  // ignore: unused_element
+  _getNotifiaction() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+    var jsonResponse = null;
+    var url = Uri.parse("${MyApp.url}/workspaces");
+    var response = await http.get(
+      url,
+      headers: requestHeaders,
+    );
+    jsonResponse = json.decode(response.body);
+    print(jsonResponse);
   }
 }
