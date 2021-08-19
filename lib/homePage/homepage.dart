@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   setState(() {
                                     theme = !theme;
-                                    _changeTheme(theme);
+                                    _changeTheme(theme, context);
                                   });
                                   theme
                                       ? Get.changeThemeMode(ThemeMode.dark)
@@ -400,9 +400,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _changeTheme(bool mode) async {
+  _changeTheme(bool mode, BuildContext context) async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
     _pref.setBool("mode", mode);
+    Toast.show(
+      "Theme Switched",
+      context,
+      duration: Toast.LENGTH_SHORT,
+      gravity: Toast.BOTTOM,
+      backgroundColor: Colors.blueGrey,
+      textColor: Colors.white,
+    );
   }
 
   void evictImage(String url) {
@@ -821,7 +829,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 0.27,
+                            margin: EdgeInsets.only(right: 5),
+                            width: MediaQuery.of(context).size.width * 0.29,
                             height: MediaQuery.of(context).size.width * 0.15,
                             // color: Colors.red,
                             child: memberStack(

@@ -4,15 +4,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 import 'login/logn.dart';
 import 'navBar.dart';
 
+// this notifiaction is if the app is close in background or comp
+// completly killeds
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  var initialzationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettings =
+      InitializationSettings(android: initialzationSettingsAndroid);
+
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
   print('Handling a background message ${message.messageId}');
-  print(message.data);
+  RemoteNotification notification = message.notification;
+  AndroidNotification android = message.notification.android;
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channel.description,
+            icon: android?.smallIcon,
+          ),
+        ));
+  }
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -67,11 +91,9 @@ class _MyAppState extends State<MyApp> {
         InitializationSettings(android: initialzationSettingsAndroid);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(message.data);
       RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
+      AndroidNotification android = message.notification.android;
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -82,14 +104,32 @@ class _MyAppState extends State<MyApp> {
                 channel.id,
                 channel.name,
                 channel.description,
-                icon: android.smallIcon,
+                icon: android?.smallIcon,
               ),
             ));
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print(message.data);
+      {
+        print(message.data);
+        RemoteNotification notification = message.notification;
+        AndroidNotification android = message.notification?.android;
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channel.description,
+                  icon: android.smallIcon,
+                ),
+              ));
+        }
+      }
     });
     super.initState();
   }
