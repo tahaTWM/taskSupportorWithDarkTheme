@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../navBar.dart';
 import '../homePage/workSpaceMembers.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import '../all_tasks/showAllTasks.dart';
@@ -54,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   bool likeIt = false;
 
   TextEditingController _fName = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              imageFound == false
+                              imageFound == false || userAvatar ==  null || userAvatar == "null"
                                   ? Container(
                                       width: width > 400 ? 60 : 40,
                                       height: width > 400 ? 60 : 40,
@@ -564,7 +564,7 @@ class _HomePageState extends State<HomePage> {
                                     listOfWorkspace[index]["role"] == "employer"
                                         ? Icons.delete
                                         : Icons.logout,
-                                    size: 20,
+                                    size: 25,
                                     // color:  Color.fromRGBO(158, 158, 158, 1),
                                   ),
                                   SizedBox(width: 12),
@@ -587,7 +587,7 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Icon(
                                           Icons.edit,
-                                          size: 20,
+                                          size: 25,
                                           // color:
                                           // Color.fromRGBO(158, 158, 158, 1),
                                         ),
@@ -608,7 +608,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(children: [
                                 Icon(
                                   Icons.add_circle_rounded,
-                                  size: 20,
+                                  size: 25,
                                   // color:  Color.fromRGBO(158, 158, 158, 1),
                                 ),
                                 SizedBox(width: 12),
@@ -628,7 +628,7 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Icon(
                                           Icons.remove,
-                                          size: 20,
+                                          size: 25,
                                           color: Colors.red,
                                         ),
                                         SizedBox(width: 12),
@@ -829,9 +829,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           child: Container(
-                            margin: EdgeInsets.only(right: 5),
-                            width: MediaQuery.of(context).size.width * 0.29,
-                            height: MediaQuery.of(context).size.width * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            height: MediaQuery.of(context).size.width * 0.16,
                             // color: Colors.red,
                             child: memberStack(
                                 listOfWorkspace[index]["users"], context),
@@ -938,14 +937,10 @@ class _HomePageState extends State<HomePage> {
 
   checkWorkSpaces() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("userAvatar") != null) {
+    if (sharedPreferences.getString("userAvatar") != "null") {
       setState(() {
         imageFound = true;
         userAvatar = sharedPreferences.getString("userAvatar");
-      });
-    } else {
-      setState(() {
-        imageFound = false;
       });
     }
     Map<String, String> requestHeaders = {
@@ -1105,7 +1100,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
-                      title: new Text('Photo Library'),
+                      title: new Text('Gallery'),
                       onTap: () {
                         _imgFromGallery(context, workspaceID);
                         Navigator.of(context).pop();
@@ -1126,18 +1121,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   _imgFromCamera(BuildContext context, int workspaceID) async {
-    // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50));
-    _showAlertDilog(context, _image, workspaceID);
+    var image = (await ImagePicker.platform.getImage(
+      source: ImageSource.camera,
+    ));
+    final File _image = File(image.path);
+    if (_image != null) _showAlertDilog(context, _image, workspaceID);
   }
 
   _imgFromGallery(BuildContext context, int workspaceID) async {
-    // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
+    var image = (await ImagePicker.platform.getImage(
       source: ImageSource.gallery,
     ));
-    _showAlertDilog(context, _image, workspaceID);
+    final File _image = File(image.path);
+    if (_image != null) _showAlertDilog(context, _image, workspaceID);
   }
 
   _showAlertDilog(BuildContext context, File _image, int workspaceID) {
@@ -1260,12 +1256,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Positioned positioned({
-    List list,
-    double left,
-    double right,
-    int index,
-  }) {
+  Positioned positioned({List list, double left, double right, int index}) {
     return Positioned(
       left: left,
       right: right,
@@ -1277,8 +1268,8 @@ class _HomePageState extends State<HomePage> {
                 margin: EdgeInsets.only(right: 5),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(),
-                    color: Colors.grey.withOpacity(0.7)),
+                    border: Border.all(color: Colors.white),
+                    color: Colors.grey),
                 child: Center(
                     child: Text(
                   list[index]["firstName"]
@@ -1296,7 +1287,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(50.0),
                   child: Image.network(
                     "${MyApp.url}${list[index]["user_avatar"]}",
-                    // fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     width: 50,
                     height: 50,
                     loadingBuilder: (BuildContext context, Widget child,

@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -18,7 +17,9 @@ import '../main.dart';
 class Attachment extends StatefulWidget {
   int taskID;
   String prority;
+
   Attachment(this.taskID, this.prority);
+
   @override
   _AttachmentState createState() => _AttachmentState();
 }
@@ -30,6 +31,7 @@ class _AttachmentState extends State<Attachment> {
   File image;
   File file;
   List res = [];
+
   @override
   void initState() {
     checkIfThereAnyAttachment();
@@ -156,7 +158,9 @@ class _AttachmentState extends State<Attachment> {
                                       .toString()
                                       .split('/')[3]));
                             },
-                            leading: url.contains('null')
+                            leading: url.contains('null') ||
+                                    res[index]["user_avatar"] == null ||
+                                    res[index]["user_avatar"] == "null"
                                 ? Container(
                                     padding: EdgeInsets.all(14),
                                     decoration: BoxDecoration(
@@ -244,7 +248,6 @@ class _AttachmentState extends State<Attachment> {
   //select betwen camera and storage
 
   _showPicker(context) async {
-    await Permission.storage.request();
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -315,15 +318,15 @@ class _AttachmentState extends State<Attachment> {
                       leading: new Icon(Icons.insert_drive_file),
                       title: new Text('File'),
                       onTap: () async {
-                        List<File> result = await FilePicker.getMultiFile(
+                        FilePickerResult result =
+                            await FilePicker.platform.pickFiles(
                           type: FileType.custom,
                           allowedExtensions: ['pdf'],
                         );
-                        print(result.single);
                         if (result != null) {
-                          File file2 = File(result.single.absolute.path);
+                          File file2 = File(result.files.single.path);
                           // _confromUploadImageOrFile(context, file2);
-                          if (result.single.path != null) {
+                          if (result.files.single.path != null) {
                             scaffoldMessengerKey.currentState.showSnackBar(
                               SnackBar(
                                 action: SnackBarAction(
@@ -371,8 +374,8 @@ class _AttachmentState extends State<Attachment> {
                     leading: new Icon(Icons.image),
                     title: new Text('Image'),
                     onTap: () {
-                      _showPicker(context);
                       Navigator.of(context).pop();
+                      _showPicker(context);
                     },
                   ),
                 ],
@@ -383,18 +386,20 @@ class _AttachmentState extends State<Attachment> {
   }
 
   _imgFromGallery(BuildContext context) async {
-    // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
+    var image = (await ImagePicker.platform.getImage(
       source: ImageSource.gallery,
     ));
+    final File _image = File(image.path);
     if (_image != null) _confromUploadImageOrFile(context, _image);
   }
 
   _imgFromCamera(BuildContext context) async {
     // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50));
-    if (_image != null) _confromUploadImageOrFile(context, _image);
+    var image = (await ImagePicker.platform.getImage(
+      source: ImageSource.camera,
+    ));
+    final File _image = File(image.path);
+    if (_image != null) _confromUploadImageOrFile(context, _image as File);
   }
 
   _confromUploadImageOrFile(BuildContext context, File file1) {
@@ -564,7 +569,9 @@ class _AttachmentState extends State<Attachment> {
 
 class ImageDialog extends StatelessWidget {
   String url;
+
   ImageDialog(this.url);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

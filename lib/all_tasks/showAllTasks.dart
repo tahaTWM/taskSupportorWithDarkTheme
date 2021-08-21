@@ -99,7 +99,9 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           // iconTheme: IconThemeData(color: Colors.black),
           title: Row(
             children: [
-              widget.userAvatar == "null"
+              widget.userAvatar == null ||
+                      widget.userAvatar == "null" ||
+                      widget.userAvatar.contains("null")
                   ? Container(
                       width: 40,
                       height: 40,
@@ -665,7 +667,22 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                       children: [
                         // task members
                         InkWell(
-                          onTap: () {},
+                          onTap: () =>
+                              // {
+                              //   print(newListReversed[index]);
+                              // },
+                              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WorkSpaceMember(
+                                widget.workspaceId,
+                                newListReversed[index]["user_avatar"],
+                                checkIfThereAnyTaskes,
+                                "Task Members",
+                                newListReversed[index]["taskId"],
+                              ),
+                            ),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: Row(

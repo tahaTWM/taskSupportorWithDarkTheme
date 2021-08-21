@@ -202,50 +202,48 @@ class _Register extends State<Register> {
 
   signUp(String firstName, String secondName, String email,
       String password) async {
-    if (await Permission.storage.request().isGranted) {
-      // ignore: avoid_init_to_null
-      var jsonResponse = null;
-      var response;
-      var url = Uri.parse("${MyApp.url}/user/register");
+    // ignore: avoid_init_to_null
+    var jsonResponse = null;
+    var response;
+    var url = Uri.parse("${MyApp.url}/user/register");
 
-      if (_passWord.text == _confPassword.text) {
-        response = await http.post(
-          url,
-          headers: requestHeaders,
-          body: jsonEncode(
-            <String, String>{
-              "firstName": firstName,
-              "secondName": secondName,
-              "email": email,
-              "password": password
-            },
-          ),
+    if (_passWord.text == _confPassword.text) {
+      response = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, String>{
+            "firstName": firstName,
+            "secondName": secondName,
+            "email": email,
+            "password": password
+          },
+        ),
+      );
+      jsonResponse = json.decode(response.body);
+      if (!jsonResponse["successful"]) {
+        showsnakbar(
+          jsonResponse["message"],
         );
-        jsonResponse = json.decode(response.body);
-        if (!jsonResponse["successful"]) {
-          showsnakbar(
-            jsonResponse["message"],
-          );
-        }
-        if (jsonResponse["successful"]) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Logn()));
-        }
-      } else {
-        scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
-            duration: Duration(seconds: 5),
-            content: Row(
-              children: [
-                Icon(Icons.warning_rounded, color: Colors.yellow),
-                SizedBox(width: 10),
-                Text(
-                  "Password does not match",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ],
-            )));
       }
+      if (jsonResponse["successful"]) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Logn()));
+      }
+    } else {
+      scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+          duration: Duration(seconds: 5),
+          content: Row(
+            children: [
+              Icon(Icons.warning_rounded, color: Colors.yellow),
+              SizedBox(width: 10),
+              Text(
+                "Password does not match",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ],
+          )));
     }
   }
 

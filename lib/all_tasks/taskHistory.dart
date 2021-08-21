@@ -69,8 +69,11 @@ class _TaskHistoryState extends State<TaskHistory>
                     return Column(
                       children: [
                         ListTile(
-                            contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 2),
-                            leading: url.contains('null')
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 2),
+                            leading: url.contains('null') ||
+                                    _history[index]["user_avatar"] == null ||
+                                    _history[index]["user_avatar"] == "null"
                                 ? Container(
                                     padding: EdgeInsets.all(14),
                                     decoration: BoxDecoration(

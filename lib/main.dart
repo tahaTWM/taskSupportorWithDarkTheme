@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
@@ -14,28 +13,32 @@ import 'navBar.dart';
 // this notifiaction is if the app is close in background or comp
 // completly killeds
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  var initialzationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettings =
-      InitializationSettings(android: initialzationSettingsAndroid);
+  // var initialzationSettingsAndroid =
+  //     AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  print('Handling a background message ${message.messageId}');
+  // var initializationSettings =
+  //     InitializationSettings(android: initialzationSettingsAndroid);
+
+  // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  print('Handling a background message ${message.senderId}');
+  // ignore: unused_local_variable
   RemoteNotification notification = message.notification;
+  // ignore: unused_local_variable
   AndroidNotification android = message.notification.android;
   if (notification != null && android != null) {
     flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            channel.description,
-            icon: android?.smallIcon,
-          ),
-        ));
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channel.description,
+          icon: android?.smallIcon,
+        ),
+      ),
+    );
   }
 }
 
@@ -44,6 +47,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'High Importance Notifications', // title
   'This channel is used for important notifications.', // description
   importance: Importance.high,
+  playSound: true,
 );
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -66,7 +70,7 @@ class MyApp extends StatefulWidget {
   static String url = "http://192.168.1.2:100";
 
   //nogrok ip
-  // static String url = "https://splendid-dolphin-71.loca.lt";
+  // static String url = "https://blue-snake-34.loca.lt";
 
   //wifi ip
   // static String url = "http://192.168.1.106:100";
@@ -115,20 +119,20 @@ class _MyAppState extends State<MyApp> {
         print(message.data);
         RemoteNotification notification = message.notification;
         AndroidNotification android = message.notification?.android;
-        if (notification != null && android != null) {
-          flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              notification.title,
-              notification.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  channel.description,
-                  icon: android.smallIcon,
-                ),
-              ));
-        }
+        // if (notification != null && android != null) {
+        //   flutterLocalNotificationsPlugin.show(
+        //       notification.hashCode,
+        //       notification.title,
+        //       notification.body,
+        //       NotificationDetails(
+        //         android: AndroidNotificationDetails(
+        //           channel.id,
+        //           channel.name,
+        //           channel.description,
+        //           icon: android.smallIcon,
+        //         ),
+        //       ));
+        // }
       }
     });
     super.initState();
@@ -178,6 +182,10 @@ class _MyAppState extends State<MyApp> {
             titleTextStyle: TextStyle(color: Colors.black),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Colors.grey[900],
+          contentTextStyle: TextStyle(color: Colors.white),
+        ),
         textTheme: TextTheme(
           headline1: TextStyle(color: Colors.black),
           headline2: TextStyle(color: Colors.black),
@@ -206,6 +214,10 @@ class _MyAppState extends State<MyApp> {
         ),
         // dividerTheme: DividerThemeData(color: Colors.white),
         dividerColor: Colors.white,
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Colors.grey[900],
+          contentTextStyle: TextStyle(color: Colors.white),
+        ),
       ),
       home: tokenFound == true ? NavBar(fName) : Logn(),
       debugShowCheckedModeBanner: false,

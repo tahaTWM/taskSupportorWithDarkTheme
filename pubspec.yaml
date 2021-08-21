@@ -16,9 +16,9 @@ dependencies:
   custom_dialog_box: null
   dialog: ^0.7.2+1
   email_validator: ^2.0.1
-  file_picker: 1.10.0
+  file_picker: ^4.0.0
   firebase_analytics: null
-  firebase_core: null
+  firebase_core:
   firebase_messaging: 10.0.4
   flappy_search_bar: ^1.7.2
   flutter:
@@ -31,7 +31,7 @@ dependencies:
   get: ^4.1.4
   getwidget: ^1.2.4
   http: ^0.13.3
-  image_picker: 0.6.5+3
+  image_picker: 0.8.1
   image_viewer: ^1.5.0
   intl: null
   lottie: ^1.0.1

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -136,6 +137,7 @@ class _Logn extends State<Logn> {
                   onFieldSubmitted: (_) {
                     _formKey.currentState.validate();
                   },
+                  keyboardType: TextInputType.emailAddress,
                 ),
               ),
               SizedBox(height: 20),
@@ -498,6 +500,7 @@ class _Logn extends State<Logn> {
   }
 
   getToken() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
     FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -519,7 +522,14 @@ class _Logn extends State<Logn> {
       print('User declined or has not accepted permission');
     }
 
-    String token = await _firebaseMessaging.getToken();
-    print(token);
+    if (await Permission.storage.request().isGranted) {
+      String token = await _firebaseMessaging.getToken();
+      if (_pref.getString("firebaseToken") != null ||
+          _pref.getString("firebaseToken") !=
+              "null") if (_pref.getString("firebaseToken") != token)
+        _pref.setString("firebaseToken", token);
+
+      print(token);
+    }
   }
 }

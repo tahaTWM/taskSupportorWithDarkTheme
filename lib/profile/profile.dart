@@ -18,7 +18,9 @@ import '../navBar.dart';
 
 class Profile extends StatefulWidget {
   String fn;
+
   Profile(this.fn);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -46,6 +48,7 @@ class _ProfileState extends State<Profile> {
 
   String workspaces = "0";
   String tasks = "0";
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -174,6 +177,26 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                   ),
+                  PopupMenuItem(
+                    value: 5,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.remove,
+                          size: 30,
+                           color: Colors.red,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Remove Profile Image",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: "RubicB",
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
                 onSelected: (item) {
                   switch (item) {
@@ -194,6 +217,13 @@ class _ProfileState extends State<Profile> {
                     case 4:
                       Get.changeThemeMode(ThemeMode.dark);
                       _changeTheme(true);
+                      break;
+                    case 5:
+                      {
+                        _removeimage();
+                        // Navigator.of(context).pop();
+                      }
+
                       break;
                   }
                 },
@@ -219,7 +249,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Stack(
                   children: [
-                    imageFound == false
+                    imageFound == false ||
+                            imagePath == null ||
+                            imagePath == "null"
                         ? Container(
                             width: MediaQuery.of(context).size.width * 0.45,
                             height: MediaQuery.of(context).size.width * 0.45,
@@ -229,7 +261,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: Center(
                               child: Text(
-                                widget.fn[0],
+                                widget.fn[0].toUpperCase(),
                                 style: TextStyle(
                                     fontSize: width > 400 ? 80 : 40,
                                     fontFamily: "CCB"),
@@ -277,11 +309,11 @@ class _ProfileState extends State<Profile> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.45,
                           height: MediaQuery.of(context).size.height * 0.04,
-                          color: Colors.grey.withOpacity(0.4),
+                          color: Colors.grey.withOpacity(0.6),
                           child: Center(
                             child: Icon(
                               Icons.image,
-                              color: Colors.grey[700],
+                              color: Colors.white,
                               size: width > 400 ? 30 : 20,
                             ),
                           ),
@@ -450,19 +482,22 @@ class _ProfileState extends State<Profile> {
     _pref.setBool("mode", mode);
   }
 
-  _imgFromCamera(BuildContext context) async {
-    // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50));
-    _showAlertDilog(context, _image);
-  }
-
   _imgFromGallery(BuildContext context) async {
     // ignore: deprecated_member_use
-    var _image = (await ImagePicker.pickImage(
+    var image = (await ImagePicker.platform.getImage(
       source: ImageSource.gallery,
     ));
-    _showAlertDilog(context, _image);
+    final File _image = File(image.path);
+    if (_image != null) _showAlertDilog(context, _image as File);
+  }
+
+  _imgFromCamera(BuildContext context) async {
+    // ignore: deprecated_member_use
+    var image = (await ImagePicker.platform.getImage(
+      source: ImageSource.camera,
+    ));
+    final File _image = File(image.path);
+    if (_image != null) _showAlertDilog(context, _image as File);
   }
 
   uploadimage(BuildContext context) async {
@@ -500,7 +535,7 @@ class _ProfileState extends State<Profile> {
                 children: <Widget>[
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
-                      title: new Text('Photo Library'),
+                      title: new Text('Gallery'),
                       onTap: () {
                         _imgFromGallery(context);
                         Navigator.of(context).pop();
@@ -513,17 +548,7 @@ class _ProfileState extends State<Profile> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  new ListTile(
-                    leading: new Icon(Icons.remove, color: Colors.red),
-                    title: new Text(
-                      'Remove profile Image',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    onTap: () {
-                      _removeimage();
-                      Navigator.of(context).pop();
-                    },
-                  ),
+
                 ],
               ),
             ),
@@ -783,14 +808,10 @@ class _ProfileState extends State<Profile> {
     var jsonResponse = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    if (sharedPreferences.getString("userAvatar") != null) {
+    if (sharedPreferences.getString("userAvatar") != "null") {
       setState(() {
         imageFound = true;
         imagePath = sharedPreferences.getString("userAvatar");
-      });
-    } else {
-      setState(() {
-        imageFound = false;
       });
     }
     List<dynamic> list = sharedPreferences.getStringList("firstSecond");
@@ -856,13 +877,13 @@ class _ProfileState extends State<Profile> {
           title: Text(
             "image is update it",
             style: TextStyle(
-                //  color: Colors.white,
+                color: Colors.grey[300],
                 fontFamily: "CCB",
                 fontSize: w > 400 ? 20 : 17),
           ),
           trailing: Icon(
             Icons.check,
-            //  color: Colors.green,
+            color: Colors.grey[300],
           ),
         ),
       );
@@ -871,11 +892,18 @@ class _ProfileState extends State<Profile> {
       setState(() {
         imagePath = res["data"];
       });
-      setState(() {
-        var list = sharedPreferences.getStringList("firstSecond");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
-      });
+      if (sharedPreferences.getString("userAvatar") != "null") {
+        setState(() {
+          imageFound = true;
+          imagePath = sharedPreferences.getString("userAvatar");
+          name();
+        });
+      }
+      // setState(() {
+      //   var list = sharedPreferences.getStringList("firstSecond");
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
+      // });
     } else
       snakbar = SnackBar(
         duration: Duration(seconds: 5),
@@ -884,13 +912,13 @@ class _ProfileState extends State<Profile> {
           title: Text(
             "Error while updating image",
             style: TextStyle(
-                //  color: Colors.white,
+                color: Colors.yellowAccent,
                 fontFamily: "CCB",
                 fontSize: w > 400 ? 20 : 17),
           ),
           trailing: Icon(
             Icons.error_outline,
-            //  color: Colors.red,
+            color: Colors.red,
           ),
         ),
       );
@@ -1104,8 +1132,6 @@ class _ProfileState extends State<Profile> {
   }
 
   _removeimage() async {
-    var response = null;
-    var jsonResponse = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map<String, String> requestHeaders = {
@@ -1114,15 +1140,26 @@ class _ProfileState extends State<Profile> {
     };
 
     var url = Uri.parse("${MyApp.url}/user/avatar");
-    response = await http.delete(
+    final response = await http.delete(
       url,
       headers: requestHeaders,
     );
-    jsonResponse = await json.decode(response.body);
+    final jsonResponse = await json.decode(response.body);
     print(jsonResponse);
     setState(() {
       name();
       sharedPreferences.remove("userAvatar");
     });
+    if (sharedPreferences.getString("userAvatar") != "null") {
+      setState(() {
+        imageFound = true;
+        imagePath = sharedPreferences.getString("userAvatar");
+        name();
+      });
+    } else {
+      setState(() {
+        imageFound = false;
+      });
+    }
   }
 }
