@@ -95,10 +95,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _navBarItemList.add(buildNavBarItem(_iconList[i], _textList[i], i));
     }
 
-    return Container(
-      child: Row(
-        children: _navBarItemList,
-      ),
+    return Row(
+      children: _navBarItemList,
     );
   }
 

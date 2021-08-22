@@ -36,6 +36,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channel.name,
           channel.description,
           icon: android?.smallIcon,
+          playSound: true,
         ),
       ),
     );
@@ -58,7 +59,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -95,11 +96,12 @@ class _MyAppState extends State<MyApp> {
         InitializationSettings(android: initialzationSettingsAndroid);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        RemoteNotification notification = message.notification;
+        AndroidNotification android = message.notification.android;
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
             notification.body,
@@ -108,33 +110,13 @@ class _MyAppState extends State<MyApp> {
                 channel.id,
                 channel.name,
                 channel.description,
-                icon: android?.smallIcon,
+                // icon: android?.smallIcon,
               ),
-            ));
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      {
-        print(message.data);
-        RemoteNotification notification = message.notification;
-        AndroidNotification android = message.notification?.android;
-        // if (notification != null && android != null) {
-        //   flutterLocalNotificationsPlugin.show(
-        //       notification.hashCode,
-        //       notification.title,
-        //       notification.body,
-        //       NotificationDetails(
-        //         android: AndroidNotificationDetails(
-        //           channel.id,
-        //           channel.name,
-        //           channel.description,
-        //           icon: android.smallIcon,
-        //         ),
-        //       ));
-        // }
-      }
-    });
+            ),
+          );
+        }
+      },
+    );
     super.initState();
   }
 

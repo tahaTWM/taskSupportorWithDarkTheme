@@ -237,7 +237,14 @@ class _AttachmentState extends State<Attachment> {
                     itemCount: res.length,
                   )
                 : Center(
-                    child: Text("No Attachment Found"),
+                    child: Text(
+                      "No Attachment add yet",
+                      style: TextStyle(
+                          fontFamily: "RubikL",
+                          fontSize: MediaQuery.of(context).size.width < 400
+                              ? 23
+                              : 28),
+                    ),
                   ),
           )),
     );

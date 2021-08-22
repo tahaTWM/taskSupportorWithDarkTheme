@@ -62,6 +62,8 @@ class _Logn extends State<Logn> {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
+  String fcm = "";
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -417,10 +419,9 @@ class _Logn extends State<Logn> {
   signIn(String email, String password) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // ignore: avoid_init_to_null
-    var jsonResponse = null;
-    var response;
+
     var url = Uri.parse("${MyApp.url}/user/login");
-    response = await http.post(
+    var response = await http.post(
       url,
       headers: requestHeaders,
       body: jsonEncode(
@@ -431,7 +432,7 @@ class _Logn extends State<Logn> {
       ),
     );
 
-    jsonResponse = json.decode(response.body);
+    var jsonResponse = json.decode(response.body);
 
     if (jsonResponse["successful"] == true) {
       await sharedPreferences.setString("token", jsonResponse['data']['token']);
@@ -501,6 +502,10 @@ class _Logn extends State<Logn> {
 
   getToken() async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": _pref.getString("token"),
+    };
     FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -524,12 +529,21 @@ class _Logn extends State<Logn> {
 
     if (await Permission.storage.request().isGranted) {
       String token = await _firebaseMessaging.getToken();
-      if (_pref.getString("firebaseToken") != null ||
-          _pref.getString("firebaseToken") !=
-              "null") if (_pref.getString("firebaseToken") != token)
-        _pref.setString("firebaseToken", token);
-
       print(token);
+
+      var url = Uri.parse("${MyApp.url}/user/device/notification");
+      var response = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, String>{"fcm_token": token},
+        ),
+      );
+      var jsonResponse = json.decode(response.body);
+      showsnakbar(
+        jsonResponse["type"],
+        jsonResponse["message"],
+      );
     }
   }
 }

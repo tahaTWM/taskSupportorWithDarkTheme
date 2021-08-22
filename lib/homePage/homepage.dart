@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _searchForMember.clear();
     checkWorkSpaces();
-    Logn.getToken();
+    // Logn.getToken();
     super.initState();
   }
 
@@ -101,7 +101,9 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              imageFound == false || userAvatar ==  null || userAvatar == "null"
+                              imageFound == false ||
+                                      userAvatar == null ||
+                                      userAvatar == "null"
                                   ? Container(
                                       width: width > 400 ? 60 : 40,
                                       height: width > 400 ? 60 : 40,
@@ -758,7 +760,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(width: 10),
                             Text(
-                              "done tasks",
+                              "Tasks",
                               style: TextStyle(
                                   // color:  Color.fromRGBO(112, 112, 112, 1),
                                   fontSize: 20),
