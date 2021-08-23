@@ -129,8 +129,8 @@ class _HomePageState extends State<HomePage> {
                                       child: Image.network(
                                         "${MyApp.url}$userAvatar",
                                         fit: BoxFit.cover,
-                                        width: width > 400 ? 60 : 40,
-                                        height: width > 400 ? 60 : 40,
+                                        width: width > 400 ? 60 : 50,
+                                        height: width > 400 ? 60 : 50,
                                         loadingBuilder: (BuildContext context,
                                             Widget child,
                                             ImageChunkEvent loadingProgress) {
@@ -172,9 +172,9 @@ class _HomePageState extends State<HomePage> {
                                       : Get.changeThemeMode(ThemeMode.light);
                                 },
                                 child: Image(
-                                    image: AssetImage("asset/logo2.png"),
-                                    width: width > 350 ? 50 : 45,
-                                    height: width > 350 ? 50 : 45),
+                                    image: AssetImage("asset/newLogo3.png"),
+                                    width: width > 350 ? 60 : 50,
+                                    height: width > 350 ? 60 : 50),
                               ),
                             ],
                           ),

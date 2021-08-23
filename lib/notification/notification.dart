@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:timeago/timeago.dart' as timeago;
 import '../main.dart';
 
 class ListItem<T> {
@@ -130,208 +131,178 @@ class _NotificationsState extends State<Notifications> {
         jsonDecode(listOfNotifactions[index]["triggered_data"]);
     // print("notification_payload  " + notification_payload.toString());
     // print("triggered_data  " + triggered_data.toString());
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          margin: EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey.withOpacity(0.8),
+    return listOfNotifactions[index]["notification_type"] != "TASK"
+        ? ListTile(
+            contentPadding: EdgeInsets.symmetric(vertical: 10),
+            leading: triggered_data["user_avatar"] == null ||
+                    triggered_data["user_avatar"].toString().contains("null")
+                ? Container(
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                      ),
+                      color: Colors.grey.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      triggered_data["triggered_by_firstName"][0]
+                          .toString()
+                          .toUpperCase(),
+                      style: TextStyle(fontFamily: "RubikB", fontSize: 20),
+                    ),
+                  )
+                : Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            "${MyApp.url}${triggered_data["user_avatar"]}"),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: new TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: triggered_data["triggered_by_firstName"] +
+                            " " +
+                            triggered_data["triggered_by_secondName"],
+                        style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " " +
+                            notification_payload["notification_method"] +
+                            " You to join ",
+                      ),
+                      TextSpan(
+                          text: notification_payload["workspaceName"],
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
                   ),
                 ),
-                child: triggered_data["user_avatar"] == null ||
-                        triggered_data["user_avatar"]
-                            .toString()
-                            .contains("null")
-                    ? Center(
+                SizedBox(height: 5),
+                Text(timeago.format(DateTime.parse(
+                    listOfNotifactions[index]["creation_date"]))),
+              ],
+            ),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: RaisedButton(
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10),
+                        ),
+                        onPressed: () => _acceptInvition(
+                            notification_payload["workspaceId"],
+                            listOfNotifactions[index]["id"],
+                            true),
                         child: Text(
-                        triggered_data["triggered_by_firstName"][0]
-                            .toString()
-                            .toUpperCase(),
-                        style: TextStyle(fontFamily: "RubikB", fontSize: 20),
-                      ))
-                    : Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  "${MyApp.url}${triggered_data["user_avatar"]}",
-                                ))),
+                          'Accept',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                  ),
+                  SizedBox(width: 10),
+                  RaisedButton(
+                      color: Color.fromRGBO(58, 66, 79, 1),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(10),
                       ),
+                      onPressed: ()
+                          // {
+                          //   print(notification_payload[
+                          //       "workspaceId"]);
+                          //   print(
+                          //       listOfNotifactions[index]
+                          //           ["id"]);
+                          // },
+                          =>
+                          _acceptInvition(notification_payload["workspaceId"],
+                              listOfNotifactions[index]["id"], false),
+                      child: Text(
+                        'Reject',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        notification_payload["notification_method"] == "INVITE"
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 15, bottom: 10),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      triggered_data["triggered_by_firstName"] +
-                                          " " +
-                                          triggered_data[
-                                              "triggered_by_secondName"],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      " " +
-                                          notification_payload[
-                                              "notification_method"] +
-                                          " You to join ",
-                                      maxLines: 5,
-                                    ),
-                                    Text(
-                                      notification_payload["workspaceName"],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Text(
-                                "Taha",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                      ],
+            ),
+          )
+        : ListTile(
+            contentPadding: EdgeInsets.symmetric(vertical: 10),
+            leading: triggered_data["user_avatar"] == null ||
+                    triggered_data["user_avatar"].toString().contains("null")
+                ? Container(
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                      ),
+                      color: Colors.grey.withOpacity(0.2),
+                      shape: BoxShape.circle,
                     ),
-                    notification_payload["notification_method"] == "INVITE"
-                        ? Container(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(listOfNotifactions[index]["creation_date"]
-                                    .toString()
-                                    .split('T')[0]),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: ButtonTheme(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 15),
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        minWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.25,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.06,
-                                        child: RaisedButton(
-                                            shape: new RoundedRectangleBorder(
-                                              borderRadius:
-                                                  new BorderRadius.circular(10),
-                                            ),
-                                            onPressed: () => _acceptInvition(
-                                                notification_payload[
-                                                    "workspaceId"],
-                                                listOfNotifactions[index]["id"],
-                                                true),
-                                            child: Text(
-                                              'Accept',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )), //your original button
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      flex: 2,
-                                      child: ButtonTheme(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 15),
-                                        //adds padding inside the button
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        //limits the touch area to the button area
-                                        minWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.25,
-                                        //wraps child's width
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.06,
-                                        //wraps child's height
-                                        child: RaisedButton(
-                                            color:
-                                                Color.fromRGBO(58, 66, 79, 1),
-                                            shape: new RoundedRectangleBorder(
-                                              borderRadius:
-                                                  new BorderRadius.circular(10),
-                                            ),
-                                            onPressed: ()
-                                                // {
-                                                //   print(notification_payload[
-                                                //       "workspaceId"]);
-                                                //   print(
-                                                //       listOfNotifactions[index]
-                                                //           ["id"]);
-                                                // },
-                                                =>
-                                                _acceptInvition(
-                                                    notification_payload[
-                                                        "workspaceId"],
-                                                    listOfNotifactions[index]
-                                                        ["id"],
-                                                    false),
-                                            child: Text(
-                                              'Reject',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )), //your original button
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : Text(
-                            "name2",
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                  ],
+                    child: Text(
+                      triggered_data["triggered_by_firstName"][0]
+                          .toString()
+                          .toUpperCase(),
+                      style: TextStyle(fontFamily: "RubikB", fontSize: 20),
+                    ),
+                  )
+                : Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            "${MyApp.url}${triggered_data["user_avatar"]}"),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: new TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: triggered_data["triggered_by_firstName"] +
+                            " " +
+                            triggered_data["triggered_by_secondName"],
+                        style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                          text:
+                              " " + notification_payload["notify_title"] + " "),
+                      TextSpan(
+                          text: notification_payload["task_title"],
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        // Divider(
-        //   thickness: 1.2,
-        //   indent: 70,
-        //   endIndent: 70,
-        // ),
-      ],
-    );
+                SizedBox(height: 5),
+                Text(timeago.format(DateTime.parse(
+                    listOfNotifactions[index]["creation_date"]))),
+              ],
+            ),
+          );
   }
 
   // ignore: unused_element
@@ -356,14 +327,14 @@ class _NotificationsState extends State<Notifications> {
         listOfNotifactions = [];
       });
     }
-    // print(jsonResponse);
+    // print(listOfNotifactions);
 
     for (int i = 0; i < listOfNotifactions.length; i++)
       list.add(ListItem<String>("item $i"));
-    for (int i = 0; i < listOfNotifactions.length; i++) {
-      print(list[i].data);
-      print(list[i].isSelected);
-    }
+    // for (int i = 0; i < listOfNotifactions.length; i++) {
+    //   print(list[i].data);
+    //   print(list[i].isSelected);
+    // }
   }
 
   _acceptInvition(int workspaceId, int notificationId, bool acc) async {

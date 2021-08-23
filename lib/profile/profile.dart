@@ -14,7 +14,7 @@ import '../login/logn.dart';
 import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
-import '../navBar.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatefulWidget {
   String fn;
@@ -184,7 +184,7 @@ class _ProfileState extends State<Profile> {
                         Icon(
                           Icons.remove,
                           size: 30,
-                           color: Colors.red,
+                          color: Colors.red,
                         ),
                         SizedBox(width: 12),
                         Text(
@@ -421,11 +421,10 @@ class _ProfileState extends State<Profile> {
                             width: width - 100,
                             height: MediaQuery.of(context).size.height * 0.06,
                             decoration: BoxDecoration(
-                              //  color: Color.fromRGBO(0, 82, 205, 0.1),
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 width: 1,
-                                color: Color.fromRGBO(49, 91, 169, 1),
+                                color: Colors.black,
                               ),
                             ),
                             child: Center(
@@ -455,7 +454,7 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 width: 1,
-                                color: Color.fromRGBO(49, 91, 169, 1),
+                                color: Colors.black,
                               ),
                             ),
                             child: Center(
@@ -548,7 +547,6 @@ class _ProfileState extends State<Profile> {
                       Navigator.of(context).pop();
                     },
                   ),
-
                 ],
               ),
             ),

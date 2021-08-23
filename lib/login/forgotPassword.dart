@@ -39,15 +39,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           padding: EdgeInsets.only(top: w > 400 ? 140 : 80),
                           child: Center(
                             child: Image(
-                                width: w > 400 ? 100 : 70,
-                                height: w > 400 ? 100 : 70,
-                                image: AssetImage("asset/logo2.png")),
+                                width: 250,
+                                height: 250,
+                                image: AssetImage("asset/newLogo3.png")),
                           ),
                         ),
                         SizedBox(height: 20),
                         Center(
                             child: Text(
-                          "Workspacer",
+                          "Ur Task",
                           style: TextStyle(
                             fontSize: 42,
                             // color: Color.fromRGBO(62, 128, 255, 1),
@@ -115,15 +115,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         //   ],
                         // ),
                         SizedBox(height: 20),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+
+                        SizedBox(
                           width: double.infinity,
-                          height: 60,
-                          // ignore: deprecated_member_use
-                          child: FlatButton(
+                          child: RaisedButton(
                             onPressed: () async {
                               FocusScope.of(context).requestFocus(FocusNode());
                               forgotPassword(_eMail.text);
@@ -131,23 +126,47 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                               "Reset Password",
                               style: TextStyle(
-                                fontSize: 22,
-                                fontFamily: "RubikB",
-                                color: Color.fromRGBO(49, 91, 169, 1),
+                                fontSize: 26,
+                                fontFamily: "Rubik",
+                                color: Colors.white,
                               ),
                             ),
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
+
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.grey.withOpacity(0.2),
+                        //     borderRadius: BorderRadius.circular(10),
+                        //   ),
+                        //   width: double.infinity,
+                        //   height: 60,
+                        //   // ignore: deprecated_member_use
+                        //   child: FlatButton(
+                        //     onPressed: () async {
+                        //       FocusScope.of(context).requestFocus(FocusNode());
+                        //       forgotPassword(_eMail.text);
+                        //     },
+                        //     child: Text(
+                        //       "Reset Password",
+                        //       style: TextStyle(
+                        //         fontSize: 22,
+                        //         fontFamily: "RubikB",
+                        //         color: Color.fromRGBO(49, 91, 169, 1),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: 10),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+
+                        SizedBox(
                           width: double.infinity,
-                          height: 60,
-                          // ignore: deprecated_member_use
-                          child: FlatButton(
+                          child: RaisedButton(
+                            color: Colors.grey[600],
                             onPressed: () async {
                               FocusScope.of(context).requestFocus(FocusNode());
                               Navigator.pop(context);
@@ -155,11 +174,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: Text(
                               "Back to LogIn",
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 26,
                                 fontFamily: "Rubik",
-                                color: Color.fromRGBO(49, 91, 169, 1),
+                                color: Colors.white,
                               ),
                             ),
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
                       ],

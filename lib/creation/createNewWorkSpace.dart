@@ -310,36 +310,38 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
                 },
                 onFieldSubmitted: (value) {}),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(49, 91, 169, 1),
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                width: 1,
-                color: Color.fromRGBO(49, 91, 169, 1),
-              ),
-            ),
-            width: double.infinity,
-            height: 60,
-            // ignore: deprecated_member_use
-            child: FlatButton(
-              onPressed: () async {
-                widget.title == 'Edit WorkSpace'
-                    ? updateWorkspace(_workspaceTitle.text, _workspaceDesc.text)
-                    : createWorkspace(
-                        _workspaceTitle.text, _workspaceDesc.text);
-              },
-              child: Text(
-                widget.title == 'Edit WorkSpace' ? "Update" : "Save",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontFamily: "Rubik",
-                  color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  onPressed: () {
+                    widget.title == 'Edit WorkSpace'
+                        ? updateWorkspace(
+                            _workspaceTitle.text, _workspaceDesc.text)
+                        : createWorkspace(
+                            _workspaceTitle.text, _workspaceDesc.text);
+                  },
+                  child: Text(
+                    widget.title == 'Edit WorkSpace' ? "Update" : "Save",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontFamily: "Rubik",
+                      color: Colors.white,
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 18,
+                      horizontal:
+                          MediaQuery.of(context).size.width > 400 ? 150 : 100),
+                  elevation: 7,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                 ),
-              ),
+              ],
             ),
-          ),
+          )
         ],
       ),
     );

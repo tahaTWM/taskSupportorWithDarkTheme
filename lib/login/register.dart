@@ -48,16 +48,16 @@ class _Register extends State<Register> {
                         child: Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Image(
-                        width: w > 400 ? 100 : 70,
-                        height: w > 400 ? 100 : 70,
-                        image: AssetImage("asset/logo2.png"),
+                        width: w > 400 ? 150 : 90,
+                        height: w > 400 ? 150 : 90,
+                        image: AssetImage("asset/newLogo3.png"),
                       ),
                     )),
                   ),
                   SizedBox(height: 5),
                   Center(
                       child: Text(
-                    "Workspacer",
+                    "Ur Tasks",
                     style: TextStyle(
                       fontSize: w > 400 ? 35 : 25,
                       // color: Color.fromRGBO(62, 128, 255, 1),
@@ -79,74 +79,60 @@ class _Register extends State<Register> {
                   // lebel(padding, 'Confirm Password'),
                   textField(_confPassword, true, "Confirm Password", false),
 
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(0, 12, 0, 5),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       InkWell(
-                  //         onTap: () => Navigator.pop(context),
-                  //         child: Text(
-                  //           "Log In",
-                  //           style: TextStyle(
-                  //               fontFamily: "Rubik",
-                  //               fontSize: 20,
-                  //               color: Color.fromRGBO(112, 112, 112, 1)),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(height: 15),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(49, 91, 169, 1),
-                      borderRadius: BorderRadius.circular(10),
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              signUp(_firstName.text, _secondName.text,
+                                  _eMail.text, _passWord.text);
+                            },
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontFamily: "Rubik",
+                                color: Colors.white,
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            color: Colors.grey[600],
+                            onPressed: () async {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Back to LogIn",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontFamily: "Rubik",
+                                color: Colors.white,
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      ],
                     ),
-                    width: double.infinity,
-                    height: 60,
-                    // ignore: deprecated_member_use
-                    child: FlatButton(
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
+                  ),
 
-                        signUp(_firstName.text, _secondName.text, _eMail.text,
-                            _passWord.text);
-                      },
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: "Rubik",
-                          // color: Color.fromRGBO(49, 91, 169, 1),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    width: double.infinity,
-                    height: 60,
-                    // ignore: deprecated_member_use
-                    child: FlatButton(
-                      onPressed: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Back to LogIn",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: "Rubik",
-                          // color: Color.fromRGBO(49, 91, 169, 1),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // ),
                 ],
               ),
             ),
@@ -155,19 +141,6 @@ class _Register extends State<Register> {
       ),
     );
   }
-
-  // Padding lebel(EdgeInsets padding, String text) {
-  //   return Padding(
-  //     padding: padding,
-  //     child: Text(
-  //       text,
-  //       style: TextStyle(
-  //         fontSize: 22,
-  //         fontFamily: "Rubik",
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget textField(
     TextEditingController controller,

@@ -189,10 +189,10 @@ class _MyAppState extends State<MyApp> {
               SystemUiOverlayStyle(statusBarColor: Colors.white),
         ),
         iconTheme: IconThemeData(
-          color: Color.fromRGBO(49, 91, 169, 1),
+          color: Color.fromRGBO(26, 189, 196, 1),
         ),
         buttonTheme: ButtonThemeData(
-          buttonColor: Color.fromRGBO(49, 91, 169, 1),
+          buttonColor: Color.fromRGBO(26, 189, 196, 1),
         ),
         // dividerTheme: DividerThemeData(color: Colors.white),
         dividerColor: Colors.white,
