@@ -13,13 +13,13 @@ import 'navBar.dart';
 // this notifiaction is if the app is close in background or comp
 // completly killeds
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // var initialzationSettingsAndroid =
-  //     AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initialzationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  // var initializationSettings =
-  //     InitializationSettings(android: initialzationSettingsAndroid);
+  var initializationSettings =
+      InitializationSettings(android: initialzationSettingsAndroid);
 
-  // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
   print('Handling a background message ${message.senderId}');
   // ignore: unused_local_variable
   RemoteNotification notification = message.notification;
@@ -111,6 +111,7 @@ class _MyAppState extends State<MyApp> {
                 channel.name,
                 channel.description,
                 // icon: android?.smallIcon,
+                playSound: true,
               ),
             ),
           );

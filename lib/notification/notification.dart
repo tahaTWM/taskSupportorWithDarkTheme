@@ -181,12 +181,10 @@ class _NotificationsState extends State<Notifications> {
                         ),
                       ),
                       TextSpan(
-                        text: " " +
-                            notification_payload["notification_method"] +
-                            " You to join ",
+                        text: " " + notification_payload["notify_title"],
                       ),
                       TextSpan(
-                          text: notification_payload["workspaceName"],
+                          text: " " + notification_payload["workspaceName"],
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -202,6 +200,7 @@ class _NotificationsState extends State<Notifications> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
+                    // ignore: deprecated_member_use
                     child: RaisedButton(
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(10),
@@ -216,6 +215,7 @@ class _NotificationsState extends State<Notifications> {
                         )),
                   ),
                   SizedBox(width: 10),
+                  // ignore: deprecated_member_use
                   RaisedButton(
                       color: Color.fromRGBO(58, 66, 79, 1),
                       shape: new RoundedRectangleBorder(
@@ -361,7 +361,7 @@ class _NotificationsState extends State<Notifications> {
         _getNotifiaction();
       });
     }
-    if (jsonResponse["type"] == "ignor") {
+    if (jsonResponse["type"] == "ignore") {
       setState(() {
         _getNotifiaction();
       });

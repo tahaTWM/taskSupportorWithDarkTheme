@@ -8,7 +8,7 @@
   <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
    <application
         android:usesCleartextTraffic="true"
-        android:label="workspace"
+        android:label="UrTask"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
         <activity

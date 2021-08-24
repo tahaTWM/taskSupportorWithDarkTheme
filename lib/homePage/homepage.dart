@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app2/login/logn.dart';
 import 'package:toast/toast.dart';
 
-import '../login/logn.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _searchForMember.clear();
     checkWorkSpaces();
-    // Logn.getToken();
+    Logn.getToken();
     super.initState();
   }
 
@@ -162,15 +162,15 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                               InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    theme = !theme;
-                                    _changeTheme(theme, context);
-                                  });
-                                  theme
-                                      ? Get.changeThemeMode(ThemeMode.dark)
-                                      : Get.changeThemeMode(ThemeMode.light);
-                                },
+                                // onTap: () {
+                                //   setState(() {
+                                //     theme = !theme;
+                                //     _changeTheme(theme, context);
+                                //   });
+                                //   theme
+                                //       ? Get.changeThemeMode(ThemeMode.dark)
+                                //       : Get.changeThemeMode(ThemeMode.light);
+                                // },
                                 child: Image(
                                     image: AssetImage("asset/newLogo3.png"),
                                     width: width > 350 ? 60 : 50,

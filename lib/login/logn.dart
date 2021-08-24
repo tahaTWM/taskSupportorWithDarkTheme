@@ -286,6 +286,7 @@ class _Logn extends State<Logn> {
                   width: double.infinity,
                   child: RaisedButton(
                     onPressed: () async {
+                      signIn(_eMail.text, _passWord.text);
                       FocusScope.of(context).requestFocus(FocusNode());
                       Navigator.pop(context);
                     },
