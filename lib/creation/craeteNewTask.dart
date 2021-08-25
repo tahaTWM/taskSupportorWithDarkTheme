@@ -513,11 +513,10 @@ class _CreateNewTaskState extends State<CreateNewTask> {
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")
     };
-    var jsonResponse = null;
     var url = Uri.parse("${MyApp.url}/workspace/new/task");
 
     if (title.isNotEmpty) {
-      var response = await http.post(url,
+      final response = await http.post(url,
           headers: requestHeaders,
           body: jsonEncode({
             "workspace_id": widget.workspaceId,
@@ -526,7 +525,8 @@ class _CreateNewTaskState extends State<CreateNewTask> {
             "priority": priorty,
             "assignedMembers": memberOfTask
           }));
-      jsonResponse = json.decode(response.body);
+
+      final jsonResponse = json.decode(response.body);
       if (jsonResponse["successful"]) {
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
             duration: Duration(seconds: 2),

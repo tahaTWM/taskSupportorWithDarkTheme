@@ -14,7 +14,6 @@ import '../login/logn.dart';
 import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
-import 'package:get/get.dart';
 
 class Profile extends StatefulWidget {
   String fn;
@@ -92,7 +91,7 @@ class _ProfileState extends State<Profile> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 icon: Icon(
-                  Icons.more_vert,
+                  Icons.settings,
                   size: width > 400 ? 30 : 20,
                   //  color: Colors.blue,
                 ),
@@ -122,6 +121,26 @@ class _ProfileState extends State<Profile> {
                     child: Row(
                       children: [
                         Icon(
+                          Icons.lock,
+                          size: 30,
+                          //  color: Color.fromRGBO(158, 158, 158, 1),
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Change Password",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: "RubicB",
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 3,
+                    child: Row(
+                      children: [
+                        Icon(
                           Icons.logout,
                           size: 30,
                           //  color: Color.fromRGBO(158, 158, 158, 1),
@@ -138,7 +157,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   PopupMenuItem(
-                    value: 3,
+                    value: 4,
                     child: Row(
                       children: [
                         Icon(
@@ -158,7 +177,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   PopupMenuItem(
-                    value: 4,
+                    value: 5,
                     child: Row(
                       children: [
                         Icon(
@@ -178,7 +197,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   PopupMenuItem(
-                    value: 5,
+                    value: 6,
                     child: Row(
                       children: [
                         Icon(
@@ -189,6 +208,7 @@ class _ProfileState extends State<Profile> {
                         SizedBox(width: 12),
                         Text(
                           "Remove Profile Image",
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 20,
                             fontFamily: "RubicB",
@@ -204,21 +224,24 @@ class _ProfileState extends State<Profile> {
                       bottomsheet(context, "Edit Account");
                       break;
                     case 2:
+                      bottomsheet(context, "Change Password");
+                      break;
+                    case 3:
                       siginOut();
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Logn()));
                       break;
 
-                    case 3:
+                    case 4:
                       Get.changeThemeMode(ThemeMode.light);
                       _changeTheme(false);
                       break;
 
-                    case 4:
+                    case 5:
                       Get.changeThemeMode(ThemeMode.dark);
                       _changeTheme(true);
                       break;
-                    case 5:
+                    case 6:
                       {
                         _removeimage();
                         // Navigator.of(context).pop();

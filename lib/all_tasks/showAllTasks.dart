@@ -62,7 +62,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     'DONE': 'DONE'
   };
 
-  String _selectedStatus = status.keys.first;
+  String _selectedStatus;
 
   void onStatusSelected(String statusKey) {
     setState(() {
@@ -228,33 +228,33 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                             ),
                           ),
                           // search bar
-                          Container(
-                            height: w > 400 ? 70 : 50,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 25),
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: TextField(
-                                style: TextStyle(
-                                  fontSize: w > 400 ? 25 : 20,
-                                  // color:Color.fromRGBO(0, 82, 205, 1),
-                                ),
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Search tasks...",
-                                  hintStyle: TextStyle(
-                                    fontSize: w > 400 ? 25 : 20,
-                                  ),
-                                  icon: Icon(Icons.search,
-                                      size: w > 400 ? 30 : 20),
-                                ),
-                                enabled: false,
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   height: w > 400 ? 70 : 50,
+                          //   margin: EdgeInsets.symmetric(
+                          //       vertical: 15, horizontal: 25),
+                          //   padding: EdgeInsets.symmetric(horizontal: 10),
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.grey.withOpacity(0.1),
+                          //       borderRadius: BorderRadius.circular(10)),
+                          //   child: Center(
+                          //     child: TextField(
+                          //       style: TextStyle(
+                          //         fontSize: w > 400 ? 25 : 20,
+                          //         // color:Color.fromRGBO(0, 82, 205, 1),
+                          //       ),
+                          //       decoration: InputDecoration(
+                          //         border: InputBorder.none,
+                          //         hintText: "Search tasks...",
+                          //         hintStyle: TextStyle(
+                          //           fontSize: w > 400 ? 25 : 20,
+                          //         ),
+                          //         icon: Icon(Icons.search,
+                          //             size: w > 400 ? 30 : 20),
+                          //       ),
+                          //       enabled: false,
+                          //     ),
+                          //   ),
+                          // ),
                           TabBar(
                             isScrollable: true,
                             unselectedLabelColor: Colors.grey,
@@ -567,10 +567,9 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                 break;
                               case 3:
                                 _showDialogAction(
-                                    newListReversed[index]["taskId"],
-                                    OldStatus,
-                                    newListReversed[index]["taskId"],
-                                    newListReversed[index]["title"]);
+                                    taskid: newListReversed[index]["taskId"],
+                                    oldStatus: OldStatus,
+                                    taskName: newListReversed[index]["title"]);
                                 break;
                               case 4:
                                 {
@@ -765,43 +764,46 @@ class _ShowAllTasksState extends State<ShowAllTasks>
 
   //get task from api
   checkIfThereAnyTaskes() async {
-    var jsonResponse = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
       'token': sharedPreferences.getString("token"),
     };
-    var url = Uri.parse(
-        '${MyApp.url}/workspace/tasks/${widget.workspaceId}/${widget.role}');
-    var response = await http.get(
-      url,
-      headers: requestHeaders,
-    );
+    try {
+      var url = Uri.parse(
+          '${MyApp.url}/workspace/tasks/${widget.workspaceId}/${widget.role}');
+      final response = await http.get(
+        url,
+        headers: requestHeaders,
+      );
 
-    jsonResponse = json.decode(response.body);
-    if (jsonResponse["successful"]) {
-      setState(() {
-        listOfTasksWaiting = jsonResponse['data']["WAITING"];
-        listOfTasksInProcess = jsonResponse['data']["IN_PROGRESS"];
-        listOfTasksStack = jsonResponse['data']["STUCK"];
-        listOfTasksDone = jsonResponse['data']["DONE"];
-        workspaceId = jsonResponse["data"]["workspaceId"];
-      });
-      setState(() {
-        istaskFound = false;
-      });
-    }
-    if (!jsonResponse["successful"]) {
-      scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
-          duration: Duration(seconds: 2),
-          content: Text(
-            "No Task Add Yet",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          )));
-      setState(() {
-        istaskFound = false;
-      });
+      final jsonResponse = json.decode(response.body);
+      if (jsonResponse["successful"]) {
+        setState(() {
+          listOfTasksWaiting = jsonResponse['data']["WAITING"];
+          listOfTasksInProcess = jsonResponse['data']["IN_PROGRESS"];
+          listOfTasksStack = jsonResponse['data']["STUCK"];
+          listOfTasksDone = jsonResponse['data']["DONE"];
+          workspaceId = jsonResponse["data"]["workspaceId"];
+        });
+        setState(() {
+          istaskFound = false;
+        });
+      }
+      if (!jsonResponse["successful"]) {
+        scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+              "No Task Add Yet",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )));
+        setState(() {
+          istaskFound = false;
+        });
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -874,8 +876,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     );
   }
 
-  _showDialogAction(
-      int taskID, String oldStatus, int taskid, String taskName) async {
+  _showDialogAction({String oldStatus, int taskid, String taskName}) async {
     _action.clear();
     var w = MediaQuery.of(context).size.width;
     showDialog(
@@ -890,9 +891,10 @@ class _ShowAllTasksState extends State<ShowAllTasks>
             child: Text("Task Action"),
           ),
           content: Container(
-            height: MediaQuery.of(context).size.height * 0.5,
+            // height: MediaQuery.of(context).size.height * 0.5,
             width: MediaQuery.of(context).size.width,
-            child: ListView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
                     child: Text(
@@ -968,28 +970,48 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   }
 
   _updateTaskAction(String oldStatus, int taskid) async {
+    print(oldStatus);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var respnse = null;
-    var jsonResponse = null;
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")
     };
     var url = Uri.parse("${MyApp.url}/task/action");
-    respnse = await http.post(
-      url,
-      headers: requestHeaders,
-      body: jsonEncode(
-        <String, dynamic>{
-          "comment": _action.text,
-          "old_task_status": oldStatus,
-          "new_task_status": _selectedStatus,
-          "action_type": _action.text.isNotEmpty ? "COMMENT" : "OPEN",
-          "task_id": taskid
-        },
-      ),
-    );
-    jsonResponse = json.decode(respnse.body);
+    if (_selectedStatus == null) {
+      final respnse = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, dynamic>{
+            "comment": _action.text,
+            "old_task_status": oldStatus,
+            "new_task_status": _selectedStatus,
+            "action_type": "COMMENT",
+            "task_id": taskid
+          },
+        ),
+      );
+
+      final jsonResponse = json.decode(respnse.body);
+      print("Comment" + jsonResponse.toString());
+    } else {
+      final respnse = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, dynamic>{
+            "comment": _action.text,
+            "old_task_status": oldStatus,
+            "new_task_status": _selectedStatus,
+            "action_type": "OPEN",
+            "task_id": taskid
+          },
+        ),
+      );
+
+      final jsonResponse = json.decode(respnse.body);
+      print("Change statue" + jsonResponse.toString());
+    }
 
     setState(() {
       checkIfThereAnyTaskes();

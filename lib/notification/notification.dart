@@ -6,28 +6,22 @@ import 'package:http/http.dart' as http;
 import 'package:timeago/timeago.dart' as timeago;
 import '../main.dart';
 
-class ListItem<T> {
-  bool isSelected = false; //Selection property to highlight or not
-  T data; //Data of the user
-  ListItem(this.data); //Constructor to assign the data
-}
-
 class Notifications extends StatefulWidget {
   @override
   _NotificationsState createState() => _NotificationsState();
 }
 
 class _NotificationsState extends State<Notifications> {
-  List<ListItem<String>> list = [];
   List listOfNotifactions = [];
+  bool mode = false;
+  bool value = false;
 
   @override
   void initState() {
     super.initState();
     _getNotifiaction();
+    _getmdode();
   }
-
-  bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -118,191 +112,228 @@ class _NotificationsState extends State<Notifications> {
               ),
             )
           : ListView.builder(
-              itemCount: list.length,
-              itemBuilder: _getListItemTile,
+              itemCount: listOfNotifactions.length,
+              itemBuilder: (BuildContext context, int index) {
+                // ignore: non_constant_identifier_names
+                var triggered_data =
+                    json.decode(listOfNotifactions[index]["triggered_data"]);
+                // ignore: non_constant_identifier_names
+                var notification_payload = json
+                    .decode(listOfNotifactions[index]["notification_payload"]);
+                // print(listOfNotifactions[index]);
+                // print(triggered_data);
+                // print(notification_payload);
+                return listOfNotifactions[index]["notification_type"] != "TASK"
+                    ? ListTile(
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                        leading: triggered_data["triggere_avatar"] == null ||
+                                triggered_data["triggere_avatar"]
+                                    .toString()
+                                    .contains("null")
+                            ? Container(
+                                width: 55,
+                                height: 55,
+                                margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.6),
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    triggered_data["triggered_by_firstName"][0]
+                                        .toString()
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                        fontFamily: "RubikB", fontSize: 20),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                width: 55,
+                                height: 55,
+                                margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        "${MyApp.url}${triggered_data["triggere_avatar"]}"),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: new TextSpan(
+                                style: TextStyle(
+                                    color: !mode ? Colors.black : null),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: triggered_data[
+                                            "triggered_by_firstName"] +
+                                        " " +
+                                        triggered_data[
+                                            "triggered_by_secondName"],
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " " +
+                                        notification_payload["notify_title"],
+                                  ),
+                                  TextSpan(
+                                      text: " " +
+                                          notification_payload["workspaceName"],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(timeago.format(DateTime.parse(
+                                listOfNotifactions[index]["creation_date"]))),
+                          ],
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                // ignore: deprecated_member_use
+                                child: RaisedButton(
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(10),
+                                    ),
+                                    onPressed: () => _acceptInvition(
+                                        notification_payload["workspaceId"],
+                                        listOfNotifactions[index]["id"],
+                                        true),
+                                    child: Text(
+                                      'Accept',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              ),
+                              SizedBox(width: 10),
+                              // ignore: deprecated_member_use
+                              RaisedButton(
+                                  color: Color.fromRGBO(58, 66, 79, 1),
+                                  shape: new RoundedRectangleBorder(
+                                    borderRadius: new BorderRadius.circular(10),
+                                  ),
+                                  onPressed: ()
+                                      // {
+                                      //   print(notification_payload[
+                                      //       "workspaceId"]);
+                                      //   print(
+                                      //       listOfNotifactions[index]
+                                      //           ["id"]);
+                                      // },
+                                      =>
+                                      _acceptInvition(
+                                          notification_payload["workspaceId"],
+                                          listOfNotifactions[index]["id"],
+                                          false),
+                                  child: Text(
+                                    'Ignore',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      )
+                    : ListTile(
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                        leading: triggered_data["user_avatar"] == null ||
+                                triggered_data["user_avatar"]
+                                    .toString()
+                                    .contains("null")
+                            ? Container(
+                                width: 55,
+                                height: 55,
+                                margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.6),
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    triggered_data["triggered_by_firstName"][0]
+                                        .toString()
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                        fontFamily: "RubikB", fontSize: 20),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                width: 55,
+                                height: 55,
+                                margin: EdgeInsets.only(left: 10),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        "${MyApp.url}${triggered_data["user_avatar"]}"),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: new TextSpan(
+                                style: TextStyle(
+                                    color: !mode ? Colors.black : null),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: triggered_data[
+                                            "triggered_by_firstName"] +
+                                        " " +
+                                        triggered_data[
+                                            "triggered_by_secondName"],
+                                    style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                      text: " " +
+                                          notification_payload["notify_title"] +
+                                          " "),
+                                  TextSpan(
+                                    text: notification_payload["task_title"],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(timeago.format(DateTime.parse(
+                                listOfNotifactions[index]["creation_date"]))),
+                          ],
+                        ),
+                      );
+              },
             ),
     );
-  }
-
-  Widget _getListItemTile(BuildContext context, int index) {
-    final notification_payload =
-        jsonDecode(listOfNotifactions[index]["notification_payload"]);
-    final triggered_data =
-        jsonDecode(listOfNotifactions[index]["triggered_data"]);
-    // print("notification_payload  " + notification_payload.toString());
-    // print("triggered_data  " + triggered_data.toString());
-    return listOfNotifactions[index]["notification_type"] != "TASK"
-        ? ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
-            leading: triggered_data["user_avatar"] == null ||
-                    triggered_data["user_avatar"].toString().contains("null")
-                ? Container(
-                    padding: EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2,
-                      ),
-                      color: Colors.grey.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      triggered_data["triggered_by_firstName"][0]
-                          .toString()
-                          .toUpperCase(),
-                      style: TextStyle(fontFamily: "RubikB", fontSize: 20),
-                    ),
-                  )
-                : Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            "${MyApp.url}${triggered_data["user_avatar"]}"),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: new TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: triggered_data["triggered_by_firstName"] +
-                            " " +
-                            triggered_data["triggered_by_secondName"],
-                        style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: " " + notification_payload["notify_title"],
-                      ),
-                      TextSpan(
-                          text: " " + notification_payload["workspaceName"],
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(timeago.format(DateTime.parse(
-                    listOfNotifactions[index]["creation_date"]))),
-              ],
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    // ignore: deprecated_member_use
-                    child: RaisedButton(
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10),
-                        ),
-                        onPressed: () => _acceptInvition(
-                            notification_payload["workspaceId"],
-                            listOfNotifactions[index]["id"],
-                            true),
-                        child: Text(
-                          'Accept',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  SizedBox(width: 10),
-                  // ignore: deprecated_member_use
-                  RaisedButton(
-                      color: Color.fromRGBO(58, 66, 79, 1),
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10),
-                      ),
-                      onPressed: ()
-                          // {
-                          //   print(notification_payload[
-                          //       "workspaceId"]);
-                          //   print(
-                          //       listOfNotifactions[index]
-                          //           ["id"]);
-                          // },
-                          =>
-                          _acceptInvition(notification_payload["workspaceId"],
-                              listOfNotifactions[index]["id"], false),
-                      child: Text(
-                        'Reject',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ],
-              ),
-            ),
-          )
-        : ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
-            leading: triggered_data["user_avatar"] == null ||
-                    triggered_data["user_avatar"].toString().contains("null")
-                ? Container(
-                    padding: EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2,
-                      ),
-                      color: Colors.grey.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      triggered_data["triggered_by_firstName"][0]
-                          .toString()
-                          .toUpperCase(),
-                      style: TextStyle(fontFamily: "RubikB", fontSize: 20),
-                    ),
-                  )
-                : Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            "${MyApp.url}${triggered_data["user_avatar"]}"),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: new TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: triggered_data["triggered_by_firstName"] +
-                            " " +
-                            triggered_data["triggered_by_secondName"],
-                        style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                          text:
-                              " " + notification_payload["notify_title"] + " "),
-                      TextSpan(
-                          text: notification_payload["task_title"],
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(timeago.format(DateTime.parse(
-                    listOfNotifactions[index]["creation_date"]))),
-              ],
-            ),
-          );
   }
 
   // ignore: unused_element
@@ -327,14 +358,6 @@ class _NotificationsState extends State<Notifications> {
         listOfNotifactions = [];
       });
     }
-    // print(listOfNotifactions);
-
-    for (int i = 0; i < listOfNotifactions.length; i++)
-      list.add(ListItem<String>("item $i"));
-    // for (int i = 0; i < listOfNotifactions.length; i++) {
-    //   print(list[i].data);
-    //   print(list[i].isSelected);
-    // }
   }
 
   _acceptInvition(int workspaceId, int notificationId, bool acc) async {
@@ -356,6 +379,7 @@ class _NotificationsState extends State<Notifications> {
       ),
     );
     final jsonResponse = json.decode(response.body);
+    print(jsonResponse);
     if (jsonResponse["type"] == "accepted") {
       setState(() {
         _getNotifiaction();
@@ -366,5 +390,12 @@ class _NotificationsState extends State<Notifications> {
         _getNotifiaction();
       });
     }
+  }
+
+  _getmdode() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    setState(() {
+      mode = _pref.getBool("mode");
+    });
   }
 }

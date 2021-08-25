@@ -1,3 +1,4 @@
+import 'package:app2/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-
-import 'login/logn.dart';
-import 'navBar.dart';
+import 'notification/notification.dart';
 
 // this notifiaction is if the app is close in background or comp
 // completly killeds
@@ -20,7 +19,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       InitializationSettings(android: initialzationSettingsAndroid);
 
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  print('Handling a background message ${message.senderId}');
+  print('Notifiaction message title ${message.notification.title}');
+  print('Notifiaction message body ${message.notification.body}');
+
   // ignore: unused_local_variable
   RemoteNotification notification = message.notification;
   // ignore: unused_local_variable
@@ -83,13 +84,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var fName = "No one";
-  bool tokenFound = false;
 
   @override
   void initState() {
     _getTheme();
-    checkLoginStatus();
     var initialzationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings =
@@ -100,6 +98,8 @@ class _MyAppState extends State<MyApp> {
       (RemoteMessage message) {
         RemoteNotification notification = message.notification;
         AndroidNotification android = message.notification.android;
+        // print('Notifiaction message title ${message.notification.title}');
+        // print('Notifiaction message body ${message.notification.body}');
         if (notification != null && android != null) {
           flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -118,6 +118,16 @@ class _MyAppState extends State<MyApp> {
         }
       },
     );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Notifiaction message title ${message.notification.title}');
+      print('Notifiaction message body ${message.notification.body}');
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Notifications()),
+        );
+      });
+    });
     super.initState();
   }
 
@@ -130,13 +140,10 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.light,
         primaryColorDark: Colors.black,
         canvasColor: Colors.white,
-
         accentColor: Colors.white,
-
         primaryTextTheme: TextTheme(
           headline6: TextStyle(color: Colors.black),
         ),
-
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(color: Colors.black),
           textTheme: TextTheme(
@@ -149,12 +156,10 @@ class _MyAppState extends State<MyApp> {
           systemOverlayStyle:
               SystemUiOverlayStyle(statusBarColor: Colors.white),
         ),
-
         buttonTheme: ButtonThemeData(
           buttonColor: Color.fromRGBO(49, 91, 169, 1),
           textTheme: ButtonTextTheme.primary,
         ),
-
         buttonColor: Colors.black,
         // shadowColor: Colors.grey[300],
         iconTheme: IconThemeData(
@@ -202,29 +207,9 @@ class _MyAppState extends State<MyApp> {
           contentTextStyle: TextStyle(color: Colors.white),
         ),
       ),
-      home: tokenFound == true ? NavBar(fName) : Logn(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
-  }
-
-  checkLoginStatus() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString("token");
-
-    if (token == null) {
-      setState(() {
-        tokenFound = false;
-      });
-    }
-    if (token != null) {
-      List list;
-      list = pref.getStringList("firstSecond") ?? null;
-      fName = list[0].toString();
-      setState(() {
-        tokenFound = true;
-        fName = list[0].toString();
-      });
-    }
   }
 
   _getTheme() async {

@@ -438,15 +438,15 @@ class _Logn extends State<Logn> {
           "userAvatar", jsonResponse['data']['user_avatar'].toString());
 
       await sharedPreferences.setString("email", _eMail.text);
-      getToken();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NavBar(
-              jsonResponse['data']["firstName"],
-            ),
+      await getToken();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NavBar(
+            jsonResponse['data']["firstName"],
           ),
-          (route) => true);
+        ),
+      );
     }
 
     if (!jsonResponse["successful"]) {
@@ -458,6 +458,9 @@ class _Logn extends State<Logn> {
   }
 
   showsnakbar(String type, String msg) {
+    print(type);
+    print(msg);
+
     var snakbar;
     if (type == null)
       snakbar = SnackBar(
@@ -532,10 +535,11 @@ class _Logn extends State<Logn> {
         ),
       );
       var jsonResponse = json.decode(response.body);
-      showsnakbar(
-        jsonResponse["type"],
-        jsonResponse["message"],
-      );
+      print(jsonResponse);
+      // showsnakbar(
+      //   jsonResponse["type"],
+      //   jsonResponse["message"],
+      // );
     }
   }
 }

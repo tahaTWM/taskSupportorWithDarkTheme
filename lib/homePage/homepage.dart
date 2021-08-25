@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                                               .toUpperCase(),
                                           style: TextStyle(
                                             fontSize: 26,
-                                            // color:  Colors.black,
+                                            // color: Colors.red,
                                             fontFamily: "CCB",
                                           ),
                                         ),
@@ -141,8 +141,9 @@ class _HomePageState extends State<HomePage> {
                                               width: width > 400 ? 60 : 40,
                                               height: width > 400 ? 60 : 40,
                                               decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all()),
+                                                shape: BoxShape.circle,
+                                                border: Border.all(),
+                                              ),
                                               child: Center(
                                                 child: Text(
                                                   widget.firstName
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                                       .toUpperCase(),
                                                   style: TextStyle(
                                                     fontSize: 26,
-                                                    // color:  Colors.black,
+                                                    // color: Colors.red,
                                                     fontFamily: "CCB",
                                                   ),
                                                 ),
