@@ -45,14 +45,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Center(
-                            child: Text(
-                          "Ur Task",
-                          style: TextStyle(
-                            fontSize: 42,
-                            // color: Color.fromRGBO(62, 128, 255, 1),
-                          ),
-                        )),
+                        // Center(
+                        //     child: Text(
+                        //   "Ur Task",
+                        //   style: TextStyle(
+                        //     fontSize: 42,
+                        //     // color: Color.fromRGBO(62, 128, 255, 1),
+                        //   ),
+                        // )),
                       ],
                     ),
                     SizedBox(height: w > 400 ? 40 : 20),

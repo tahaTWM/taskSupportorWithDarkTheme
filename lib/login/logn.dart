@@ -53,10 +53,14 @@ class _Logn extends State<Logn> {
   bool _obscureText = true;
   final _formKey = GlobalKey<FormState>();
 
+  var fName = "No one";
+  bool tokenFound = false;
+
   @override
   void initState() {
     super.initState();
     getCredential();
+    // checkLoginStatus();
   }
 
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -88,14 +92,14 @@ class _Logn extends State<Logn> {
                 ),
                 SizedBox(height: 20),
                 // application name
-                Center(
-                    child: Text(
-                  "Ur Tasks",
-                  style: TextStyle(
-                    fontSize: w > 400 ? 42 : 30,
-                    // color: Color.fromRGBO(62, 128, 255, 1),
-                  ),
-                )),
+                // Center(
+                //     child: Text(
+                //   "Ur Tasks",
+                //   style: TextStyle(
+                //     fontSize: w > 400 ? 42 : 30,
+                //     // color: Color.fromRGBO(62, 128, 255, 1),
+                //   ),
+                // )),
                 // email lable
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -288,7 +292,7 @@ class _Logn extends State<Logn> {
                     onPressed: () async {
                       signIn(_eMail.text, _passWord.text);
                       FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                     },
                     child: Text(
                       "LogIn",
@@ -425,6 +429,7 @@ class _Logn extends State<Logn> {
     );
 
     var jsonResponse = json.decode(response.body);
+    print(jsonResponse);
 
     if (jsonResponse["successful"] == true) {
       await sharedPreferences.setString("token", jsonResponse['data']['token']);
@@ -438,23 +443,25 @@ class _Logn extends State<Logn> {
           "userAvatar", jsonResponse['data']['user_avatar'].toString());
 
       await sharedPreferences.setString("email", _eMail.text);
+
       await getToken();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavBar(
-            jsonResponse['data']["firstName"],
-          ),
-        ),
-      );
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => NavBar(
+      //       jsonResponse['data']["firstName"],
+      //     ),
+      //   ),
+      // );
     }
 
-    if (!jsonResponse["successful"]) {
-      showsnakbar(
-        jsonResponse["type"],
-        jsonResponse["message"],
-      );
-    }
+    // if (!jsonResponse["successful"]) {
+    //   showsnakbar(
+    //     jsonResponse["type"],
+    //     jsonResponse["message"],
+    //   );
+    // }
   }
 
   showsnakbar(String type, String msg) {

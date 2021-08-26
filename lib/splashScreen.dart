@@ -43,8 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         tokenFound = false;
       });
-    }
-    if (token != null) {
+    } else {
       List list;
       list = pref.getStringList("firstSecond") ?? null;
       fName = list[0].toString();

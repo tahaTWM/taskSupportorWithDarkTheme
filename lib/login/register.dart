@@ -55,14 +55,14 @@ class _Register extends State<Register> {
                     )),
                   ),
                   SizedBox(height: 5),
-                  Center(
-                      child: Text(
-                    "Ur Tasks",
-                    style: TextStyle(
-                      fontSize: w > 400 ? 35 : 25,
-                      // color: Color.fromRGBO(62, 128, 255, 1),
-                    ),
-                  )),
+                  // Center(
+                  //     child: Text(
+                  //   "Ur Tasks",
+                  //   style: TextStyle(
+                  //     fontSize: w > 400 ? 35 : 25,
+                  //     // color: Color.fromRGBO(62, 128, 255, 1),
+                  //   ),
+                  // )),
                   SizedBox(height: 20),
                   // lebel(padding, "First Name"),
                   textField(_firstName, false, "First Name", false),

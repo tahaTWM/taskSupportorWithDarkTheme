@@ -15,12 +15,11 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int _selectedItem;
+  int _selectedItem = 0;
   List<Widget> contents = [];
 
   @override
   Future<void> initState() {
-    _selectedItem = 0;
     super.initState();
     contents.add(HomePage(widget.fristName));
     contents.add(Notifications());
