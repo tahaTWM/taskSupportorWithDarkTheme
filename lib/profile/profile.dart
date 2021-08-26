@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app2/profile/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get.dart';
@@ -418,11 +419,17 @@ class _ProfileState extends State<Profile> {
                                   fontSize: width > 400 ? 22 : 18),
                             )),
                         // SizedBox(height: 3),
-                        Text(
-                          "Notifactions",
-                          style: TextStyle(
-                              //  color: Colors.grey[700],
-                              fontSize: width > 400 ? 22 : 18),
+                        InkWell(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Setting(fName))),
+                          child: Text(
+                            "Notifactions",
+                            style: TextStyle(
+                                //  color: Colors.grey[700],
+                                fontSize: width > 400 ? 22 : 18),
+                          ),
                         ),
                       ],
                     ),
