@@ -26,9 +26,10 @@ class _TaskHistoryState extends State<TaskHistory>
 
   var _history = [];
   var _timeSort = [];
+
   @override
   void initState() {
-    _showHistory(widget.taskID);
+    _getHistory(widget.taskID);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -54,7 +55,7 @@ class _TaskHistoryState extends State<TaskHistory>
 
         elevation: 0,
       ),
-      body: _history != null
+      body: _history == []
           ? Scrollbar(
               radius: Radius.circular(5),
               isAlwaysShown: true,
@@ -137,33 +138,32 @@ class _TaskHistoryState extends State<TaskHistory>
               ),
             )
           : Center(
-              child: Text("No History or this task"),
+              child: Text(
+                "No Action add\nfor this task",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 26),
+              ),
             ),
     );
   }
 
-  _showHistory(int id) async {
-    var respones = null;
-    var jsonResponse = null;
+  _getHistory(int id) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
       'token': sharedPreferences.getString("token"),
     };
     var url = Uri.parse('${MyApp.url}/workspace/task/$id');
-    var response = await http.get(
+    final response = await http.get(
       url,
       headers: requestHeaders,
     );
 
-    jsonResponse = json.decode(response.body);
-    if (jsonResponse['type'] == "ok") {
+    final jsonResponse = json.decode(response.body);
+    print(jsonResponse);
+    if (jsonResponse["successful"] == true && jsonResponse['type'] == "ok") {
       setState(() {
         _history = jsonResponse["data"]["taskActions"];
-      });
-    } else {
-      setState(() {
-        _history = [];
       });
     }
   }

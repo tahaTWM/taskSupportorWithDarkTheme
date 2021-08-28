@@ -36,105 +36,124 @@ class _Register extends State<Register> {
         key: scaffoldMessengerKey,
         child: Scaffold(
           // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(25, 15, 25, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: w > 400 ? 30 : 10),
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Image(
-                        width: w > 400 ? 150 : 90,
-                        height: w > 400 ? 150 : 90,
-                        image: AssetImage("asset/newLogo3.png"),
-                      ),
-                    )),
-                  ),
-                  SizedBox(height: 5),
-                  // Center(
-                  //     child: Text(
-                  //   "Ur Tasks",
-                  //   style: TextStyle(
-                  //     fontSize: w > 400 ? 35 : 25,
-                  //     // color: Color.fromRGBO(62, 128, 255, 1),
-                  //   ),
-                  // )),
-                  SizedBox(height: 20),
-                  // lebel(padding, "First Name"),
-                  textField(_firstName, false, "First Name", false),
-                  SizedBox(height: 20),
-                  // lebel(padding, "Second Name"),
-                  textField(_secondName, false, "Second Name", false),
-                  SizedBox(height: 20),
-                  // lebel(padding, "Email"),
-                  textField(_eMail, false, "Email", true),
-                  SizedBox(height: 20),
-                  // lebel(padding, 'Password'),
-                  textField(_passWord, true, "Password", false),
-                  SizedBox(height: 20),
-                  // lebel(padding, 'Confirm Password'),
-                  textField(_confPassword, true, "Confirm Password", false),
-
-                  SizedBox(height: 15),
-                  Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: RaisedButton(
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              signUp(_firstName.text, _secondName.text,
-                                  _eMail.text, _passWord.text);
-                            },
-                            child: Text(
-                              "Register",
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontFamily: "Rubik",
-                                color: Colors.white,
-                              ),
-                            ),
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            elevation: 7,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        SizedBox(
-                          width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.grey[600],
-                            onPressed: () async {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Back to LogIn",
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontFamily: "Rubik",
-                                color: Colors.white,
-                              ),
-                            ),
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            elevation: 7,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                      ],
+          body: Padding(
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: w > 400 ? 30 : 10),
+                  child: Center(
+                      child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Image(
+                      width: w > 400 ? 150 : 90,
+                      height: w > 400 ? 150 : 90,
+                      image: AssetImage("asset/newLogo3.png"),
                     ),
+                  )),
+                ),
+                // lebel(padding, "First Name"),
+                SizedBox(height: 10),
+                textField(_firstName, false, "First Name", false),
+                SizedBox(height: 20),
+                // lebel(padding, "Second Name"),
+                textField(_secondName, false, "Second Name", false),
+                SizedBox(height: 20),
+                // lebel(padding, "Email"),
+                textField(_eMail, false, "Email", true),
+                SizedBox(height: 20),
+                // lebel(padding, 'Password'),
+                textField(_passWord, true, "Password", false),
+                SizedBox(height: 10),
+                // lebel(padding, 'Confirm Password'),
+                textField(_confPassword, true, "Confirm Password", false),
+                SizedBox(height: 10),
+                Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          onPressed: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            signUp(_firstName.text, _secondName.text,
+                                _eMail.text, _passWord.text);
+                          },
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontFamily: "Rubik",
+                              color: Colors.white,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          elevation: 7,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          color: Colors.grey[600],
+                          onPressed: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Back to LogIn",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontFamily: "Rubik",
+                              color: Colors.white,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          elevation: 7,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                    ],
                   ),
-
-                  // ),
-                ],
-              ),
+                ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: () => print("tapped"),
+                        child: Image(
+                          image: AssetImage("asset/facebook.png"),
+                          width: 55,
+                          height: 55,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => print("tapped"),
+                        child: Image(
+                          image: AssetImage("asset/github.png"),
+                          width: 55,
+                          height: 55,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => print("tapped"),
+                        child: Image(
+                          image: AssetImage("asset/google.png"),
+                          width: 66,
+                          height: 66,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                // ),
+              ],
             ),
           ),
         ),

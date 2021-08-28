@@ -1,5 +1,7 @@
 import 'dart:io';
 
+
+import '../profile/profile.dart';
 import 'package:app2/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,9 +15,6 @@ import 'dart:convert';
 import 'package:get/get_core/src/get_main.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart';
-import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/cupertino.dart';
 
 class Setting extends StatefulWidget {
@@ -60,6 +59,7 @@ class _SettingState extends State<Setting> {
 
   @override
   void initState() {
+    name();
     _getthemeBool();
     super.initState();
   }
@@ -69,6 +69,7 @@ class _SettingState extends State<Setting> {
     return ScaffoldMessenger(
       key: scaffoldMessengerKey,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             title: Text(
               "Settings",
@@ -210,7 +211,7 @@ class _SettingState extends State<Setting> {
                       ),
                       Field(
                           onclick: () {
-                            print("Edit Profile");
+                            _newBottomSheetChangeUserName(context);
                           },
                           colur: Colors.orangeAccent,
                           icon: Icon(
@@ -225,7 +226,7 @@ class _SettingState extends State<Setting> {
                           )),
                       Field(
                           onclick: () {
-                            print("Change Password");
+                            _newBottomSheetChangePassword(context);
                           },
                           colur: Colors.blue,
                           icon: Icon(
@@ -287,9 +288,7 @@ class _SettingState extends State<Setting> {
                         ),
                       ),
                       Field(
-                        onclick: () {
-                          print("Language");
-                        },
+                        onclick: () {},
                         colur: Colors.purple,
                         icon: Icon(
                           Icons.language,
@@ -357,7 +356,6 @@ class _SettingState extends State<Setting> {
       isSwitched = _pref.getBool("mode") ?? false;
       userAvatar = _pref.getString("userAvatar");
     });
-    print("isSwitched : " + isSwitched.toString());
   }
 
   _siginOut() async {
@@ -366,257 +364,159 @@ class _SettingState extends State<Setting> {
     sharedPreferences.remove("token");
     sharedPreferences.remove("firstSecond");
     sharedPreferences.remove("userAvatar");
+    sharedPreferences.remove("registrationDate");
 
     // sharedPreferences.clear();
     // ignore: deprecated_member_use
     // sharedPreferences.commit();
   }
 
-  bottomsheet(BuildContext context, String select) {
-    if (select == "Change Password")
-      return showAdaptiveActionSheet(
-        context: context,
-        title: const Text('Change Password'),
-        // bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
-        actions: <BottomSheetAction>[
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                controller: textEditingControllerOldPassword,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
+  _newBottomSheetChangeUserName(BuildContext context) {
+    return showModalBottomSheet<void>(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            child: Wrap(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "change UserName",
+                          style: TextStyle(fontSize: 24),
+                        )
+                      ]),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    controller: textEditingControllerFName,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      icon: Icon(
+                        Icons.person_rounded,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
                     ),
-                decoration: InputDecoration(
-                  hintText: "Enter Old Password",
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  icon: Icon(
-                    Icons.vpn_key_outlined,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
                   ),
                 ),
-              ),
-            ),
-          ),
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                controller: textEditingControllerNewPassword,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
+                // ignore: missing_required_param
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    controller: textEditingControllerSName,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      icon: Icon(
+                        Icons.person_rounded,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
                     ),
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Enter New Password",
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  icon: Icon(
-                    Icons.vpn_key,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
                   ),
                 ),
-              ),
-            ),
-          ),
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                controller: textEditingControllerConformNewPassword,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
+                // ignore: missing_required_param
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    enabled: false,
+                    controller: textEditingControllerEmail,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Colors.grey[400],
+                        ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      icon: Icon(
+                        Icons.account_circle,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
                     ),
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Confirm New Password",
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  icon: Icon(
-                    Icons.vpn_key,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
                   ),
                 ),
-              ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14, horizontal: 40),
+                          onPressed: () {
+                            _updateName(context);
+
+                          },
+                          child: Text(
+                            "Update",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)),
+                        )
+                      ]),
+                )
+              ],
             ),
           ),
-        ],
-        cancelAction: CancelAction(
-          title: const Text('Save Change'),
-          onPressed: () {
-            Navigator.pop(context);
-            _changePassword(
-                context,
-                textEditingControllerOldPassword.text,
-                textEditingControllerNewPassword.text,
-                textEditingControllerConformNewPassword.text);
-          },
-        ),
-      );
-    else
-      return showAdaptiveActionSheet(
-        context: context,
-        title: const Text('Edit Profile'),
-        // bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
-        actions: <BottomSheetAction>[
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                controller: textEditingControllerFName,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
-                    ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  icon: Icon(
-                    Icons.person_rounded,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                controller: textEditingControllerSName,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
-                    ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  icon: Icon(
-                    Icons.person_rounded,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // ignore: missing_required_param
-          BottomSheetAction(
-            title: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  //  color: Color.fromRGBO(243, 246, 255, 1),
-                  borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                enabled: false,
-                controller: textEditingControllerEmail,
-                onFieldSubmitted: (_) {},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'search box is Empty';
-                  }
-                  return null;
-                },
-                style: TextStyle(
-                    //  color: Colors.grey[400],
-                    ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  icon: Icon(
-                    Icons.account_circle,
-                    //  color: Color.fromRGBO(0, 82, 205, 1),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-        cancelAction: CancelAction(
-          title: const Text('Update'),
-          onPressed: () {
-            _updateName(context);
-            Navigator.pop(context);
-          },
-        ),
-      );
+        );
+      },
+    );
   }
 
   _changePassword(BuildContext context, String oldPassword, String newPassword,
@@ -773,6 +673,8 @@ class _SettingState extends State<Setting> {
             ),
           ),
         ));
+        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Profile(fName)), (route) => false);
       } else {
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
           duration: Duration(seconds: 5),
@@ -793,6 +695,201 @@ class _SettingState extends State<Setting> {
         ));
       }
     }
+  }
+
+  name() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    List<dynamic> list = sharedPreferences.getStringList("firstSecond");
+    email = sharedPreferences.getString("email");
+    setState(() {
+      textEditingControllerFName.text = list[0];
+      textEditingControllerSName.text = list[1];
+      textEditingControllerEmail.text = email;
+      fName = list[0];
+      sName = list[1];
+    });
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+
+    try {
+      var url = Uri.parse("${MyApp.url}/");
+      final response = await http.get(
+        url,
+        headers: requestHeaders,
+      );
+      final jsonResponse = await json.decode(response.body);
+      setState(() {
+        workspaces = jsonResponse["assignedWorkspaces"].toString();
+        tasks = jsonResponse["assignedTasks"].toString();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _newBottomSheetChangePassword(BuildContext context) {
+    return showModalBottomSheet<void>(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            child: Wrap(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "change Password",
+                          style: TextStyle(fontSize: 24),
+                        )
+                      ]),
+                ),
+
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    controller: textEditingControllerOldPassword,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                    decoration: InputDecoration(
+                      hintText: "Enter Old Password",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      icon: Icon(
+                        Icons.vpn_key_outlined,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
+                    ),
+                  ),
+                ),
+                // ignore: missing_required_param
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    controller: textEditingControllerNewPassword,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter New Password",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      icon: Icon(
+                        Icons.vpn_key,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
+                    ),
+                  ),
+                ),
+                // ignore: missing_required_param
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //  color: Color.fromRGBO(243, 246, 255, 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextFormField(
+                    controller: textEditingControllerConformNewPassword,
+                    onFieldSubmitted: (_) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'search box is Empty';
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Confirm New Password",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      icon: Icon(
+                        Icons.vpn_key,
+                        //  color: Color.fromRGBO(0, 82, 205, 1),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14, horizontal: 40),
+                          onPressed: () {
+                            _changePassword(
+                                context,
+                                textEditingControllerOldPassword.text,
+                                textEditingControllerNewPassword.text,
+                                textEditingControllerConformNewPassword.text);
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Update",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)),
+                        )
+                      ]),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

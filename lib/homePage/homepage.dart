@@ -1264,7 +1264,7 @@ class _HomePageState extends State<HomePage> {
       left: left,
       right: right,
       child: Container(
-        child: list[index]["user_avatar"] == null
+        child: list[index]["user_avatar"] == null || "${MyApp.url}${list[index]["user_avatar"]}".contains('null')
             ? Container(
                 width: 50,
                 height: 50,

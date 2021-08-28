@@ -66,6 +66,9 @@ flutter:
     - asset/newLogowithName.png
     - asset/newLogoWithName2.png
     - asset/newLogo3.png
+    - asset/google.png
+    - asset/facebook.png
+    - asset/github.png
 
   fonts:
     - family: Gilory

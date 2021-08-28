@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/widgets.dart';
+import 'package:toast/toast.dart';
 import '../creation/craeteNewTask.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../main.dart';
@@ -870,7 +871,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         CupertinoRadioChoice(
           choices: status,
           onChange: onStatusSelected,
-          initialKeyValue: 'waiting',
+          initialKeyValue: 'DONE',
         ),
       ],
     );
@@ -890,54 +891,56 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           title: Center(
             child: Text("Task Action"),
           ),
-          content: Container(
-            // height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                    child: Text(
-                  taskName,
-                  style: TextStyle(
-                    fontSize: w > 400 ? 23 : 20,
-                    // color:Color.fromRGBO(0, 82, 205, 1),
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
-                SizedBox(height: 10),
-                _status(),
-                SizedBox(height: 10),
-                Container(
-                  height: w > 400 ? 200 : 150,
-                  // margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.withOpacity(0.1),
-                  ),
-                  child: Center(
-                    child: TextField(
-                      maxLines: 8,
-                      controller: _action,
-                      style: TextStyle(
-                        fontSize: w > 400 ? 20 : 16,
-                        // color:Color.fromRGBO(0, 82, 205, 1),
-                      ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.only(left: 10, right: 10, top: 10),
-                        hintText:
-                            "Please leave a comment or let's us know your progress.",
-                        hintStyle: TextStyle(
+          content: SingleChildScrollView(
+            child: Container(
+              // height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                      child: Text(
+                    taskName,
+                    style: TextStyle(
+                      fontSize: w > 400 ? 23 : 20,
+                      // color:Color.fromRGBO(0, 82, 205, 1),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  SizedBox(height: 10),
+                  _status(),
+                  SizedBox(height: 10),
+                  Container(
+                    height: w > 400 ? 200 : 150,
+                    // margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: Center(
+                      child: TextField(
+                        maxLines: 8,
+                        controller: _action,
+                        style: TextStyle(
                           fontSize: w > 400 ? 20 : 16,
+                          // color:Color.fromRGBO(0, 82, 205, 1),
+                        ),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding:
+                              EdgeInsets.only(left: 10, right: 10, top: 10),
+                          hintText:
+                              "Please leave a comment or let's us know your progress.",
+                          hintStyle: TextStyle(
+                            fontSize: w > 400 ? 20 : 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           actions: <Widget>[
@@ -970,14 +973,17 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   }
 
   _updateTaskAction(String oldStatus, int taskid) async {
-    print(oldStatus);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")
     };
+    print(_action.text);
+    print(oldStatus);
+    print(_selectedStatus);
     var url = Uri.parse("${MyApp.url}/task/action");
-    if (_selectedStatus == null) {
+    var jsonResponse;
+    if (_selectedStatus != null) {
       final respnse = await http.post(
         url,
         headers: requestHeaders,
@@ -992,9 +998,8 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
 
-      final jsonResponse = json.decode(respnse.body);
-      print("Comment" + jsonResponse.toString());
-    } else {
+      jsonResponse = json.decode(respnse.body);
+    } else if (_action.text.isNotEmpty) {
       final respnse = await http.post(
         url,
         headers: requestHeaders,
@@ -1009,9 +1014,16 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
 
-      final jsonResponse = json.decode(respnse.body);
-      print("Change statue" + jsonResponse.toString());
+      jsonResponse = json.decode(respnse.body);
+    } else {
+      Toast.show(
+        "Enter at least a comment",
+        context,
+        backgroundColor: Colors.pink,
+        duration: Toast.LENGTH_SHORT,
+      );
     }
+    print(jsonResponse);
 
     setState(() {
       checkIfThereAnyTaskes();

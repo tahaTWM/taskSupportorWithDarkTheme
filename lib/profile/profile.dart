@@ -33,6 +33,7 @@ class _ProfileState extends State<Profile> {
   String fName = '';
   String sName = '';
   String email = '';
+  String creationDate = '';
   TextEditingController textEditingControllerFName = TextEditingController();
   TextEditingController textEditingControllerSName = TextEditingController();
   TextEditingController textEditingControllerEmail = TextEditingController();
@@ -50,17 +51,20 @@ class _ProfileState extends State<Profile> {
   String tasks = "0";
   final ImagePicker _picker = ImagePicker();
 
-  @override
-  void initState() {
-    super.initState();
-    name();
-  }
-
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
   var imagePath = "";
 
   bool imageFound = false;
+
+  String createDataDay = '';
+  String createDataTime = '';
+
+  @override
+  void initState() {
+    super.initState();
+    name();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,176 +85,17 @@ class _ProfileState extends State<Profile> {
           ),
           centerTitle: true,
           actions: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(18),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 1),
-              margin: EdgeInsets.only(right: 5, top: 5, bottom: 2),
-              child: PopupMenuButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                icon: Icon(
-                  Icons.settings,
-                  size: width > 400 ? 30 : 20,
-                  //  color: Colors.blue,
+            GestureDetector(
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Setting(fName))),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  shape: BoxShape.circle,
                 ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Edit Account",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.lock,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Change Password",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 3,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.logout,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Log out",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 4,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.light_mode,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Light Theme",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 5,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.dark_mode,
-                          size: 30,
-                          //  color: Color.fromRGBO(158, 158, 158, 1),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Dark Theme",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 6,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.remove,
-                          size: 30,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Remove Profile Image",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "RubicB",
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-                onSelected: (item) {
-                  switch (item) {
-                    case 1:
-                      bottomsheet(context, "Edit Account");
-                      break;
-                    case 2:
-                      bottomsheet(context, "Change Password");
-                      break;
-                    case 3:
-                      siginOut();
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Logn()));
-                      break;
-
-                    case 4:
-                      Get.changeThemeMode(ThemeMode.light);
-                      _changeTheme(false);
-                      break;
-
-                    case 5:
-                      Get.changeThemeMode(ThemeMode.dark);
-                      _changeTheme(true);
-                      break;
-                    case 6:
-                      {
-                        _removeimage();
-                        // Navigator.of(context).pop();
-                      }
-
-                      break;
-                  }
-                },
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                margin: EdgeInsets.only(right: 5, top: 5, bottom: 2),
+                child: Icon(Icons.settings),
               ),
             )
           ],
@@ -287,7 +132,7 @@ class _ProfileState extends State<Profile> {
                               child: Text(
                                 widget.fn[0].toUpperCase(),
                                 style: TextStyle(
-                                    fontSize: width > 400 ? 80 : 40,
+                                    fontSize: width > 400 ? 80 : 60,
                                     fontFamily: "CCB"),
                               ),
                             ))
@@ -354,6 +199,72 @@ class _ProfileState extends State<Profile> {
                 fName + " " + sName,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40, bottom: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromRGBO(127, 210, 35, 1)),
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          "Available",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: width > 400 ? 22 : 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 35, top: 10, bottom: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.email_outlined),
+                        SizedBox(width: 20),
+                        Text(
+                          textEditingControllerEmail.text,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: width > 400 ? 22 : 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 35, top: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.more_time_rounded),
+                        SizedBox(width: 20),
+                        Row(
+                          children: [
+                            Text(
+                              createDataDay + "  at  ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: width > 400 ? 22 : 18),
+                            ),
+                            Text(
+                              createDataTime,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: width > 400 ? 22 : 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
               // SizedBox(
               //   height: width > 400 ? 50 : 20,
               // ),
@@ -419,17 +330,11 @@ class _ProfileState extends State<Profile> {
                                   fontSize: width > 400 ? 22 : 18),
                             )),
                         // SizedBox(height: 3),
-                        InkWell(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Setting(fName))),
-                          child: Text(
-                            "Notifactions",
-                            style: TextStyle(
-                                //  color: Colors.grey[700],
-                                fontSize: width > 400 ? 22 : 18),
-                          ),
+                        Text(
+                          "Notifications",
+                          style: TextStyle(
+                              //  color: Colors.grey[700],
+                              fontSize: width > 400 ? 22 : 18),
                         ),
                       ],
                     ),
@@ -439,66 +344,66 @@ class _ProfileState extends State<Profile> {
               // SizedBox(
               //   height: width > 400 ? 90 : 30,
               // ),
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => bottomsheet(context, "Edit Account"),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            width: width - 100,
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            child: Center(
-                                child: Text(
-                              "Edit Account",
-                              style: TextStyle(fontSize: width > 400 ? 24 : 20),
-                            )),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: width > 400 ? 30 : 20,
-                  ),
-                  GestureDetector(
-                    onTap: () => bottomsheet(context, "Change Password"),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            width: width - 100,
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            decoration: BoxDecoration(
-                              //  color: Color.fromRGBO(0, 82, 205, 0.1),
-                              borderRadius: BorderRadius.circular(30),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            child: Center(
-                                child: Text(
-                              "Change Password",
-                              style: TextStyle(fontSize: width > 400 ? 24 : 20),
-                            )),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Column(
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () => bottomsheet(context, "Edit Account"),
+              //       child: Container(
+              //         child: Column(
+              //           children: [
+              //             Container(
+              //               padding: EdgeInsets.symmetric(vertical: 5),
+              //               width: width - 100,
+              //               height: MediaQuery.of(context).size.height * 0.06,
+              //               decoration: BoxDecoration(
+              //                 borderRadius: BorderRadius.circular(30),
+              //                 border: Border.all(
+              //                   width: 1,
+              //                   color: Colors.black,
+              //                 ),
+              //               ),
+              //               child: Center(
+              //                   child: Text(
+              //                 "Edit Account",
+              //                 style: TextStyle(fontSize: width > 400 ? 24 : 20),
+              //               )),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       height: width > 400 ? 30 : 20,
+              //     ),
+              //     GestureDetector(
+              //       onTap: () => bottomsheet(context, "Change Password"),
+              //       child: Container(
+              //         child: Column(
+              //           children: [
+              //             Container(
+              //               padding: EdgeInsets.symmetric(vertical: 5),
+              //               width: width - 100,
+              //               height: MediaQuery.of(context).size.height * 0.06,
+              //               decoration: BoxDecoration(
+              //                 //  color: Color.fromRGBO(0, 82, 205, 0.1),
+              //                 borderRadius: BorderRadius.circular(30),
+              //                 border: Border.all(
+              //                   width: 1,
+              //                   color: Colors.black,
+              //                 ),
+              //               ),
+              //               child: Center(
+              //                   child: Text(
+              //                 "Change Password",
+              //                 style: TextStyle(fontSize: width > 400 ? 24 : 20),
+              //               )),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -577,6 +482,14 @@ class _ProfileState extends State<Profile> {
                       Navigator.of(context).pop();
                     },
                   ),
+                  new ListTile(
+                    leading: new Icon(Icons.remove, color: Colors.red),
+                    title: new Text('Remove image'),
+                    onTap: () {
+                      _removeimage();
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ],
               ),
             ),
@@ -588,6 +501,7 @@ class _ProfileState extends State<Profile> {
     if (select == "Change Password")
       return showAdaptiveActionSheet(
         context: context,
+
         title: const Text('Change Password'),
         // bottomSheetColor: Color.fromRGBO(226, 234, 246, 1),
         actions: <BottomSheetAction>[
@@ -713,6 +627,7 @@ class _ProfileState extends State<Profile> {
                 textEditingControllerConformNewPassword.text);
           },
         ),
+
       );
     else
       return showAdaptiveActionSheet(
@@ -832,8 +747,6 @@ class _ProfileState extends State<Profile> {
   }
 
   name() async {
-    var response = null;
-    var jsonResponse = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     if (sharedPreferences.getString("userAvatar") != "null") {
@@ -844,6 +757,10 @@ class _ProfileState extends State<Profile> {
     }
     List<dynamic> list = sharedPreferences.getStringList("firstSecond");
     email = sharedPreferences.getString("email");
+    creationDate = sharedPreferences.getString("creationDate");
+    createDataDay = creationDate.split('T')[0];
+    createDataTime = creationDate.split('T')[1];
+
     setState(() {
       textEditingControllerFName.text = list[0];
       textEditingControllerSName.text = list[1];
@@ -859,11 +776,11 @@ class _ProfileState extends State<Profile> {
 
     try {
       var url = Uri.parse("${MyApp.url}/");
-      response = await http.get(
+      final response = await http.get(
         url,
         headers: requestHeaders,
       );
-      jsonResponse = await json.decode(response.body);
+      final jsonResponse = await json.decode(response.body);
       setState(() {
         workspaces = jsonResponse["assignedWorkspaces"].toString();
         tasks = jsonResponse["assignedTasks"].toString();
