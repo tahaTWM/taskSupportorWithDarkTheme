@@ -978,9 +978,6 @@ class _ShowAllTasksState extends State<ShowAllTasks>
       "Content-type": "application/json; charset=UTF-8",
       "token": sharedPreferences.getString("token")
     };
-    print(_action.text);
-    print(oldStatus);
-    print(_selectedStatus);
     var url = Uri.parse("${MyApp.url}/task/action");
     var jsonResponse;
     if (_selectedStatus != null) {
@@ -1023,7 +1020,6 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         duration: Toast.LENGTH_SHORT,
       );
     }
-    print(jsonResponse);
 
     setState(() {
       checkIfThereAnyTaskes();

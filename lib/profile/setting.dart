@@ -83,8 +83,8 @@ class _SettingState extends State<Setting> {
             elevation: 0),
         body: Container(
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SingleChildScrollView(
                 child: Padding(
@@ -330,11 +330,14 @@ class _SettingState extends State<Setting> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  "App version 0.0.1",
-                  style: TextStyle(),
+              Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    "App version 0.0.1",
+                    style: TextStyle(),
+                  ),
                 ),
               ),
             ],

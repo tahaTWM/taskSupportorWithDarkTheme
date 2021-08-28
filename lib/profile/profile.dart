@@ -199,75 +199,6 @@ class _ProfileState extends State<Profile> {
                 fName + " " + sName,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, bottom: 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color.fromRGBO(127, 210, 35, 1)),
-                        ),
-                        SizedBox(width: 30),
-                        Text(
-                          "Available",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: width > 400 ? 22 : 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 35, top: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Icon(Icons.email_outlined),
-                        SizedBox(width: 20),
-                        Text(
-                          textEditingControllerEmail.text,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: width > 400 ? 22 : 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 35, top: 10),
-                    child: Row(
-                      children: [
-                        Icon(Icons.more_time_rounded),
-                        SizedBox(width: 20),
-                        Row(
-                          children: [
-                            Text(
-                              createDataDay + "  at  ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: width > 400 ? 22 : 18),
-                            ),
-                            Text(
-                              createDataTime,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: width > 400 ? 22 : 18),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              // SizedBox(
-              //   height: width > 400 ? 50 : 20,
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -341,68 +272,74 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40, bottom: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color.fromRGBO(127, 210, 35, 1)),
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          "Available",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: width > 400 ? 22 : 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 35, top: 10, bottom: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.email_outlined),
+                        SizedBox(width: 20),
+                        Text(
+                          textEditingControllerEmail.text,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: width > 400 ? 22 : 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 35, top: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.more_time_rounded),
+                        SizedBox(width: 20),
+                        Row(
+                          children: [
+                            Text(
+                              createDataDay + "  at  ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: width > 400 ? 22 : 18),
+                            ),
+                            Text(
+                              createDataTime,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: width > 400 ? 22 : 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
               // SizedBox(
-              //   height: width > 400 ? 90 : 30,
-              // ),
-              // Column(
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () => bottomsheet(context, "Edit Account"),
-              //       child: Container(
-              //         child: Column(
-              //           children: [
-              //             Container(
-              //               padding: EdgeInsets.symmetric(vertical: 5),
-              //               width: width - 100,
-              //               height: MediaQuery.of(context).size.height * 0.06,
-              //               decoration: BoxDecoration(
-              //                 borderRadius: BorderRadius.circular(30),
-              //                 border: Border.all(
-              //                   width: 1,
-              //                   color: Colors.black,
-              //                 ),
-              //               ),
-              //               child: Center(
-              //                   child: Text(
-              //                 "Edit Account",
-              //                 style: TextStyle(fontSize: width > 400 ? 24 : 20),
-              //               )),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       height: width > 400 ? 30 : 20,
-              //     ),
-              //     GestureDetector(
-              //       onTap: () => bottomsheet(context, "Change Password"),
-              //       child: Container(
-              //         child: Column(
-              //           children: [
-              //             Container(
-              //               padding: EdgeInsets.symmetric(vertical: 5),
-              //               width: width - 100,
-              //               height: MediaQuery.of(context).size.height * 0.06,
-              //               decoration: BoxDecoration(
-              //                 //  color: Color.fromRGBO(0, 82, 205, 0.1),
-              //                 borderRadius: BorderRadius.circular(30),
-              //                 border: Border.all(
-              //                   width: 1,
-              //                   color: Colors.black,
-              //                 ),
-              //               ),
-              //               child: Center(
-              //                   child: Text(
-              //                 "Change Password",
-              //                 style: TextStyle(fontSize: width > 400 ? 24 : 20),
-              //               )),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ],
+              //   height: width > 400 ? 50 : 20,
               // ),
             ],
           ),
@@ -627,7 +564,6 @@ class _ProfileState extends State<Profile> {
                 textEditingControllerConformNewPassword.text);
           },
         ),
-
       );
     else
       return showAdaptiveActionSheet(

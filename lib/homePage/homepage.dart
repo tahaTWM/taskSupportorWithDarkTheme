@@ -1306,8 +1306,7 @@ class _HomePageState extends State<HomePage> {
                               border: Border.all(),
                             ),
                             child: Center(
-                                child: Text(listOfWorkspace[0]["users"][index]
-                                        ["firstName"]
+                                child: Text(list[index]["firstName"]
                                     .toString()
                                     .split('')[0]
                                     .toUpperCase()
