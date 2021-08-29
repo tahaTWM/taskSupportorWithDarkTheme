@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:app2/login/logn.dart';
+import 'package:app2/navBar.dart';
 
 import '../profile/profile.dart';
 import 'package:app2/splashScreen.dart';
@@ -129,7 +131,10 @@ class _SettingState extends State<Setting> {
                                             child: Image.network(
                                               "${MyApp.url}$userAvatar",
                                               height: 55,
+                                              width: 55,
+                                              fit: BoxFit.cover,
                                             ),
+
                                           ),
                                   ),
                                 ),
@@ -303,15 +308,6 @@ class _SettingState extends State<Setting> {
                       ),
                       Field(
                         onclick: () async {
-                          SharedPreferences _pref =
-                              await SharedPreferences.getInstance();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SplashScreen(),
-                            ),
-                            // (route) => false
-                          );
                           _siginOut();
                         },
                         colur: Colors.orange[900],
@@ -364,10 +360,87 @@ class _SettingState extends State<Setting> {
   _siginOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    sharedPreferences.remove("token");
-    sharedPreferences.remove("firstSecond");
-    sharedPreferences.remove("userAvatar");
-    sharedPreferences.remove("registrationDate");
+    Map<String, String> requestHeaders = {
+      "Content-type": "application/json; charset=UTF-8",
+      "token": sharedPreferences.getString("token")
+    };
+
+    final url = Uri.parse("${MyApp.url}/user/logout");
+    final user_device_id = sharedPreferences.getInt('fcmTokenId');
+    var response = await http.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(
+        <String, dynamic>{
+          "user_device_id": user_device_id,
+        },
+      ),
+    );
+    final jsonResponse = json.decode(response.body);
+    if(response.statusCode == 200 ){
+      if(jsonResponse["successful"] && jsonResponse["type"] == "ok"){
+        setState(() {
+          sharedPreferences.remove("token");
+          sharedPreferences.remove("firstSecond");
+          sharedPreferences.remove("userAvatar");
+          sharedPreferences.remove("registrationDate");
+          sharedPreferences.remove("fcmTokenId");
+        });
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Logn(),
+            ),
+                (route) => false
+        );
+      }else{
+        scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+            duration: Duration(seconds: 5),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  jsonResponse["message"],
+                  style: TextStyle(
+                    //  color: Colors.white,
+                      fontFamily: "RubikL",
+                      fontSize: 17),
+                ),
+                Icon(
+                  Icons.error,
+                  //  color: Colors.green,
+                ),
+              ],
+            )));
+      }
+
+    }else{
+      scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
+          duration: Duration(seconds: 5),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Error in server contact support team",
+                style: TextStyle(
+                  //  color: Colors.white,
+                    fontFamily: "RubikL",
+                    fontSize: 17),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Icon(
+                Icons.error,
+                //  color: Colors.green,
+              ),
+            ],
+          )));
+    }
+
+
+
+
+
+
 
     // sharedPreferences.clear();
     // ignore: deprecated_member_use
@@ -503,7 +576,6 @@ class _SettingState extends State<Setting> {
                               vertical: 14, horizontal: 40),
                           onPressed: () {
                             _updateName(context);
-
                           },
                           child: Text(
                             "Update",
@@ -677,7 +749,10 @@ class _SettingState extends State<Setting> {
           ),
         ));
         Navigator.pop(context);
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Profile(fName)), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => NavBar(fName, 2)),
+            (route) => false);
       } else {
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
           duration: Duration(seconds: 5),

@@ -415,26 +415,25 @@ class _Logn extends State<Logn> {
 
       await sharedPreferences.setString("email", _eMail.text);
 
-      await sharedPreferences.setString("creationDate", jsonResponse['data']["registrationDate"].toString());
+      await sharedPreferences.setString(
+          "creationDate", jsonResponse['data']["registrationDate"].toString());
 
       await getToken();
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NavBar(
-            jsonResponse['data']["firstName"],
-          ),
+          builder: (context) => NavBar(jsonResponse['data']["firstName"], 0),
         ),
       );
     }
 
-    // if (!jsonResponse["successful"]) {
-    //   showsnakbar(
-    //     jsonResponse["type"],
-    //     jsonResponse["message"],
-    //   );
-    // }
+    if (!jsonResponse["successful"]) {
+      showsnakbar(
+        jsonResponse["type"],
+        jsonResponse["message"],
+      );
+    }
   }
 
   showsnakbar(String type, String msg) {
@@ -515,7 +514,8 @@ class _Logn extends State<Logn> {
         ),
       );
       var jsonResponse = json.decode(response.body);
-      print(jsonResponse);
+      print(jsonResponse['data']["user_device_id"]);
+      await _pref.setInt("fcmTokenId", jsonResponse['data']["user_device_id"]);
       // showsnakbar(
       //   jsonResponse["type"],
       //   jsonResponse["message"],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app2/profile/setting.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get.dart';
@@ -138,37 +139,53 @@ class _ProfileState extends State<Profile> {
                             ))
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              "${MyApp.url}$imagePath",
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              height: MediaQuery.of(context).size.width * 0.45,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                    child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            fName[0].toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: width > 400 ? 80 : 40,
-                                                fontFamily: "CCB"),
+                            child: image == null
+                                ? Image.network(
+                                    "${MyApp.url}$imagePath",
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(),
                                           ),
-                                        )));
-                              },
-                            ),
+                                          child: Center(
+                                            child: Text(
+                                              fName[0].toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      width > 400 ? 80 : 40,
+                                                  fontFamily: "CCB"),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Image.file(
+                                    image,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                     Positioned(
                       bottom: 0,
@@ -177,7 +194,7 @@ class _ProfileState extends State<Profile> {
                         onTap: () => _showPicker(context),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.45,
-                          height: MediaQuery.of(context).size.height * 0.04,
+                          height: MediaQuery.of(context).size.height * 0.05,
                           color: Colors.grey.withOpacity(0.6),
                           child: Center(
                             child: Icon(
@@ -325,7 +342,7 @@ class _ProfileState extends State<Profile> {
                                   fontSize: width > 400 ? 22 : 18),
                             ),
                             Text(
-                              createDataTime,
+                              createDataTime.split('.')[0],
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: width > 400 ? 22 : 18),
@@ -359,6 +376,7 @@ class _ProfileState extends State<Profile> {
       source: ImageSource.gallery,
     ));
     final File _image = File(image.path);
+
     if (_image != null) _showAlertDilog(context, _image as File);
   }
 
@@ -367,7 +385,9 @@ class _ProfileState extends State<Profile> {
     var image = (await ImagePicker.platform.getImage(
       source: ImageSource.camera,
     ));
+
     final File _image = File(image.path);
+
     if (_image != null) _showAlertDilog(context, _image as File);
   }
 

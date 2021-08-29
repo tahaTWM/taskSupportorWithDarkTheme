@@ -5,20 +5,22 @@ import 'profile/profile.dart';
 import 'package:flutter/material.dart';
 import './homePage/homepage.dart';
 
+// ignore: must_be_immutable
 class NavBar extends StatefulWidget {
   String fristName;
-
-  NavBar(this.fristName);
+  int selectedItem;
+  NavBar(this.fristName, this.selectedItem);
 
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  int _selectedItem = 0;
+  // int _selectedItem = 2;
   List<Widget> contents = [];
 
   @override
+  // ignore: missing_return
   Future<void> initState() {
     super.initState();
     contents.add(HomePage(widget.fristName));
@@ -43,13 +45,13 @@ class _NavBarState extends State<NavBar> {
         ],
         onChange: (indx) {
           setState(() {
-            _selectedItem = indx;
+            widget.selectedItem = indx;
           });
         },
-        defaultSelectedIndex: _selectedItem,
+        defaultSelectedIndex: widget.selectedItem,
       ),
       body: Center(
-        child: contents[_selectedItem],
+        child: contents[widget.selectedItem],
       ),
     );
   }

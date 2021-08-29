@@ -1,3 +1,4 @@
+import 'package:app2/navBar.dart';
 import 'package:app2/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -55,13 +56,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() async {
-
   // SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -70,7 +70,7 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   // lan ip
-  static String url = "http://192.168.1.2:100";
+  static String url = "https://ur-task.com/api";
 
   //nogrok ip
   // static String url = "https://blue-snake-34.loca.lt";
@@ -121,14 +121,18 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Notifiaction message title ${message.notification.title}');
       print('Notifiaction message body ${message.notification.body}');
-      setState(() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Notifications()),
-        );
-      });
+      _openApp();
     });
     super.initState();
+  }
+
+  _openApp() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    var name = _pref.getStringList('firstSecond');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NavBar(name[0], 1)),
+    );
   }
 
   @override

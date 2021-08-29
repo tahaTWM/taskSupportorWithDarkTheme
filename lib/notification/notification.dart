@@ -173,7 +173,7 @@ class _NotificationsState extends State<Notifications> {
                               overflow: TextOverflow.ellipsis,
                               text: new TextSpan(
                                 style: TextStyle(
-                                    color: !mode ? Colors.black : null),
+                                    color: MyApp.mode ? Colors.black : null),
                                 children: <TextSpan>[
                                   TextSpan(
                                     text: triggered_data[

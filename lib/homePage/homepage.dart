@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app2/login/logn.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:toast/toast.dart';
 
 import 'package:get/get.dart';
@@ -52,6 +53,8 @@ class _HomePageState extends State<HomePage> {
 
   bool likeIt = false;
 
+  var msg = "No Workspace Add yet!!";
+
   TextEditingController _fName = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
@@ -59,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _searchForMember.clear();
     checkWorkSpaces();
-    Logn.getToken();
+    // Logn.getToken();
     super.initState();
   }
 
@@ -374,6 +377,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       //list view of all workspaces
+
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.only(top: 10),
@@ -382,7 +386,7 @@ class _HomePageState extends State<HomePage> {
                               : listOfWorkspace.isEmpty
                                   ? Center(
                                       child: Text(
-                                        "No Workspace Add yet!!",
+                                        msg,
                                         style: TextStyle(
                                             fontFamily: "RubikL",
                                             fontSize: width < 400 ? 23 : 28),
@@ -462,42 +466,53 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: Image.network(
-                                "${MyApp.url}${listOfWorkspace[index]['workspaceAvatar']}",
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(
-                                          width: 2.3,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        listOfWorkspace[index]["workspaceName"]
-                                            .toString()
-                                            .split('')[0]
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w600),
-                                      )),
+                              child: image == null
+                                  ? Image.network(
+                                      "${MyApp.url}${listOfWorkspace[index]['workspaceAvatar']}",
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Center(
+                                          child: Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.grey.withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              border: Border.all(
+                                                width: 2.3,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              listOfWorkspace[index]
+                                                      ["workspaceName"]
+                                                  .toString()
+                                                  .split('')[0]
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w600),
+                                            )),
+                                          ),
+                                        );
+                                      },
+                                      fit: BoxFit.cover,
+                                      width: 40,
+                                      height: 40,
+                                    )
+                                  : Image.file(
+                                      image,
+                                      fit: BoxFit.cover,
+                                      width: 40,
+                                      height: 40,
                                     ),
-                                  );
-                                },
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
                             ),
                           )
                         : Container(
@@ -816,8 +831,8 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       Positioned(
-                        bottom:  0,
-                        right:0,
+                        bottom: 0,
+                        right: 0,
                         child: GestureDetector(
                           onTap: () => Navigator.push(
                             context,
@@ -832,100 +847,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           child: Container(
-                            width: width > 1000? width  * 0.15 : width   * 0.3,
-                            height: width > 1000? width  * 0.05 : width   * 0.16,
+                            width: width > 1000 ? width * 0.15 : width * 0.3,
+                            height: width > 1000 ? width * 0.05 : width * 0.16,
                             // color: Colors.red,
                             child: memberStack(
                                 listOfWorkspace[index]["users"], context),
                           ),
                         ),
                       )
-                      //           ? MediaQuery.of(context).size.height * 0.07
-                      //           : MediaQuery.of(context).size.height * 0.06,
-                      //       child: listOfWorkspace[index]['users'].length !=
-                      //               null
-                      //           ? ListView.builder(
-                      //               physics: BouncingScrollPhysics(),
-                      //               scrollDirection: Axis.horizontal,
-                      //               itemBuilder: (BuildContext bc, int index) {
-                      //                 return listOfWorkspace[workspaceIndex]
-                      //                                 ["users"][index]
-                      //                             ["user_avatar"] ==
-                      //                         null
-                      //                     ? Container(
-                      //                         width: 50,
-                      //                         height: 50,
-                      //                         margin: EdgeInsets.only(right: 5),
-                      //                         decoration: BoxDecoration(
-                      //                           shape: BoxShape.circle,
-                      //                           border: Border.all(),
-                      //                         ),
-                      //                         child: Center(
-                      //                             child: Text(listOfWorkspace[0]
-                      //                                         ["users"][index]
-                      //                                     ["firstName"]
-                      //                                 .toString()
-                      //                                 .split('')[0]
-                      //                                 .toUpperCase()
-                      //                                 .toUpperCase())))
-                      //                     : Padding(
-                      //                         padding: const EdgeInsets.only(
-                      //                             left: 5),
-                      //                         child: ClipRRect(
-                      //                           borderRadius:
-                      //                               BorderRadius.circular(50.0),
-                      //                           child: Image.network(
-                      //                             "${MyApp.url}${listOfWorkspace[workspaceIndex]["users"][index]["user_avatar"]}",
-                      //                             fit: BoxFit.fill,
-                      //                             // width: width > 400 ? 55 : 48,
-                      //                             // height: width > 400 ? 55 : 48,
-                      //                             loadingBuilder:
-                      //                                 (BuildContext context,
-                      //                                     Widget child,
-                      //                                     ImageChunkEvent
-                      //                                         loadingProgress) {
-                      //                               if (loadingProgress == null)
-                      //                                 return child;
-                      //                               return Center(
-                      //                                 child: Container(
-                      //                                     width: 50,
-                      //                                     height: 50,
-                      //                                     margin:
-                      //                                         EdgeInsets.only(
-                      //                                             right: 5),
-                      //                                     decoration:
-                      //                                         BoxDecoration(
-                      //                                       shape:
-                      //                                           BoxShape.circle,
-                      //                                       border:
-                      //                                           Border.all(),
-                      //                                     ),
-                      //                                     child: Center(
-                      //                                         child: Text(listOfWorkspace[0]
-                      //                                                         [
-                      //                                                         "users"]
-                      //                                                     [
-                      //                                                     index]
-                      //                                                 [
-                      //                                                 "firstName"]
-                      //                                             .toString()
-                      //                                             .split('')[0]
-                      //                                             .toUpperCase()
-                      //                                             .toUpperCase()))),
-                      //                               );
-                      //                             },
-                      //                           ),
-                      //                         ),
-                      //                       );
-                      //               },
-                      //               itemCount: listOfWorkspace[workspaceIndex]
-                      //                       ["users"]
-                      //                   .length,
-                      //             )
-                      //           : Container(),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -961,7 +890,6 @@ class _HomePageState extends State<HomePage> {
       jsonResponse = json.decode(response.body);
       if (response.statusCode == 200) {
         if (!jsonResponse["successful"]) {
-          print("No work space found");
           setState(() {
             notWorkspacefound = false;
           });
@@ -986,12 +914,18 @@ class _HomePageState extends State<HomePage> {
           });
         }
       } else if (response.statusCode == 400) {
-        print(jsonResponse["error"]);
+        setState(() {
+          msg = "client Error";
+        });
       } else {
-        print("undefine Case!!");
+        setState(() {
+          msg = "server Error";
+        });
       }
     } catch (e) {
-      print("undefine Case!!");
+      setState(() {
+        msg = "Error Cortact Suppot Team";
+      });
     }
   }
 
@@ -1156,7 +1090,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     image = _image;
                   });
-                  _addWorkSpace(workspaceID, context);
+                  _updateWorkspaceAvatar(workspaceID, context);
                   Navigator.pop(context);
                 },
                 child: Text("Yes"),
@@ -1170,7 +1104,7 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _addWorkSpace(int worksoaceID, BuildContext context) async {
+  _updateWorkspaceAvatar(int worksoaceID, BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonResponse;
     try {
@@ -1191,14 +1125,16 @@ class _HomePageState extends State<HomePage> {
         final resSTR = await response.stream.bytesToString();
         jsonResponse = json.decode(resSTR);
       }
-      if (jsonResponse["successful"]) {
-        // var list = sharedPreferences.getStringList("firstSecond");
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
-        setState(() {
+      Future.delayed(Duration(seconds: 30), () {
+        if (jsonResponse["successful"]) {
+          // var list = sharedPreferences.getStringList("firstSecond");
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
+          print("waiting");
+
           checkWorkSpaces();
-        });
-      }
+        }
+      });
 
       if (!jsonResponse["successful"]) {
         print(jsonResponse["successful"]);
@@ -1264,7 +1200,8 @@ class _HomePageState extends State<HomePage> {
       left: left,
       right: right,
       child: Container(
-        child: list[index]["user_avatar"] == null || "${MyApp.url}${list[index]["user_avatar"]}".contains('null')
+        child: list[index]["user_avatar"] == null ||
+                "${MyApp.url}${list[index]["user_avatar"]}".contains('null')
             ? Container(
                 width: 50,
                 height: 50,
