@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app2/profile/setting.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -12,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../login/logn.dart';
 import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';

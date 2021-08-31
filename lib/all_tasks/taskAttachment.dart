@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 
+// ignore: must_be_immutable
 class Attachment extends StatefulWidget {
   int taskID;
   String prority;
@@ -31,6 +32,7 @@ class _AttachmentState extends State<Attachment> {
   File image;
   File file;
   List res = [];
+  String token = '';
 
   @override
   void initState() {
@@ -141,6 +143,10 @@ class _AttachmentState extends State<Attachment> {
             child: res != null
                 ? ListView.builder(
                     itemBuilder: (context, index) {
+                      Map<String, String> headersMap = {
+                        "token": token,
+                      };
+
                       var url = "${MyApp.url}${res[index]["user_avatar"]}";
                       return Column(
                         children: [
@@ -148,15 +154,15 @@ class _AttachmentState extends State<Attachment> {
                             contentPadding: EdgeInsets.only(
                                 bottom: 5, left: 10, right: 10, top: 5),
                             onLongPress: () {
-                              print(res[index]["id"].toString() + "\n");
-                              print(
-                                  res[index]["path"].toString().split('/')[3]);
+                              // print(res[index]["id"].toString() + "\n");
+                              // print(
+                              //     res[index]["path"].toString().split('/')[5]);
                               _confirmDelete(
                                   context,
                                   res[index]["id"],
                                   int.parse(res[index]["path"]
                                       .toString()
-                                      .split('/')[3]));
+                                      .split('/')[5]));
                             },
                             leading: url.contains('null') ||
                                     res[index]["user_avatar"] == null ||
@@ -177,20 +183,34 @@ class _AttachmentState extends State<Attachment> {
                                         .toString()
                                         .toUpperCase()),
                                   )
-                                : Container(
-                                    width: 100,
-                                    height: 100,
-                                    padding: EdgeInsets.all(0),
-                                    margin: EdgeInsets.all(0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.amber,
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: NetworkImage(url),
-                                        fit: BoxFit.contain,
+                                : CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.deepOrangeAccent,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        url,
+                                        height: 55,
+                                        width: 55,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
+                            // Container(
+                            //     width: 100,
+                            //     height: 100,
+                            //     padding: EdgeInsets.all(0),
+                            //     margin: EdgeInsets.all(0),
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.amber,
+                            //       shape: BoxShape.circle,
+                            //       image: DecorationImage(
+                            //         fit: BoxFit.cover,
+                            //         image: NetworkImage(
+                            //           url,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                             title: Text(
                               res[index]["firstName"] +
                                   " " +
@@ -213,13 +233,18 @@ class _AttachmentState extends State<Attachment> {
                                         builder: (_) => ImageDialog(
                                             "${MyApp.url}${res[index]["path"]}")),
                                     child: Image.network(
-                                        "${MyApp.url}${res[index]["path"]}"),
+                                        "${MyApp.url}${res[index]["path"]}",
+                                        headers: {
+                                          "token": token.toString(),
+                                        }),
                                   )
                                 : IconButton(
                                     onPressed: () async {
                                       final url =
                                           "${MyApp.url}${res[index]["path"]}";
-                                      final file = await loadNetwork(url);
+                                      final file = await loadNetwork(
+                                        url,
+                                      );
                                       openPDF(context, file);
                                     },
                                     icon: Icon(CupertinoIcons.paperclip),
@@ -478,6 +503,9 @@ class _AttachmentState extends State<Attachment> {
       "Content-type": "application/json; charset=UTF-8",
       'token': sharedPreferences.getString("token"),
     };
+    setState(() {
+      token = sharedPreferences.getString("token");
+    });
     var url =
         Uri.parse('${MyApp.url}/workspace/task/${widget.taskID}/attachment');
     var response = await http.get(
@@ -486,6 +514,7 @@ class _AttachmentState extends State<Attachment> {
     );
 
     jsonResponse = json.decode(response.body);
+    // print(jsonResponse);
     if (jsonResponse["successful"]) {
       setState(() {
         _res = jsonResponse["data"];

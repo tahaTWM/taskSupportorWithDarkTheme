@@ -12,38 +12,38 @@ import 'notification/notification.dart';
 
 // this notifiaction is if the app is close in background or comp
 // completly killeds
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  var initialzationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   var initialzationSettingsAndroid =
+//       AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  var initializationSettings =
-      InitializationSettings(android: initialzationSettingsAndroid);
+//   var initializationSettings =
+//       InitializationSettings(android: initialzationSettingsAndroid);
 
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  print('Notifiaction message title ${message.notification.title}');
-  print('Notifiaction message body ${message.notification.body}');
+//   flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//   print('Notifiaction message title ${message.notification.title}');
+//   print('Notifiaction message body ${message.notification.body}');
 
-  // ignore: unused_local_variable
-  RemoteNotification notification = message.notification;
-  // ignore: unused_local_variable
-  AndroidNotification android = message.notification.android;
-  if (notification != null && android != null) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channel.description,
-          icon: android?.smallIcon,
-          playSound: true,
-        ),
-      ),
-    );
-  }
-}
+//   // ignore: unused_local_variable
+//   RemoteNotification notification = message.notification;
+//   // ignore: unused_local_variable
+//   AndroidNotification android = message.notification.android;
+//   if (notification != null && android != null) {
+//     flutterLocalNotificationsPlugin.show(
+//       notification.hashCode,
+//       notification.title,
+//       notification.body,
+//       NotificationDetails(
+//         android: AndroidNotificationDetails(
+//           channel.id,
+//           channel.name,
+//           channel.description,
+//           icon: android?.smallIcon,
+//           playSound: true,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'Firebase_app', // id
@@ -61,7 +61,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -137,12 +137,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    //   DeviceOrientation.portraitDown,
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
     return GetMaterialApp(
       theme: ThemeData.light().copyWith(
         primaryColor: Colors.white,

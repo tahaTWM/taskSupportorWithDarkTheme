@@ -1,21 +1,13 @@
 import 'dart:io';
-
 import 'package:app2/login/logn.dart';
 import 'package:app2/navBar.dart';
-
-import '../profile/profile.dart';
-import 'package:app2/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../main.dart';
-
 import 'dart:convert';
 import 'package:get/get_core/src/get_main.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
@@ -134,7 +126,6 @@ class _SettingState extends State<Setting> {
                                               width: 55,
                                               fit: BoxFit.cover,
                                             ),
-
                                           ),
                                   ),
                                 ),
@@ -377,23 +368,21 @@ class _SettingState extends State<Setting> {
       ),
     );
     final jsonResponse = json.decode(response.body);
-    if(response.statusCode == 200 ){
-      if(jsonResponse["successful"] && jsonResponse["type"] == "ok"){
-        setState(() {
-          sharedPreferences.remove("token");
-          sharedPreferences.remove("firstSecond");
-          sharedPreferences.remove("userAvatar");
-          sharedPreferences.remove("registrationDate");
-          sharedPreferences.remove("fcmTokenId");
-        });
+    if (response.statusCode == 200) {
+      if (jsonResponse["successful"] && jsonResponse["type"] == "ok") {
+        sharedPreferences.remove("token");
+        sharedPreferences.remove("firstSecond");
+        sharedPreferences.remove("userAvatar");
+        sharedPreferences.remove("registrationDate");
+        sharedPreferences.remove("fcmTokenId");
+
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => Logn(),
             ),
-                (route) => false
-        );
-      }else{
+            (route) => false);
+      } else {
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
             duration: Duration(seconds: 5),
             content: Row(
@@ -402,7 +391,7 @@ class _SettingState extends State<Setting> {
                 Text(
                   jsonResponse["message"],
                   style: TextStyle(
-                    //  color: Colors.white,
+                      //  color: Colors.white,
                       fontFamily: "RubikL",
                       fontSize: 17),
                 ),
@@ -413,8 +402,7 @@ class _SettingState extends State<Setting> {
               ],
             )));
       }
-
-    }else{
+    } else {
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
           duration: Duration(seconds: 5),
           content: Row(
@@ -423,7 +411,7 @@ class _SettingState extends State<Setting> {
               Text(
                 "Error in server contact support team",
                 style: TextStyle(
-                  //  color: Colors.white,
+                    //  color: Colors.white,
                     fontFamily: "RubikL",
                     fontSize: 17),
                 overflow: TextOverflow.ellipsis,
@@ -435,12 +423,6 @@ class _SettingState extends State<Setting> {
             ],
           )));
     }
-
-
-
-
-
-
 
     // sharedPreferences.clear();
     // ignore: deprecated_member_use
