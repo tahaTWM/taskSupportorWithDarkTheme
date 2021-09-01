@@ -33,7 +33,7 @@ class _AttachmentState extends State<Attachment> {
   File file;
   List res = [];
   String token = '';
-
+  bool attachmentFound = false;
   @override
   void initState() {
     checkIfThereAnyAttachment();
@@ -140,137 +140,125 @@ class _AttachmentState extends State<Attachment> {
           ),
           body: Padding(
             padding: EdgeInsets.all(10),
-            child: res != null
-                ? ListView.builder(
-                    itemBuilder: (context, index) {
-                      Map<String, String> headersMap = {
-                        "token": token,
-                      };
-
-                      var url = "${MyApp.url}${res[index]["user_avatar"]}";
-                      return Column(
-                        children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.only(
-                                bottom: 5, left: 10, right: 10, top: 5),
-                            onLongPress: () {
-                              // print(res[index]["id"].toString() + "\n");
-                              // print(
-                              //     res[index]["path"].toString().split('/')[5]);
-                              _confirmDelete(
-                                  context,
-                                  res[index]["id"],
-                                  int.parse(res[index]["path"]
-                                      .toString()
-                                      .split('/')[5]));
-                            },
-                            leading: url.contains('null') ||
-                                    res[index]["user_avatar"] == null ||
-                                    res[index]["user_avatar"] == "null"
-                                ? Container(
-                                    padding: EdgeInsets.all(14),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 2,
-                                        color: widget.prority == "URGENT"
-                                            ? Color.fromRGBO(248, 135, 135, 1)
-                                            : Color.fromRGBO(46, 204, 113, 1),
-                                      ),
-                                      color: Colors.grey.withOpacity(0.2),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Text(res[index]["firstName"][0]
-                                        .toString()
-                                        .toUpperCase()),
-                                  )
-                                : CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.deepOrangeAccent,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        url,
-                                        height: 55,
-                                        width: 55,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                            // Container(
-                            //     width: 100,
-                            //     height: 100,
-                            //     padding: EdgeInsets.all(0),
-                            //     margin: EdgeInsets.all(0),
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.amber,
-                            //       shape: BoxShape.circle,
-                            //       image: DecorationImage(
-                            //         fit: BoxFit.cover,
-                            //         image: NetworkImage(
-                            //           url,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            title: Text(
-                              res[index]["firstName"] +
-                                  " " +
-                                  res[index]["secondName"],
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            subtitle: Text(
-                              res[index]["name"],
-                            ),
-                            // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
-                            // overflow: TextOverflow.ellipsis,
-                            // ),
-                            trailing: res[index]["attachment_type"] == "IMAGE"
-                                ? InkWell(
-                                    onTap: () => showDialog(
-                                        context: context,
-                                        builder: (_) => ImageDialog(
-                                            "${MyApp.url}${res[index]["path"]}")),
-                                    child: Image.network(
-                                        "${MyApp.url}${res[index]["path"]}",
-                                        headers: {
-                                          "token": token.toString(),
-                                        }),
-                                  )
-                                : IconButton(
-                                    onPressed: () async {
-                                      final url =
-                                          "${MyApp.url}${res[index]["path"]}";
-                                      final file = await loadNetwork(
-                                        url,
-                                      );
-                                      openPDF(context, file);
-                                    },
-                                    icon: Icon(CupertinoIcons.paperclip),
-                                  ),
-                          ),
-                          Divider(
-                            //  color:Colors.black,
-                            thickness: 1,
-                            indent: 50,
-                            endIndent: 50,
-                          )
-                        ],
-                      );
-                    },
-                    itemCount: res.length,
+            child: attachmentFound == false
+                ? Center(
+                    child: CircularProgressIndicator(),
                   )
-                : Center(
-                    child: Text(
-                      "No Attachment add yet",
-                      style: TextStyle(
-                          fontFamily: "RubikL",
-                          fontSize: MediaQuery.of(context).size.width < 400
-                              ? 23
-                              : 28),
-                    ),
-                  ),
+                : res != null
+                    ? ListView.builder(
+                        itemBuilder: (context, index) {
+                          var url = "${MyApp.url}${res[index]["user_avatar"]}";
+                        
+                          return Column(
+                            children: [
+                              ListTile(
+                                contentPadding: EdgeInsets.only(
+                                    bottom: 5, left: 10, right: 10, top: 5),
+                                onLongPress: () {
+                                  // print(res[index]["id"].toString() + "\n");
+                                  // print(
+                                  //     res[index]["path"].toString().split('/')[5]);
+                                  _confirmDelete(
+                                      context,
+                                      res[index]["id"],
+                                      int.parse(res[index]["path"]
+                                          .toString()
+                                          .split('/')[5]));
+                                },
+                                leading: url.contains('null') ||
+                                        res[index]["user_avatar"] == null ||
+                                        res[index]["user_avatar"] == "null"
+                                    ? Container(
+                                        padding: EdgeInsets.all(14),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 2,
+                                            color: widget.prority == "URGENT"
+                                                ? Color.fromRGBO(
+                                                    248, 135, 135, 1)
+                                                : Color.fromRGBO(
+                                                    46, 204, 113, 1),
+                                          ),
+                                          color: Colors.grey.withOpacity(0.2),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Text(res[index]["firstName"][0]
+                                            .toString()
+                                            .toUpperCase()),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor:
+                                            Colors.deepOrangeAccent,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            url,
+                                            height: 53,
+                                            width: 53,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+
+                                title: Text(
+                                  res[index]["firstName"] +
+                                      " " +
+                                      res[index]["secondName"],
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  res[index]["name"],
+                                ),
+                                // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
+                                // overflow: TextOverflow.ellipsis,
+                                // ),
+                                trailing: res[index]["attachment_type"] ==
+                                        "IMAGE"
+                                    ? InkWell(
+                                        onTap: () => showDialog(
+                                            context: context,
+                                            builder: (_) => ImageDialog(
+                                                "${MyApp.url}${res[index]["path"]}")),
+                                        child: Image.network(
+                                          "${MyApp.url}${res[index]["path"]}?token=${token.toString()}",
+                                        ),
+                                      )
+                                    : IconButton(
+                                        onPressed: () async {
+                                          final url =
+                                              "${MyApp.url}${res[index]["path"]}?token=${token.toString()}";
+                                          final file = await loadNetwork(
+                                            url,
+                                          );
+                                          openPDF(context, file);
+                                        },
+                                        icon: Icon(CupertinoIcons.paperclip),
+                                      ),
+                              ),
+                              Divider(
+                                //  color:Colors.black,
+                                thickness: 1,
+                                indent: 50,
+                                endIndent: 50,
+                              )
+                            ],
+                          );
+                        },
+                        itemCount: res.length,
+                      )
+                    : Center(
+                        child: Text(
+                          "No Attachment add yet",
+                          style: TextStyle(
+                              fontFamily: "RubikL",
+                              fontSize: MediaQuery.of(context).size.width < 400
+                                  ? 23
+                                  : 28),
+                        ),
+                      ),
           )),
     );
   }
@@ -361,6 +349,7 @@ class _AttachmentState extends State<Attachment> {
                           if (result.files.single.path != null) {
                             scaffoldMessengerKey.currentState.showSnackBar(
                               SnackBar(
+                                backgroundColor: Colors.grey[700],
                                 action: SnackBarAction(
                                   label: "Yes",
                                   onPressed: () => uploadimage(context, file2),
@@ -517,6 +506,7 @@ class _AttachmentState extends State<Attachment> {
     // print(jsonResponse);
     if (jsonResponse["successful"]) {
       setState(() {
+        attachmentFound = true;
         _res = jsonResponse["data"];
         if (_res != null) {
           List<dynamic> resREV = _res.reversed.toList();

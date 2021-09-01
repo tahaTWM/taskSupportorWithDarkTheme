@@ -12,6 +12,7 @@ import 'package:typicons_flutter/typicons_flutter.dart';
 import '../all_tasks/showAllTasks.dart';
 import '../creation/createNewWorkSpace.dart';
 import '../main.dart';
+import 'package:refresh_loadmore/refresh_loadmore.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -78,7 +79,6 @@ class _HomePageState extends State<HomePage> {
         key: _formkey,
         child: Scaffold(
           // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
-
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -426,7 +426,8 @@ class _HomePageState extends State<HomePage> {
                         Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(width: 2, color: Colors.white),
+                              border: Border.all(
+                                  width: 2, color: Colors.deepOrangeAccent),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
@@ -831,7 +832,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  checkWorkSpaces() async {
+  Future<void> checkWorkSpaces() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("userAvatar") != "null") {
       setState(() {
@@ -923,10 +924,8 @@ class _HomePageState extends State<HomePage> {
       );
       jsonResponse = json.decode(response.body);
       if (response.statusCode == 200) {
-        print(jsonResponse["success"]);
-        setState(() {
+        if (jsonResponse["successful"] && jsonResponse['type'] == "ok")
           checkWorkSpaces();
-        });
       } else if (response.statusCode == 400) {
         print(jsonResponse["error"]);
       }
@@ -950,10 +949,8 @@ class _HomePageState extends State<HomePage> {
       );
       jsonResponse = json.decode(response.body);
       if (response.statusCode == 200) {
-        print(jsonResponse["success"]);
-        setState(() {
+        if (jsonResponse["successful"] && jsonResponse['type'] == "ok")
           checkWorkSpaces();
-        });
       } else if (response.statusCode == 400) {
         print(jsonResponse["error"]);
       }
@@ -1186,7 +1183,8 @@ class _HomePageState extends State<HomePage> {
             : Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(width: 1, color: Colors.white)),
+                    border:
+                        Border.all(width: 1, color: Colors.deepOrangeAccent)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50.0),
                   child: Image.network(
@@ -1228,6 +1226,7 @@ class _HomePageState extends State<HomePage> {
     int id,
   ) async {
     SharedPreferences _pred = await SharedPreferences.getInstance();
+    _fName.clear();
     return _delete == "delete"
         ? showDialog(
             context: context,
@@ -1282,6 +1281,15 @@ class _HomePageState extends State<HomePage> {
                       if (_fName.text.toLowerCase() == fName[0].toLowerCase()) {
                         delete(id);
                         Navigator.pop(context);
+                      } else {
+                        _fName.clear();
+                        Toast.show(
+                          "User is incorrect",
+                          context,
+                          gravity: Toast.CENTER,
+                          duration: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.pink,
+                        );
                       }
                     },
                     child: Text("Yes"),

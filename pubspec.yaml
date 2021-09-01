@@ -10,7 +10,6 @@ dependencies:
   adaptive_action_sheet: ^2.0.0
   adaptive_theme: ^2.2.0
   animated_splash_screen: ^1.1.0
-  cached_network_image: ^3.1.0
   cupertino_icons: null
   cupertino_radio_choice: ^1.0.1+1
   custom_dialog_box: null
@@ -18,7 +17,7 @@ dependencies:
   email_validator: ^2.0.1
   file_picker: ^4.0.0
   firebase_analytics: null
-  firebase_core:
+  firebase_core: null
   firebase_messaging: 10.0.4
   flappy_search_bar: ^1.7.2
   flutter:
@@ -41,6 +40,7 @@ dependencies:
   path_provider: ^2.0.1
   permission_handler: null
   provider: ^5.0.0
+  refresh_loadmore: ^2.0.4
   shared_preferences: ^2.0.0
   slider_button: null
   timeago: ^3.0.2

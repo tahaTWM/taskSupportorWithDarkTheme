@@ -93,23 +93,20 @@ class _SettingState extends State<Setting> {
                           print("test");
                         },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(55)),
-                                    // color: Colors.red,
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: Colors.deepOrangeAccent,
-                                    child: userAvatar == null ||
-                                            userAvatar == "null"
+                            Container(
+                              width: 60.0,
+                              height: 60.0,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(55)),
+                                // color: Colors.red,
+                              ),
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundColor: Colors.deepOrangeAccent,
+                                child:
+                                    userAvatar == null || userAvatar == "null"
                                         ? Text(
                                             widget.title
                                                 .toString()[0]
@@ -127,44 +124,35 @@ class _SettingState extends State<Setting> {
                                               fit: BoxFit.cover,
                                             ),
                                           ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.title,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        "Personal details",
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            Icon(
-                              Icons.keyboard_arrow_right,
-                              size: 32,
-                            )
+                            SizedBox(width: 20),
+                            Text(
+                              widget.title,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w600),
+                            ),
                           ],
                         ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.03,
                       ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Account Settings',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+
                       Field(
                         colur: Colors.brown[900],
                         icon: Icon(
@@ -192,19 +180,19 @@ class _SettingState extends State<Setting> {
                           },
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Porfile',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(
+                      //       'Porfile',
+                      //       style: TextStyle(
+                      //         fontSize: 17,
+                      //         fontWeight: FontWeight.w800,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Field(
                           onclick: () {
                             _newBottomSheetChangeUserName(context);
@@ -234,69 +222,69 @@ class _SettingState extends State<Setting> {
                             Icons.keyboard_arrow_right,
                             size: 32,
                           )),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Notificatoins',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Field(
-                        onclick: () {},
-                        colur: Colors.green,
-                        icon: Icon(
-                          Icons.notifications,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                        txt: "  Notificatoins",
-                        endd: Switch(
-                          value: notificatoins,
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: Colors.greenAccent,
-                          activeColor: Colors.greenAccent,
-                          inactiveThumbColor: Colors.greenAccent,
-                          onChanged: (value) {
-                            setState(() {
-                              notificatoins = value;
-                              print(notificatoins);
-                            });
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Regional',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Field(
-                        onclick: () {},
-                        colur: Colors.purple,
-                        icon: Icon(
-                          Icons.language,
-                          color: Colors.white,
-                          size: 26,
-                        ),
-                        txt: "Language",
-                        endd: Icon(
-                          Icons.keyboard_arrow_right,
-                          size: 32,
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(
+                      //       'Notificatoins',
+                      //       style: TextStyle(
+                      //         fontSize: 17,
+                      //         fontWeight: FontWeight.w800,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Field(
+                      //   onclick: () {},
+                      //   colur: Colors.green,
+                      //   icon: Icon(
+                      //     Icons.notifications,
+                      //     color: Colors.white,
+                      //     size: 28,
+                      //   ),
+                      //   txt: "  Notificatoins",
+                      //   endd: Switch(
+                      //     value: notificatoins,
+                      //     inactiveTrackColor: Colors.grey,
+                      //     activeTrackColor: Colors.greenAccent,
+                      //     activeColor: Colors.greenAccent,
+                      //     inactiveThumbColor: Colors.greenAccent,
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         notificatoins = value;
+                      //         print(notificatoins);
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
+                      // Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(
+                      //       'Regional',
+                      //       style: TextStyle(
+                      //         fontSize: 17,
+                      //         fontWeight: FontWeight.w800,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Field(
+                      //   onclick: () {},
+                      //   colur: Colors.purple,
+                      //   icon: Icon(
+                      //     Icons.language,
+                      //     color: Colors.white,
+                      //     size: 26,
+                      //   ),
+                      //   txt: "Language",
+                      //   endd: Icon(
+                      //     Icons.keyboard_arrow_right,
+                      //     size: 32,
+                      //   ),
+                      // ),
                       Field(
                         onclick: () async {
                           _siginOut();
@@ -718,7 +706,7 @@ class _SettingState extends State<Setting> {
           content: ListTile(
             contentPadding: EdgeInsets.all(0),
             title: Text(
-              "your name will change after restart the app",
+              "your name is Changed successfully",
               style: TextStyle(
                   //  color: Colors.white,
                   fontFamily: "CCB",

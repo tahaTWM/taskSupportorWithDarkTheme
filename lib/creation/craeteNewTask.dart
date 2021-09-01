@@ -751,7 +751,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                         SizedBox(width: 10),
                         Text(
                           memberOfTask.length.toString() +
-                              " Member add to task",
+                              " Member added to task",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),

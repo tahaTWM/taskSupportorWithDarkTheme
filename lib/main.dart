@@ -8,7 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'notification/notification.dart';
+
+import 'login/logn.dart';
 
 // this notifiaction is if the app is close in background or comp
 // completly killeds
@@ -69,25 +70,21 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  // lan ip
   static String url = "https://ur-task.com/api";
-
-  //nogrok ip
-  // static String url = "https://blue-snake-34.loca.lt";
-
-  //wifi ip
-  // static String url = "http://192.168.1.106:100";
-
   static bool mode = false;
-
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  var fName = "No one";
+  bool tokenFound = false;
+  bool skip = false;
+
   @override
   void initState() {
     _getTheme();
+    checkLoginStatus();
     var initialzationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings =
@@ -124,15 +121,6 @@ class _MyAppState extends State<MyApp> {
       _openApp();
     });
     super.initState();
-  }
-
-  _openApp() async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    var name = _pref.getStringList('firstSecond');
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NavBar(name[0], 1)),
-    );
   }
 
   @override
@@ -217,8 +205,21 @@ class _MyAppState extends State<MyApp> {
           contentTextStyle: TextStyle(color: Colors.white),
         ),
       ),
-      home: SplashScreen(),
+      home: !skip
+          ? SplashScreen()
+          : tokenFound
+              ? NavBar(fName, 0)
+              : Logn(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+
+  _openApp() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    var name = _pref.getStringList('firstSecond');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NavBar(name[0], 1)),
     );
   }
 
@@ -234,6 +235,30 @@ class _MyAppState extends State<MyApp> {
     } else {
       setState(() {
         MyApp.mode = false;
+      });
+    }
+    if (_pref.getBool("skip") != null) {
+      setState(() {
+        skip = _pref.getBool("skip");
+      });
+    }
+  }
+
+  checkLoginStatus() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var token = pref.getString("token");
+
+    if (token == null) {
+      setState(() {
+        tokenFound = false;
+      });
+    } else {
+      List list;
+      list = pref.getStringList("firstSecond") ?? null;
+      fName = list[0].toString();
+      setState(() {
+        tokenFound = true;
+        fName = list[0].toString();
       });
     }
   }

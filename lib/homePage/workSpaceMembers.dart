@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
@@ -208,21 +207,25 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                                                 size: width < 400 ? 25 : 35,
                                                 //  color:Colors.green,
                                               ))
-                                          : IconButton(
-                                              onPressed: () {
-                                                _kickUser(
-                                                    listOfWorkspaceMembers[
-                                                        index]["userId"]);
-                                              },
-                                              icon: Icon(
-                                                Icons.remove,
-                                                size: width < 400 ? 25 : 35,
-                                                color: Colors.red,
-                                              ))
+                                          : listOfWorkspaceMembers[index]
+                                                      ["isAccepted"] ==
+                                                  0
+                                              ? Text("Pendding")
+                                              : IconButton(
+                                                  onPressed: () {
+                                                    _kickUser(
+                                                        listOfWorkspaceMembers[
+                                                            index]["userId"]);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.remove,
+                                                    size: width < 400 ? 25 : 35,
+                                                    color: Colors.red,
+                                                  ))
                                   : widget.title == "Add Member to Task"
                                       ? listOfWorkspaceMembers[index]
-                                                  ["isInTask"] ==
-                                              1
+                                                  ["isWorkspaceOwner"] ==
+                                              0
                                           ? IconButton(
                                               onPressed: () {
                                                 // kick
@@ -232,19 +235,34 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                                                 size: width < 400 ? 25 : 35,
                                                 color: Colors.red,
                                               ))
-                                          : IconButton(
-                                              onPressed: () {
-                                                _inviteEmployeeToTask(
-                                                    widget.taskId,
-                                                    listOfWorkspaceMembers[
-                                                        index]["userId"]);
-                                              },
-                                              icon: Icon(
-                                                Icons.person_add_rounded,
-                                                size: width < 400 ? 25 : 35,
-                                                //  color:Colors.green,
-                                              ))
+                                          : Container()
                                       : Container()
+
+                              // ? listOfWorkspaceMembers[index]
+                              //             ["isInTask"] ==
+                              //         1
+                              //     ? IconButton(
+                              //         onPressed: () {
+                              //           // kick
+                              //         },
+                              //         icon: Icon(
+                              //           Icons.remove,
+                              //           size: width < 400 ? 25 : 35,
+                              //           color: Colors.red,
+                              //         ))
+                              //     : IconButton(
+                              //         onPressed: () {
+                              //           _inviteEmployeeToTask(
+                              //               widget.taskId,
+                              //               listOfWorkspaceMembers[
+                              //                   index]["userId"]);
+                              //         },
+                              //         icon: Icon(
+                              //           Icons.person_add_rounded,
+                              //           size: width < 400 ? 25 : 35,
+                              //           //  color:Colors.green,
+                              //         ))
+                              // : Container()
                             ]),
                       );
                     },
@@ -275,7 +293,6 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
       headers: requestHeaders,
     );
     jsonResponse = json.decode(response.body);
-    print(jsonResponse);
     if (jsonResponse["data"] != null)
       setState(() {
         listOfWorkspaceMembers = jsonResponse["data"];
@@ -290,10 +307,17 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
       "token": sharedPreferences.getString("token")
     };
     var jsonResponse = null;
-    var url = widget.title == "Add Member to Task"
-        ? Uri.parse(
-            "${MyApp.url}/workspace/${widget.workspaceID}/task/${widget.taskId}/members")
-        : Uri.parse("${MyApp.url}/workspace/${widget.workspaceID}");
+    Uri url;
+    if (widget.title == "Add Member to Task") {
+      url = Uri.parse(
+          "${MyApp.url}/workspace/${widget.workspaceID}/task/${widget.taskId}/members");
+    } else if (widget.title == "Task Members") {
+      url = Uri.parse(
+          "${MyApp.url}/workspace/${widget.workspaceID}/task/${widget.taskId}/members");
+    } else {
+      url = Uri.parse("${MyApp.url}/workspace/${widget.workspaceID}");
+    }
+
     var response = await http.get(
       url,
       headers: requestHeaders,
@@ -301,9 +325,10 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
     jsonResponse = json.decode(response.body);
     print(jsonResponse);
     setState(() {
-      listOfWorkspaceMembers = widget.title == "Add Member to Task"
-          ? jsonResponse["data"]
-          : jsonResponse["data"]["users"];
+      listOfWorkspaceMembers =
+          widget.title == "Add Member to Task" || widget.title == "Task Members"
+              ? jsonResponse["data"]
+              : jsonResponse["data"]["users"];
     });
   }
 
@@ -349,8 +374,6 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
     widget.checkWorkSpaces();
     Navigator.pop(context);
   }
-
-  _setTaskAction() async {}
 
   _inviteMemberToTask(int taskID, int memberID) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

@@ -13,6 +13,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   var fName = "No one";
   bool tokenFound = false;
+  bool skip = false;
 
   initState() {
     super.initState();
@@ -21,26 +22,46 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      splash: Container(
-        child: Lottie.network(
-          // "https://assets4.lottiefiles.com/packages/lf20_lQfkLu.json",
-          "https://assets9.lottiefiles.com/packages/lf20_jy1bgnpp.json",
-        ),
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 4,
+            child: AnimatedSplashScreen(
+              splash: Lottie.network(
+                // "https://assets4.lottiefiles.com/packages/lf20_lQfkLu.json",
+                "https://assets9.lottiefiles.com/packages/lf20_jy1bgnpp.json",
+              ),
+              nextScreen: tokenFound == true ? NavBar(fName, 0) : Logn(),
+              splashIconSize:
+                  MediaQuery.of(context).size.width > 400 ? 500 : 400,
+              duration: 5000,
+              // pageTransitionType: PageTransitionType.rightToLeft,
+            ),
+          ),
+          CheckboxListTile(
+            title: Text("Skip the Intero Next Time"),
+            onChanged: (bool value) {
+              setState(() {
+                skip = value;
+              });
+              _setSkip(value);
+            },
+            value: skip,
+          )
+        ],
       ),
-      nextScreen: tokenFound == true ? NavBar(fName, 0) : Logn(),
-
-      splashIconSize: MediaQuery.of(context).size.width > 400 ? 600 : 400,
-      duration: 6500,
-      // pageTransitionType: PageTransitionType.rightToLeft,
-      centered: true,
     );
   }
 
   checkLoginStatus() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var token = pref.getString("token");
-
+    if (pref.getBool("skip") != null) {
+      setState(() {
+        skip = pref.getBool("skip");
+      });
+    }
     if (token == null) {
       setState(() {
         tokenFound = false;
@@ -54,5 +75,10 @@ class _SplashScreenState extends State<SplashScreen> {
         fName = list[0].toString();
       });
     }
+  }
+
+  _setSkip(bool value) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool("skip", value);
   }
 }

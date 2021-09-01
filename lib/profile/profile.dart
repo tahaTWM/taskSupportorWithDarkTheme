@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../gets.dart';
 import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
@@ -57,6 +58,7 @@ class _ProfileState extends State<Profile> {
   String createDataDay = '';
   String createDataTime = '';
 
+  int notifications = 0;
   @override
   void initState() {
     super.initState();
@@ -268,7 +270,7 @@ class _ProfileState extends State<Profile> {
                         Container(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              "0",
+                              notifications.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width > 400 ? 22 : 18),
@@ -712,7 +714,7 @@ class _ProfileState extends State<Profile> {
     creationDate = sharedPreferences.getString("creationDate");
     createDataDay = creationDate.split('T')[0];
     createDataTime = creationDate.split('T')[1];
-
+    // notifications = await GetsNumbers.getNotifiaction();
     setState(() {
       textEditingControllerFName.text = list[0];
       textEditingControllerSName.text = list[1];
@@ -736,6 +738,7 @@ class _ProfileState extends State<Profile> {
       setState(() {
         workspaces = jsonResponse["assignedWorkspaces"].toString();
         tasks = jsonResponse["assignedTasks"].toString();
+        notifications = jsonResponse["assignedNotification"];
       });
     } catch (e) {
       print(e);

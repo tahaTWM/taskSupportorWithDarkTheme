@@ -44,6 +44,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   bool closeTask = false;
 
   File file;
+  bool tasksFound = false;
 
   @override
   void initState() {
@@ -76,23 +77,28 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
-    istaskFound
-        ? Timer(
-            Duration(seconds: 1),
-            () => _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              curve: Curves.easeInOut,
-              duration: Duration(seconds: 1),
-            ),
-            // ignore: unnecessary_statements
-          )
-        // ignore: unnecessary_statements
-        : null;
+    // istaskFound
+    //     ? Timer(
+    //         Duration(seconds: 1),
+    //         () => _scrollController.animateTo(
+    //           _scrollController.position.maxScrollExtent,
+    //           curve: Curves.easeInOut,
+    //           duration: Duration(seconds: 1),
+    //         ),
+    //         // ignore: unnecessary_statements
+    //       )
+    //     // ignore: unnecessary_statements
+    //     : null;
     return ScaffoldMessenger(
       key: scaffoldMessengerKey,
       child: Scaffold(
         // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
         appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () => checkIfThereAnyTaskes(),
+                icon: Icon(Icons.refresh))
+          ],
           toolbarHeight: 70,
           backgroundColor: Colors.grey.withOpacity(0.1),
           centerTitle: true,
@@ -357,24 +363,33 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                         ],
                       ),
                     ),
-                    // for tavView
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-                        child: TabBarView(
-                          children: [
-                            tabViewForTabBarAndTabView(
-                                listOfTasksWaiting, "WAITING"),
-                            tabViewForTabBarAndTabView(
-                                listOfTasksInProcess, "IN_PROGRESS"),
-                            tabViewForTabBarAndTabView(
-                                listOfTasksStack, "STUCK"),
-                            tabViewForTabBarAndTabView(listOfTasksDone, "DONE"),
-                          ],
-                          controller: _tabController,
-                        ),
-                      ),
-                    )
+                    tasksFound == false
+                        ? Expanded(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        :
+                        // for tavView
+                        Expanded(
+                            child: Container(
+                              margin:
+                                  EdgeInsets.only(top: 10, left: 10, right: 10),
+                              child: TabBarView(
+                                children: [
+                                  tabViewForTabBarAndTabView(
+                                      listOfTasksWaiting, "WAITING"),
+                                  tabViewForTabBarAndTabView(
+                                      listOfTasksInProcess, "IN_PROGRESS"),
+                                  tabViewForTabBarAndTabView(
+                                      listOfTasksStack, "STUCK"),
+                                  tabViewForTabBarAndTabView(
+                                      listOfTasksDone, "DONE"),
+                                ],
+                                controller: _tabController,
+                              ),
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -575,16 +590,17 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                               case 4:
                                 {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => WorkSpaceMember(
-                                                widget.workspaceId,
-                                                null,
-                                                checkIfThereAnyTaskes,
-                                                "Add Member to Task",
-                                                newListReversed[index]
-                                                    ["taskId"],
-                                              )));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WorkSpaceMember(
+                                        widget.workspaceId,
+                                        null,
+                                        checkIfThereAnyTaskes,
+                                        "Add Member to Task",
+                                        newListReversed[index]["taskId"],
+                                      ),
+                                    ),
+                                  );
                                 }
                                 break;
                             }
@@ -667,11 +683,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                       children: [
                         // task members
                         InkWell(
-                          onTap: () =>
-                              // {
-                              //   print(newListReversed[index]);
-                              // },
-                              Navigator.push(
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => WorkSpaceMember(
@@ -694,8 +706,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  newListReversed[index]["taskMembers"]
-                                      .length
+                                  "${newListReversed[index]["taskMembers"].length}"
                                       .toString(),
                                   style: TextStyle(
                                       // color:Color.fromRGBO(158, 158, 158, 1),
@@ -764,7 +775,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   }
 
   //get task from api
-  checkIfThereAnyTaskes() async {
+  Future<void> checkIfThereAnyTaskes() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
@@ -781,6 +792,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
       final jsonResponse = json.decode(response.body);
       if (jsonResponse["successful"]) {
         setState(() {
+          tasksFound = true;
           listOfTasksWaiting = jsonResponse['data']["WAITING"];
           listOfTasksInProcess = jsonResponse['data']["IN_PROGRESS"];
           listOfTasksStack = jsonResponse['data']["STUCK"];
@@ -989,13 +1001,20 @@ class _ShowAllTasksState extends State<ShowAllTasks>
             "comment": _action.text,
             "old_task_status": oldStatus,
             "new_task_status": _selectedStatus,
-            "action_type": "COMMENT",
+            "action_type": "OPEN",
             "task_id": taskid
           },
         ),
       );
 
       jsonResponse = json.decode(respnse.body);
+      if (jsonResponse["successful"])
+        Toast.show(
+          "Status Change",
+          context,
+          backgroundColor: Colors.orange,
+          duration: Toast.LENGTH_SHORT,
+        );
     } else if (_action.text.isNotEmpty) {
       final respnse = await http.post(
         url,
@@ -1004,14 +1023,20 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           <String, dynamic>{
             "comment": _action.text,
             "old_task_status": oldStatus,
-            "new_task_status": _selectedStatus,
-            "action_type": "OPEN",
+            "new_task_status": oldStatus,
+            "action_type": "COMMENT",
             "task_id": taskid
           },
         ),
       );
-
       jsonResponse = json.decode(respnse.body);
+      if (jsonResponse["successful"])
+        Toast.show(
+          "Commint done",
+          context,
+          backgroundColor: Colors.green,
+          duration: Toast.LENGTH_SHORT,
+        );
     } else {
       Toast.show(
         "Enter at least a comment",
