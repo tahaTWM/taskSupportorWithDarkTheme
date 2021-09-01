@@ -94,15 +94,17 @@ class _ShowAllTasksState extends State<ShowAllTasks>
       child: Scaffold(
         // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
         appBar: AppBar(
+          backgroundColor: Colors.grey.withOpacity(0.1),
+          elevation: 0.0,
           actions: [
             IconButton(
                 onPressed: () => checkIfThereAnyTaskes(),
                 icon: Icon(Icons.refresh))
           ],
           toolbarHeight: 70,
-          backgroundColor: Colors.grey.withOpacity(0.1),
+
           centerTitle: true,
-          elevation: 0.0,
+
           // iconTheme: IconThemeData(color: Colors.black),
           title: Row(
             children: [
@@ -405,356 +407,364 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     if (listOfTasks.isNotEmpty) {
       return Container(
         margin: EdgeInsets.only(top: 5, left: 10, right: 10),
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            List<dynamic> newListReversed = listOfTasks.reversed.toList();
-            var newDateTime =
-                DateTime.parse(newListReversed[index]["taskCreationDate"]);
+        child: RefreshIndicator(
+          onRefresh: checkIfThereAnyTaskes,
+          child: ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              List<dynamic> newListReversed = listOfTasks.reversed.toList();
+              var newDateTime =
+                  DateTime.parse(newListReversed[index]["taskCreationDate"]);
 
-            return Container(
-              padding: EdgeInsets.only(top: 3, left: 20, right: 20, bottom: 5),
-              margin: EdgeInsets.only(top: 10, bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //line of prority and more
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, right: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              color:
-                                  newListReversed[index]["prority"] == "URGENT"
-                                      ? Color.fromRGBO(248, 135, 135, 1)
-                                      : Color.fromRGBO(46, 204, 113, 1),
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        PopupMenuButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0))),
-                          icon: Icon(
-                            Icons.more_horiz,
-                            // color:Colors.grey,
-                            size: 40,
+              return Container(
+                padding:
+                    EdgeInsets.only(top: 3, left: 20, right: 20, bottom: 5),
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //line of prority and more
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, right: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 20,
+                            decoration: BoxDecoration(
+                                color: newListReversed[index]["prority"] ==
+                                        "URGENT"
+                                    ? Color.fromRGBO(248, 135, 135, 1)
+                                    : Color.fromRGBO(46, 204, 113, 1),
+                                borderRadius: BorderRadius.circular(20)),
                           ),
-                          itemBuilder: (context) => [
-                            newListReversed[index]["isTaskOwner"] == 1
-                                ? PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.delete,
-                                          size: 30,
-                                          // color:
-                                          //     Color.fromRGBO(158, 158, 158, 1),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          "Delete",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "RubicB",
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.delete,
-                                          size: 30,
-                                          // color:
-                                          //     Color.fromRGBO(158, 158, 158, 1),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          "Leave",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "RubicB",
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                            newListReversed[index]["isTaskOwner"] == 1
-                                ? PopupMenuItem(
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.edit,
-                                          size: 30,
-                                          // color:
-                                          //     Color.fromRGBO(158, 158, 158, 1),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          "Edit",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "RubicB",
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : null,
-                            PopupMenuItem(
-                              value: 3,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.comment_bank_rounded,
-                                    size: 30,
-                                    // color:Color.fromRGBO(158, 158, 158, 1),
-                                  ),
-                                  SizedBox(width: 12),
-                                  Text(
-                                    "Add Action",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: "RubicB",
-                                    ),
-                                  )
-                                ],
-                              ),
+                          PopupMenuButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0))),
+                            icon: Icon(
+                              Icons.more_horiz,
+                              // color:Colors.grey,
+                              size: 40,
                             ),
-                            newListReversed[index]["isTaskOwner"] == 1
-                                ? PopupMenuItem(
-                                    value: 4,
-                                    child: Row(children: [
-                                      Icon(
-                                        Icons.add_circle_rounded,
-                                        size: 30,
-                                        // color:Color.fromRGBO(158, 158, 158, 1),
+                            itemBuilder: (context) => [
+                              newListReversed[index]["isTaskOwner"] == 1
+                                  ? PopupMenuItem(
+                                      value: 1,
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            size: 30,
+                                            // color:
+                                            //     Color.fromRGBO(158, 158, 158, 1),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Text(
+                                            "Delete",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "RubicB",
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      SizedBox(width: 12),
-                                      Text(
-                                        "Add Memeber",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "RubicB",
-                                        ),
+                                    )
+                                  : PopupMenuItem(
+                                      value: 1,
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            size: 30,
+                                            // color:
+                                            //     Color.fromRGBO(158, 158, 158, 1),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Text(
+                                            "Leave",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "RubicB",
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    ]),
-                                  )
-                                : null
-                          ],
-                          onSelected: (item) {
-                            switch (item) {
-                              case 1:
-                                {
-                                  newListReversed[index]["isTaskOwner"] == 1
-                                      ? delete(newListReversed[index]["taskId"])
-                                      : leave(newListReversed[index]["taskId"]);
-                                }
-                                break;
-                              case 2:
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CreateNewTask(
-                                      "Edit Task",
-                                      widget.workspaceId,
-                                      checkIfThereAnyTaskes,
-                                      newListReversed[index]["taskId"],
-                                      newListReversed[index]["isTaskOwner"],
-                                      newListReversed[index]["title"],
-                                      newListReversed[index]["content"],
-                                      newListReversed[index]["prority"],
                                     ),
-                                  ),
-                                );
-                                break;
-                              case 3:
-                                _showDialogAction(
-                                    taskid: newListReversed[index]["taskId"],
-                                    oldStatus: OldStatus,
-                                    taskName: newListReversed[index]["title"]);
-                                break;
-                              case 4:
-                                {
+                              newListReversed[index]["isTaskOwner"] == 1
+                                  ? PopupMenuItem(
+                                      value: 2,
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 30,
+                                            // color:
+                                            //     Color.fromRGBO(158, 158, 158, 1),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Text(
+                                            "Edit",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "RubicB",
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : null,
+                              PopupMenuItem(
+                                value: 3,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.comment_bank_rounded,
+                                      size: 30,
+                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                    ),
+                                    SizedBox(width: 12),
+                                    Text(
+                                      "Add Action",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "RubicB",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              newListReversed[index]["isTaskOwner"] == 1
+                                  ? PopupMenuItem(
+                                      value: 4,
+                                      child: Row(children: [
+                                        Icon(
+                                          Icons.add_circle_rounded,
+                                          size: 30,
+                                          // color:Color.fromRGBO(158, 158, 158, 1),
+                                        ),
+                                        SizedBox(width: 12),
+                                        Text(
+                                          "Add Memeber",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "RubicB",
+                                          ),
+                                        ),
+                                      ]),
+                                    )
+                                  : null
+                            ],
+                            onSelected: (item) {
+                              switch (item) {
+                                case 1:
+                                  {
+                                    newListReversed[index]["isTaskOwner"] == 1
+                                        ? delete(
+                                            newListReversed[index]["taskId"])
+                                        : leave(
+                                            newListReversed[index]["taskId"]);
+                                  }
+                                  break;
+                                case 2:
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WorkSpaceMember(
+                                      builder: (context) => CreateNewTask(
+                                        "Edit Task",
                                         widget.workspaceId,
-                                        null,
                                         checkIfThereAnyTaskes,
-                                        "Add Member to Task",
                                         newListReversed[index]["taskId"],
+                                        newListReversed[index]["isTaskOwner"],
+                                        newListReversed[index]["title"],
+                                        newListReversed[index]["content"],
+                                        newListReversed[index]["prority"],
                                       ),
                                     ),
                                   );
-                                }
-                                break;
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TaskHistory(
-                            title: newListReversed[index]["title"],
-                            prority: newListReversed[index]["prority"],
-                            taskID: newListReversed[index]["taskId"],
+                                  break;
+                                case 3:
+                                  _showDialogAction(
+                                      taskid: newListReversed[index]["taskId"],
+                                      oldStatus: OldStatus,
+                                      taskName: newListReversed[index]
+                                          ["title"]);
+                                  break;
+                                case 4:
+                                  {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => WorkSpaceMember(
+                                          widget.workspaceId,
+                                          null,
+                                          checkIfThereAnyTaskes,
+                                          "Add Member to Task",
+                                          newListReversed[index]["taskId"],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  break;
+                              }
+                            },
                           ),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //task title and time ago for task
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // task name
-                              Flexible(
-                                child: Text(
-                                  newListReversed[index]["title"],
-                                  style: TextStyle(
-                                    fontSize: width > 400 ? 30 : 22,
-                                    fontFamily: "RubikB",
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TaskHistory(
+                              title: newListReversed[index]["title"],
+                              prority: newListReversed[index]["prority"],
+                              taskID: newListReversed[index]["taskId"],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //task title and time ago for task
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // task name
+                                Flexible(
+                                  child: Text(
+                                    newListReversed[index]["title"],
+                                    style: TextStyle(
+                                      fontSize: width > 400 ? 30 : 22,
+                                      fontFamily: "RubikB",
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              // task creation date
-                              Text(
-                                timeago.format(newDateTime),
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width > 400
-                                          ? 22
-                                          : 18,
-                                  fontFamily: "Rubik",
-                                  // color:Color.fromRGBO(158, 158, 158, 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //task description
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: Text(
-                            newListReversed[index]["content"],
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width > 400
-                                  ? 22
-                                  : 20,
-                              fontFamily: "Rubik",
-                              // color:Color.fromRGBO(158, 158, 158, 1),
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // members in task and attachment
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30, bottom: 10),
-                    child: Row(
-                      children: [
-                        // task members
-                        InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WorkSpaceMember(
-                                widget.workspaceId,
-                                newListReversed[index]["user_avatar"],
-                                checkIfThereAnyTaskes,
-                                "Task Members",
-                                newListReversed[index]["taskId"],
-                              ),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.group_outlined,
-                                  // color:Color.fromRGBO(158, 158, 158, 1),
-                                  size: 25,
-                                ),
-                                SizedBox(width: 10),
+                                // task creation date
                                 Text(
-                                  "${newListReversed[index]["taskMembers"].length}"
-                                      .toString(),
+                                  timeago.format(newDateTime),
                                   style: TextStyle(
-                                      // color:Color.fromRGBO(158, 158, 158, 1),
-                                      fontSize: 18),
+                                    fontSize:
+                                        MediaQuery.of(context).size.width > 400
+                                            ? 22
+                                            : 18,
+                                    fontFamily: "Rubik",
+                                    // color:Color.fromRGBO(158, 158, 158, 1),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        SizedBox(width: 30),
-                        // task attachment
-                        InkWell(
-                          onTap: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Attachment(
-                                        newListReversed[index]["taskId"],
-                                        newListReversed[index]["prority"])));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.attachment_rounded,
-                                  // color:Color.fromRGBO(158, 158, 158, 1),
-                                  size: 25,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  "Attachment",
-                                  style: TextStyle(
-                                      // color:Color.fromRGBO(158, 158, 158, 1),
-                                      fontSize: 18),
-                                ),
-                              ],
+                          //task description
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Text(
+                              newListReversed[index]["content"],
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width > 400
+                                        ? 22
+                                        : 20,
+                                fontFamily: "Rubik",
+                                // color:Color.fromRGBO(158, 158, 158, 1),
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-          itemCount: listOfTasks.length,
+                    // members in task and attachment
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30, bottom: 10),
+                      child: Row(
+                        children: [
+                          // task members
+                          InkWell(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WorkSpaceMember(
+                                  widget.workspaceId,
+                                  newListReversed[index]["user_avatar"],
+                                  checkIfThereAnyTaskes,
+                                  "Task Members",
+                                  newListReversed[index]["taskId"],
+                                ),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.group_outlined,
+                                    // color:Color.fromRGBO(158, 158, 158, 1),
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "${newListReversed[index]["taskMembers"].length}"
+                                        .toString(),
+                                    style: TextStyle(
+                                        // color:Color.fromRGBO(158, 158, 158, 1),
+                                        fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 30),
+                          // task attachment
+                          InkWell(
+                            onTap: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Attachment(
+                                          newListReversed[index]["taskId"],
+                                          newListReversed[index]["prority"])));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.attachment_rounded,
+                                    // color:Color.fromRGBO(158, 158, 158, 1),
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Attachment",
+                                    style: TextStyle(
+                                        // color:Color.fromRGBO(158, 158, 158, 1),
+                                        fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            itemCount: listOfTasks.length,
+          ),
         ),
       );
     } else

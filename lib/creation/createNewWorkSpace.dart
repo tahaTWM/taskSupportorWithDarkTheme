@@ -54,8 +54,7 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
         key: scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-            // backgroundColor: Color.fromRGBO(250, 250, 250, 2),
-            elevation: 0,
+          
             title: Text(
               widget.title,
               style: TextStyle(

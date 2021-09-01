@@ -143,6 +143,8 @@ class _MyAppState extends State<MyApp> {
           headline6: TextStyle(color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
+          // backgroundColor: Color.fromRGBO(48, 48, 48, 0),
+          elevation: 0.0,
           titleTextStyle: TextStyle(color: Colors.black),
           textTheme: TextTheme(
             bodyText1: TextStyle(color: Colors.black),

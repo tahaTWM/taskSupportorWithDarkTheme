@@ -48,9 +48,7 @@ class _AttachmentState extends State<Attachment> {
     return ScaffoldMessenger(
       key: scaffoldMessengerKey,
       child: Scaffold(
-          // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
           appBar: AppBar(
-            // backgroundColor: Color.fromRGBO(243, 246, 255, 1),
             elevation: 0,
             title: Text(
               "Attachments",
@@ -145,109 +143,113 @@ class _AttachmentState extends State<Attachment> {
                     child: CircularProgressIndicator(),
                   )
                 : res != null
-                    ? ListView.builder(
-                        itemBuilder: (context, index) {
-                          var url = "${MyApp.url}${res[index]["user_avatar"]}";
-                        
-                          return Column(
-                            children: [
-                              ListTile(
-                                contentPadding: EdgeInsets.only(
-                                    bottom: 5, left: 10, right: 10, top: 5),
-                                onLongPress: () {
-                                  // print(res[index]["id"].toString() + "\n");
-                                  // print(
-                                  //     res[index]["path"].toString().split('/')[5]);
-                                  _confirmDelete(
-                                      context,
-                                      res[index]["id"],
-                                      int.parse(res[index]["path"]
-                                          .toString()
-                                          .split('/')[5]));
-                                },
-                                leading: url.contains('null') ||
-                                        res[index]["user_avatar"] == null ||
-                                        res[index]["user_avatar"] == "null"
-                                    ? Container(
-                                        padding: EdgeInsets.all(14),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            width: 2,
-                                            color: widget.prority == "URGENT"
-                                                ? Color.fromRGBO(
-                                                    248, 135, 135, 1)
-                                                : Color.fromRGBO(
-                                                    46, 204, 113, 1),
-                                          ),
-                                          color: Colors.grey.withOpacity(0.2),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Text(res[index]["firstName"][0]
-                                            .toString()
-                                            .toUpperCase()),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 30,
-                                        backgroundColor:
-                                            Colors.deepOrangeAccent,
-                                        child: ClipOval(
-                                          child: Image.network(
-                                            url,
-                                            height: 53,
-                                            width: 53,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
+                    ? RefreshIndicator(
+                        onRefresh: checkIfThereAnyAttachment,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            var url =
+                                "${MyApp.url}${res[index]["user_avatar"]}";
 
-                                title: Text(
-                                  res[index]["firstName"] +
-                                      " " +
-                                      res[index]["secondName"],
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  res[index]["name"],
-                                ),
-                                // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
-                                // overflow: TextOverflow.ellipsis,
-                                // ),
-                                trailing: res[index]["attachment_type"] ==
-                                        "IMAGE"
-                                    ? InkWell(
-                                        onTap: () => showDialog(
-                                            context: context,
-                                            builder: (_) => ImageDialog(
-                                                "${MyApp.url}${res[index]["path"]}")),
-                                        child: Image.network(
-                                          "${MyApp.url}${res[index]["path"]}?token=${token.toString()}",
+                            return Column(
+                              children: [
+                                ListTile(
+                                  contentPadding: EdgeInsets.only(
+                                      bottom: 5, left: 10, right: 10, top: 5),
+                                  onLongPress: () {
+                                    // print(res[index]["id"].toString() + "\n");
+                                    // print(
+                                    //     res[index]["path"].toString().split('/')[5]);
+                                    _confirmDelete(
+                                        context,
+                                        res[index]["id"],
+                                        int.parse(res[index]["path"]
+                                            .toString()
+                                            .split('/')[5]));
+                                  },
+                                  leading: url.contains('null') ||
+                                          res[index]["user_avatar"] == null ||
+                                          res[index]["user_avatar"] == "null"
+                                      ? Container(
+                                          padding: EdgeInsets.all(14),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 2,
+                                              color: widget.prority == "URGENT"
+                                                  ? Color.fromRGBO(
+                                                      248, 135, 135, 1)
+                                                  : Color.fromRGBO(
+                                                      46, 204, 113, 1),
+                                            ),
+                                            color: Colors.grey.withOpacity(0.2),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Text(res[index]["firstName"][0]
+                                              .toString()
+                                              .toUpperCase()),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 30,
+                                          backgroundColor:
+                                              Colors.deepOrangeAccent,
+                                          child: ClipOval(
+                                            child: Image.network(
+                                              url,
+                                              height: 53,
+                                              width: 53,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      )
-                                    : IconButton(
-                                        onPressed: () async {
-                                          final url =
-                                              "${MyApp.url}${res[index]["path"]}?token=${token.toString()}";
-                                          final file = await loadNetwork(
-                                            url,
-                                          );
-                                          openPDF(context, file);
-                                        },
-                                        icon: Icon(CupertinoIcons.paperclip),
-                                      ),
-                              ),
-                              Divider(
-                                //  color:Colors.black,
-                                thickness: 1,
-                                indent: 50,
-                                endIndent: 50,
-                              )
-                            ],
-                          );
-                        },
-                        itemCount: res.length,
+
+                                  title: Text(
+                                    res[index]["firstName"] +
+                                        " " +
+                                        res[index]["secondName"],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    res[index]["name"],
+                                  ),
+                                  // subtitle: Image.network("${MyApp.url}${res[index]["path"]}"),
+                                  // overflow: TextOverflow.ellipsis,
+                                  // ),
+                                  trailing: res[index]["attachment_type"] ==
+                                          "IMAGE"
+                                      ? InkWell(
+                                          onTap: () => showDialog(
+                                              context: context,
+                                              builder: (_) => ImageDialog(
+                                                  "${MyApp.url}${res[index]["path"]}")),
+                                          child: Image.network(
+                                            "${MyApp.url}${res[index]["path"]}?token=${token.toString()}",
+                                          ),
+                                        )
+                                      : IconButton(
+                                          onPressed: () async {
+                                            final url =
+                                                "${MyApp.url}${res[index]["path"]}?token=${token.toString()}";
+                                            final file = await loadNetwork(
+                                              url,
+                                            );
+                                            openPDF(context, file);
+                                          },
+                                          icon: Icon(CupertinoIcons.paperclip),
+                                        ),
+                                ),
+                                Divider(
+                                  //  color:Colors.black,
+                                  thickness: 1,
+                                  indent: 50,
+                                  endIndent: 50,
+                                )
+                              ],
+                            );
+                          },
+                          itemCount: res.length,
+                        ),
                       )
                     : Center(
                         child: Text(
@@ -484,7 +486,7 @@ class _AttachmentState extends State<Attachment> {
     }
   }
 
-  checkIfThereAnyAttachment() async {
+  Future<void> checkIfThereAnyAttachment() async {
     var jsonResponse = null;
     List<dynamic> _res = [];
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

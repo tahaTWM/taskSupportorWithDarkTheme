@@ -40,7 +40,6 @@ dependencies:
   path_provider: ^2.0.1
   permission_handler: null
   provider: ^5.0.0
-  refresh_loadmore: ^2.0.4
   shared_preferences: ^2.0.0
   slider_button: null
   timeago: ^3.0.2

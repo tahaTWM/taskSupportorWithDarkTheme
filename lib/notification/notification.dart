@@ -25,9 +25,19 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      // backgroundColor: Colors.grey[350],
       appBar: AppBar(
-        elevation: 0,
+        backgroundColor: Colors.grey.withOpacity(0.1),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: IconButton(
+                onPressed: () => _getNotifiaction(),
+                icon: Icon(
+                  Icons.refresh,
+                  size: 25,
+                )),
+          )
+        ],
         title: Text(
           "Notifications",
           style: TextStyle(
@@ -54,6 +64,7 @@ class _NotificationsState extends State<Notifications> {
               : RefreshIndicator(
                   onRefresh: _getNotifiaction,
                   child: ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
                     itemCount: listOfNotifactions.length,
                     itemBuilder: (BuildContext context, int index) {
                       // ignore: non_constant_identifier_names

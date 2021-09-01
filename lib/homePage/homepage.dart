@@ -12,7 +12,6 @@ import 'package:typicons_flutter/typicons_flutter.dart';
 import '../all_tasks/showAllTasks.dart';
 import '../creation/createNewWorkSpace.dart';
 import '../main.dart';
-import 'package:refresh_loadmore/refresh_loadmore.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
@@ -301,8 +300,21 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   )),
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      checkWorkSpaces();
+                                    },
+                                    child: Icon(
+                                      Icons.refresh,
+                                      size: 25,
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
+                            // ignore: deprecated_member_use
                             RaisedButton.icon(
                               elevation: 6,
                               onPressed: () {
@@ -356,8 +368,11 @@ class _HomePageState extends State<HomePage> {
                                             fontSize: width < 400 ? 23 : 28),
                                       ),
                                     )
-                                  : foundworkspace(
-                                      formattedDate.toString(), context),
+                                  : RefreshIndicator(
+                                      onRefresh: checkWorkSpaces,
+                                      child: foundworkspace(
+                                          formattedDate.toString(), context),
+                                    ),
                         ),
                       ),
                     ],
@@ -397,7 +412,7 @@ class _HomePageState extends State<HomePage> {
   ListView foundworkspace(String formattedDate, BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         workspaceIndex = index;
         return Container(

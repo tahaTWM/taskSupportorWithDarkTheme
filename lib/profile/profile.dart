@@ -74,8 +74,6 @@ class _ProfileState extends State<Profile> {
       child: Scaffold(
         appBar: AppBar(
           leading: Container(),
-          // backgroundColor: Color.fromRGBO(250, 250, 250, 2),
-          elevation: 0,
           title: Text(
             "Profile",
             style: TextStyle(

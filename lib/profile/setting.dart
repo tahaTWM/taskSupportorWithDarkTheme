@@ -50,6 +50,7 @@ class _SettingState extends State<Setting> {
   String workspaces = "0";
   String tasks = "0";
   final ImagePicker _picker = ImagePicker();
+  bool skip = false;
 
   @override
   void initState() {
@@ -65,16 +66,17 @@ class _SettingState extends State<Setting> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            title: Text(
-              "Settings",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                wordSpacing: 3,
-                // fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
+          elevation: 0,
+          title: Text(
+            "Settings",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              wordSpacing: 3,
+              // fontSize: 25,
+              fontWeight: FontWeight.bold,
             ),
-            elevation: 0),
+          ),
+        ),
         body: Container(
           width: double.infinity,
           child: ListView(
@@ -180,6 +182,24 @@ class _SettingState extends State<Setting> {
                           },
                         ),
                       ),
+
+                      Field(
+                          colur: Colors.green,
+                          icon: Icon(
+                            Icons.keyboard_arrow_right,
+                            color: Colors.white,
+                          ),
+                          txt: "  Skiping Intro",
+                          endd: Checkbox(
+                            onChanged: (bool value) {
+                              _setSkip(value);
+                              setState(() {
+                                skip = value;
+                              });
+                            },
+                            value: skip,
+                          )),
+
                       // Align(
                       //   alignment: Alignment.centerLeft,
                       //   child: Padding(
@@ -194,20 +214,21 @@ class _SettingState extends State<Setting> {
                       //   ),
                       // ),
                       Field(
-                          onclick: () {
-                            _newBottomSheetChangeUserName(context);
-                          },
-                          colur: Colors.orangeAccent,
-                          icon: Icon(
-                            Icons.emoji_people,
-                            color: Colors.white,
-                            size: 26,
-                          ),
-                          txt: "Edit Profile",
-                          endd: Icon(
-                            Icons.keyboard_arrow_right,
-                            size: 32,
-                          )),
+                        onclick: () {
+                          _newBottomSheetChangeUserName(context);
+                        },
+                        colur: Colors.orangeAccent,
+                        icon: Icon(
+                          Icons.emoji_people,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                        txt: "Edit Profile",
+                        endd: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 32,
+                        ),
+                      ),
                       Field(
                           onclick: () {
                             _newBottomSheetChangePassword(context);
@@ -310,7 +331,7 @@ class _SettingState extends State<Setting> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Text(
-                    "App version 0.0.1",
+                    "Alph version 0.0.1",
                     style: TextStyle(),
                   ),
                 ),
@@ -334,6 +355,11 @@ class _SettingState extends State<Setting> {
       isSwitched = _pref.getBool("mode") ?? false;
       userAvatar = _pref.getString("userAvatar");
     });
+    if (_pref.getBool("skip") != null) {
+      setState(() {
+        skip = _pref.getBool("skip");
+      });
+    }
   }
 
   _siginOut() async {
@@ -938,6 +964,11 @@ class _SettingState extends State<Setting> {
         );
       },
     );
+  }
+
+  _setSkip(bool value) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool("skip", value);
   }
 }
 
