@@ -374,16 +374,12 @@ class _NotificationsState extends State<Notifications> {
       ),
     );
     final jsonResponse = json.decode(response.body);
-    print(jsonResponse);
+
     if (jsonResponse["type"] == "accepted") {
-      setState(() {
-        _getNotifiaction();
-      });
+      _getNotifiaction();
     }
     if (jsonResponse["type"] == "ignore") {
-      setState(() {
-        _getNotifiaction();
-      });
+      _getNotifiaction();
     }
   }
 }

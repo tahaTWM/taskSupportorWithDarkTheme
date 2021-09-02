@@ -223,7 +223,7 @@ class _SettingState extends State<Setting> {
                           color: Colors.white,
                           size: 26,
                         ),
-                        txt: "Edit Profile",
+                        txt: "Change User Name",
                         endd: Icon(
                           Icons.keyboard_arrow_right,
                           size: 32,
@@ -722,10 +722,12 @@ class _SettingState extends State<Setting> {
       );
       jsonResponse = await json.decode(response.body);
       if (jsonResponse["successful"] == true) {
-        await sharedPreferences.setStringList('firstSecond', [
-          jsonResponse['data']['firstName'],
-          jsonResponse['data']['secondName'],
-        ]);
+        setState(() {
+          sharedPreferences.setStringList('firstSecond', [
+            jsonResponse['data']['firstName'],
+            jsonResponse['data']['secondName'],
+          ]);
+        });
 
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
           duration: Duration(seconds: 5),
@@ -735,7 +737,7 @@ class _SettingState extends State<Setting> {
               "your name is Changed successfully",
               style: TextStyle(
                   //  color: Colors.white,
-                  fontFamily: "CCB",
+                  fontFamily: "CCL",
                   fontSize: MediaQuery.of(context).size.width > 400 ? 16 : 13),
             ),
             trailing: Icon(

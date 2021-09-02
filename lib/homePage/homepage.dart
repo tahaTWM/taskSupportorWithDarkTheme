@@ -302,7 +302,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 10),
-                                  child: GestureDetector(
+                                  child: InkWell(
                                     onTap: () {
                                       checkWorkSpaces();
                                     },
@@ -829,6 +829,7 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             width: width > 1000 ? width * 0.15 : width * 0.3,
                             height: width > 1000 ? width * 0.05 : width * 0.16,
+
                             // color: Colors.red,
                             child: memberStack(
                                 listOfWorkspace[index]["users"], context),

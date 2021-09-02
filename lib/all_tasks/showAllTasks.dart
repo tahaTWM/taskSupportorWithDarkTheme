@@ -617,7 +617,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                         ],
                       ),
                     ),
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -630,59 +630,66 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                           ),
                         );
                       },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //task title and time ago for task
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // task name
-                                Flexible(
-                                  child: Text(
-                                    newListReversed[index]["title"],
-                                    style: TextStyle(
-                                      fontSize: width > 400 ? 30 : 22,
-                                      fontFamily: "RubikB",
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //task title and time ago for task
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 5, bottom: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // task name
+                                  Flexible(
+                                    child: Text(
+                                      newListReversed[index]["title"],
+                                      style: TextStyle(
+                                        fontSize: width > 400 ? 30 : 22,
+                                        fontFamily: "RubikB",
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                // task creation date
-                                Text(
-                                  timeago.format(newDateTime),
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width > 400
-                                            ? 22
-                                            : 18,
-                                    fontFamily: "Rubik",
-                                    // color:Color.fromRGBO(158, 158, 158, 1),
+                                  // task creation date
+                                  Text(
+                                    timeago.format(newDateTime),
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width >
+                                                  400
+                                              ? 22
+                                              : 18,
+                                      fontFamily: "Rubik",
+                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          //task description
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 10),
-                            child: Text(
-                              newListReversed[index]["content"],
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width > 400
-                                        ? 22
-                                        : 20,
-                                fontFamily: "Rubik",
-                                // color:Color.fromRGBO(158, 158, 158, 1),
+                                ],
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
+                            //task description
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Text(
+                                newListReversed[index]["content"],
+                                style: TextStyle(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width > 400
+                                          ? 22
+                                          : 20,
+                                  fontFamily: "Rubik",
+                                  // color:Color.fromRGBO(158, 158, 158, 1),
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     // members in task and attachment
@@ -845,10 +852,10 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     );
     jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
-      print(jsonResponse["success"]);
-      setState(() {
-        checkIfThereAnyTaskes();
-      });
+      if (jsonResponse["successful"])
+        setState(() {
+          checkIfThereAnyTaskes();
+        });
     } else if (response.statusCode == 400) {
       print(jsonResponse["error"]);
     }
@@ -868,10 +875,10 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     );
     jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
-      print(jsonResponse["success"]);
-      setState(() {
-        checkIfThereAnyTaskes();
-      });
+      if (jsonResponse["successful"])
+        setState(() {
+          checkIfThereAnyTaskes();
+        });
     } else if (response.statusCode == 400) {
       print(jsonResponse["error"]);
     }

@@ -54,7 +54,6 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
         key: scaffoldMessengerKey,
         child: Scaffold(
           appBar: AppBar(
-          
             title: Text(
               widget.title,
               style: TextStyle(
@@ -103,8 +102,8 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  NavBar(sharedPreferences.getStringList('firstSecond')[0],0)));
+              builder: (context) => NavBar(
+                  sharedPreferences.getStringList('firstSecond')[0], 0)));
     }
     if (!jsonResponse["successful"]) {
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
@@ -163,8 +162,8 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
     jsonResponse = json.decode(response.body);
     if (jsonResponse['successful']) {
       var list2 = await sharedPreferences.getStringList("firstSecond");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => NavBar(list2[0],0)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => NavBar(list2[0], 0)));
     }
   }
 
@@ -246,6 +245,8 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextFormField(
+                minLines: 2,
+                maxLines: 6,
                 maxLength: 255,
                 autofocus: false,
                 textAlign: TextAlign.start,
