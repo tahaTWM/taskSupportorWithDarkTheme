@@ -1072,6 +1072,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text("Yes"),
               ),
+              // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text("No"),

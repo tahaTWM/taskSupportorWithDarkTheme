@@ -222,7 +222,7 @@ class _AttachmentState extends State<Attachment> {
                                           onTap: () => showDialog(
                                               context: context,
                                               builder: (_) => ImageDialog(
-                                                  "${MyApp.url}${res[index]["path"]}")),
+                                                  "${MyApp.url}${res[index]["path"]}?token=${token.toString()}")),
                                           child: Image.network(
                                             "${MyApp.url}${res[index]["path"]}?token=${token.toString()}",
                                           ),
