@@ -8,43 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-
 import 'login/logn.dart';
-
-// this notifiaction is if the app is close in background or comp
-// completly killeds
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   var initialzationSettingsAndroid =
-//       AndroidInitializationSettings('@mipmap/ic_launcher');
-
-//   var initializationSettings =
-//       InitializationSettings(android: initialzationSettingsAndroid);
-
-//   flutterLocalNotificationsPlugin.initialize(initializationSettings);
-//   print('Notifiaction message title ${message.notification.title}');
-//   print('Notifiaction message body ${message.notification.body}');
-
-//   // ignore: unused_local_variable
-//   RemoteNotification notification = message.notification;
-//   // ignore: unused_local_variable
-//   AndroidNotification android = message.notification.android;
-//   if (notification != null && android != null) {
-//     flutterLocalNotificationsPlugin.show(
-//       notification.hashCode,
-//       notification.title,
-//       notification.body,
-//       NotificationDetails(
-//         android: AndroidNotificationDetails(
-//           channel.id,
-//           channel.name,
-//           channel.description,
-//           icon: android?.smallIcon,
-//           playSound: true,
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'Firebase_app', // id
@@ -72,6 +36,7 @@ void main() async {
 class MyApp extends StatefulWidget {
   static String url = "https://ur-task.com/api";
   static bool mode = false;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -80,6 +45,7 @@ class _MyAppState extends State<MyApp> {
   var fName = "No one";
   bool tokenFound = false;
   bool skip = false;
+  bool notificatoins = false;
 
   @override
   void initState() {
@@ -118,7 +84,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Notifiaction message title ${message.notification.title}');
       print('Notifiaction message body ${message.notification.body}');
-      _openApp();
+      NavBar(1);
     });
     super.initState();
   }
@@ -210,18 +176,9 @@ class _MyAppState extends State<MyApp> {
       home: !skip
           ? SplashScreen()
           : tokenFound
-              ? NavBar(fName, 0)
+              ? NavBar(0)
               : Logn(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-
-  _openApp() async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    var name = _pref.getStringList('firstSecond');
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NavBar(name[0], 1)),
     );
   }
 
@@ -263,5 +220,18 @@ class _MyAppState extends State<MyApp> {
         fName = list[0].toString();
       });
     }
+    if (pref.getBool("notifiaction") != null) {
+      setState(() {
+        notificatoins = pref.getBool("skip");
+      });
+    }
+  }
+
+  _getAllCoockies() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    List keys = _pref.getKeys().toList();
+    keys.forEach((element) {
+      print(element.toString() + "  " + _pref.get(element).toString());
+    });
   }
 }

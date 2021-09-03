@@ -423,7 +423,7 @@ class _Logn extends State<Logn> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NavBar(jsonResponse['data']["firstName"], 0),
+          builder: (context) => NavBar(0),
         ),
       );
     }

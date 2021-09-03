@@ -51,7 +51,6 @@ class _SettingState extends State<Setting> {
   String tasks = "0";
   final ImagePicker _picker = ImagePicker();
   bool skip = false;
-
   @override
   void initState() {
     name();
@@ -161,7 +160,7 @@ class _SettingState extends State<Setting> {
                           isSwitched ? Icons.dark_mode : Icons.light_mode,
                           color: Colors.white,
                         ),
-                        txt: "  Dark Mode",
+                        txt: "Dark Mode",
                         endd: Switch(
                           value: isSwitched,
                           inactiveTrackColor: Colors.grey,
@@ -182,14 +181,36 @@ class _SettingState extends State<Setting> {
                           },
                         ),
                       ),
-
+                      Field(
+                        onclick: () {},
+                        colur: Colors.pink[400],
+                        icon: Icon(
+                          Icons.notifications,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                        txt: "Notificatoins",
+                        endd: Switch(
+                          value: notificatoins,
+                          inactiveTrackColor: Colors.grey,
+                          activeTrackColor: Colors.greenAccent,
+                          activeColor: Colors.greenAccent,
+                          inactiveThumbColor: Colors.greenAccent,
+                          onChanged: (value) {
+                            _setNotifiaction(value);
+                            setState(() {
+                              notificatoins = value;
+                            });
+                          },
+                        ),
+                      ),
                       Field(
                           colur: Colors.green,
                           icon: Icon(
                             Icons.keyboard_arrow_right,
                             color: Colors.white,
                           ),
-                          txt: "  Skiping Intro",
+                          txt: "Skiping Intro",
                           endd: Checkbox(
                             onChanged: (bool value) {
                               _setSkip(value);
@@ -256,29 +277,7 @@ class _SettingState extends State<Setting> {
                       //     ),
                       //   ),
                       // ),
-                      // Field(
-                      //   onclick: () {},
-                      //   colur: Colors.green,
-                      //   icon: Icon(
-                      //     Icons.notifications,
-                      //     color: Colors.white,
-                      //     size: 28,
-                      //   ),
-                      //   txt: "  Notificatoins",
-                      //   endd: Switch(
-                      //     value: notificatoins,
-                      //     inactiveTrackColor: Colors.grey,
-                      //     activeTrackColor: Colors.greenAccent,
-                      //     activeColor: Colors.greenAccent,
-                      //     inactiveThumbColor: Colors.greenAccent,
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         notificatoins = value;
-                      //         print(notificatoins);
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
+
                       // Align(
                       //   alignment: Alignment.centerLeft,
                       //   child: Padding(
@@ -310,11 +309,11 @@ class _SettingState extends State<Setting> {
                         onclick: () async {
                           _siginOut();
                         },
-                        colur: Colors.orange[900],
+                        colur: Colors.red[600],
                         icon: Icon(
                           Icons.logout,
                           color: Colors.white,
-                          size: 28,
+                          size: 26,
                         ),
                         txt: "Logout",
                         endd: Icon(
@@ -358,6 +357,11 @@ class _SettingState extends State<Setting> {
     if (_pref.getBool("skip") != null) {
       setState(() {
         skip = _pref.getBool("skip");
+      });
+    }
+    if (_pref.getBool("notifiaction") != null) {
+      setState(() {
+        notificatoins = _pref.getBool("skip");
       });
     }
   }
@@ -749,7 +753,7 @@ class _SettingState extends State<Setting> {
         Navigator.pop(context);
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => NavBar(fName, 2)),
+            MaterialPageRoute(builder: (context) => NavBar(2)),
             (route) => false);
       } else {
         scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
@@ -972,6 +976,11 @@ class _SettingState extends State<Setting> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setBool("skip", value);
   }
+
+  _setNotifiaction(bool value) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool("notifiaction", value);
+  }
 }
 
 class Field extends StatelessWidget {
@@ -990,34 +999,33 @@ class Field extends StatelessWidget {
       child: GestureDetector(
         onTap: onclick,
         child: Container(
+          color: Colors.transparent,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: colur,
-                ),
-                child: icon,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      txt,
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: colur,
+                    ),
+                    child: icon,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        txt,
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2,
+                ],
               ),
               endd
             ],

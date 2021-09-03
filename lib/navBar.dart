@@ -7,9 +7,8 @@ import './homePage/homepage.dart';
 
 // ignore: must_be_immutable
 class NavBar extends StatefulWidget {
-  String fristName;
   int selectedItem;
-  NavBar(this.fristName, this.selectedItem);
+  NavBar(this.selectedItem);
 
   @override
   _NavBarState createState() => _NavBarState();
@@ -23,9 +22,9 @@ class _NavBarState extends State<NavBar> {
   // ignore: missing_return
   Future<void> initState() {
     super.initState();
-    contents.add(HomePage(widget.fristName));
+    contents.add(HomePage());
     contents.add(Notifications());
-    contents.add(Profile(widget.fristName));
+    contents.add(Profile());
   }
 
   @override

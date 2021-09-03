@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app2/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -376,10 +377,18 @@ class _NotificationsState extends State<Notifications> {
     final jsonResponse = json.decode(response.body);
 
     if (jsonResponse["type"] == "accepted") {
-      _getNotifiaction();
+      setState(() {
+        _getNotifiaction();
+      });
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => NavBar(0)));
     }
     if (jsonResponse["type"] == "ignore") {
-      _getNotifiaction();
+      setState(() {
+        _getNotifiaction();
+      });
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => NavBar(0)));
     }
   }
 }

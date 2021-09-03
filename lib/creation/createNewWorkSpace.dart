@@ -100,10 +100,7 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
     jsonResponse = json.decode(response.body);
     if (jsonResponse["successful"]) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NavBar(
-                  sharedPreferences.getStringList('firstSecond')[0], 0)));
+          context, MaterialPageRoute(builder: (context) => NavBar(0)));
     }
     if (!jsonResponse["successful"]) {
       scaffoldMessengerKey.currentState.showSnackBar(SnackBar(
@@ -162,8 +159,8 @@ class _CreateNewWorkSpaceState extends State<CreateNewWorkSpace> {
     jsonResponse = json.decode(response.body);
     if (jsonResponse['successful']) {
       var list2 = await sharedPreferences.getStringList("firstSecond");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => NavBar(list2[0], 0)));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => NavBar(0)));
     }
   }
 

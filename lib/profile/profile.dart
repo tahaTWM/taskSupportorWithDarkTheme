@@ -9,16 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../gets.dart';
 import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mime/mime.dart';
 
 class Profile extends StatefulWidget {
-  String fn;
-
-  Profile(this.fn);
-
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -127,7 +122,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: Center(
                               child: Text(
-                                widget.fn[0].toUpperCase(),
+                                fName.toUpperCase(),
                                 style: TextStyle(
                                     fontSize: width > 400 ? 80 : 60,
                                     fontFamily: "CCB"),

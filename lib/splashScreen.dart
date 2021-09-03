@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 // "https://assets4.lottiefiles.com/packages/lf20_lQfkLu.json",
                 "https://assets9.lottiefiles.com/packages/lf20_jy1bgnpp.json",
               ),
-              nextScreen: tokenFound == true ? NavBar(fName, 0) : Logn(),
+              nextScreen: tokenFound == true ? NavBar(0) : Logn(),
               splashIconSize:
                   MediaQuery.of(context).size.width > 400 ? 500 : 400,
               duration: 5000,

@@ -15,10 +15,6 @@ import '../main.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  String firstName;
-
-  HomePage(this.firstName);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -53,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController _fName = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-
+  String fName = 'Unknown';
   @override
   void initState() {
     _searchForMember.clear();
@@ -110,10 +106,7 @@ class _HomePageState extends State<HomePage> {
                                           border: Border.all()),
                                       child: Center(
                                         child: Text(
-                                          widget.firstName
-                                              .toString()
-                                              .split('')[0]
-                                              .toUpperCase(),
+                                          fName[0].toUpperCase(),
                                           style: TextStyle(
                                             fontSize: 26,
                                             // color: Colors.red,
@@ -144,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  widget.firstName
+                                                  fName
                                                       .toString()
                                                       .split('')[0]
                                                       .toUpperCase(),
@@ -161,15 +154,6 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                               InkWell(
-                                // onTap: () {
-                                //   setState(() {
-                                //     theme = !theme;
-                                //     _changeTheme(theme, context);
-                                //   });
-                                //   theme
-                                //       ? Get.changeThemeMode(ThemeMode.dark)
-                                //       : Get.changeThemeMode(ThemeMode.light);
-                                // },
                                 child: Image(
                                     image: AssetImage("asset/newLogo3.png"),
                                     width: width > 350 ? 60 : 50,
@@ -183,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                               left: 20, top: 10, bottom: 10),
                           //account text
                           child: Text(
-                            "Hello, ${widget.firstName}!",
+                            "Hello, ${fName}!",
                             style: TextStyle(
                               fontSize: width > 400 ? 30 : 25,
                               fontFamily: "Rubik",
@@ -850,6 +834,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> checkWorkSpaces() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      fName = sharedPreferences.getStringList("firstSecond")[0];
+    });
     if (sharedPreferences.getString("userAvatar") != "null") {
       setState(() {
         imageFound = true;
