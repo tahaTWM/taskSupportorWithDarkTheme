@@ -503,8 +503,6 @@ class _Logn extends State<Logn> {
 
     if (await Permission.storage.request().isGranted) {
       String token = await _firebaseMessaging.getToken();
-      print(token);
-
       var url = Uri.parse("${MyApp.url}/user/device/notification");
       var response = await http.post(
         url,
@@ -514,7 +512,6 @@ class _Logn extends State<Logn> {
         ),
       );
       var jsonResponse = json.decode(response.body);
-      print(jsonResponse['data']["user_device_id"]);
       await _pref.setInt("fcmTokenId", jsonResponse['data']["user_device_id"]);
       // showsnakbar(
       //   jsonResponse["type"],

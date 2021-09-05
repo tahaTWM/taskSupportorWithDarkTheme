@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:app2/all_tasks/taskAttachment.dart';
-import 'package:app2/all_tasks/taskHistory.dart';
+import 'package:app2/all_tasks/taskActions.dart';
 import 'package:app2/homePage/workSpaceMembers.dart';
 import 'package:cupertino_radio_choice/cupertino_radio_choice.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/widgets.dart';
 import 'package:toast/toast.dart';
 import '../creation/craeteNewTask.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import '../main.dart';
 
 // ignore: must_be_immutable
@@ -65,7 +66,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   };
 
   String _selectedStatus;
-
+  bool thememode;
   void onStatusSelected(String statusKey) {
     setState(() {
       _selectedStatus = statusKey;
@@ -152,6 +153,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
               SizedBox(width: 20),
               Text(
                 widget.workSpaceTitle,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 22,
                     // color:Colors.black,
@@ -413,9 +415,11 @@ class _ShowAllTasksState extends State<ShowAllTasks>
             physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               List<dynamic> newListReversed = listOfTasks.reversed.toList();
-              var newDateTime =
-                  DateTime.parse(newListReversed[index]["taskCreationDate"]);
-
+              // var newDateTime =
+              //     DateTime.parse(newListReversed[index]["taskCreationDate"]);
+              var dataTime = newListReversed[index]["taskCreationDate"]
+                  .toString()
+                  .split(' ');
               return Container(
                 padding:
                     EdgeInsets.only(top: 3, left: 20, right: 20, bottom: 5),
@@ -622,7 +626,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TaskHistory(
+                            builder: (context) => TaskActions(
                               title: newListReversed[index]["title"],
                               prority: newListReversed[index]["prority"],
                               taskID: newListReversed[index]["taskId"],
@@ -654,19 +658,46 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  // task creation date
-                                  Text(
-                                    timeago.format(newDateTime),
+
+                                  DefaultTextStyle(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width >
-                                                  400
-                                              ? 22
-                                              : 18,
-                                      fontFamily: "Rubik",
-                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                        fontSize: width > 400 ? 22 : 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: thememode == false
+                                            ? Colors.black
+                                            : Colors.white
+                                        // color: Colors.primaries[Random()
+                                        //     .nextInt(Colors.primaries.length)],
+                                        ),
+                                    child: AnimatedTextKit(
+                                      repeatForever: true,
+                                      animatedTexts: [
+                                        FadeAnimatedText("Task"),
+                                        FadeAnimatedText("Created At"),
+                                        FadeAnimatedText(dataTime[0]),
+                                        FadeAnimatedText(dataTime[1]
+                                            .toString()
+                                            .split('.')[0]),
+                                        // FadeAnimatedText(
+                                        //     'do it RIGHT NOW!!!'),
+                                      ],
                                     ),
-                                  ),
+                                  )
+                                  // task creation date
+                                  // Text(
+                                  //   timeago.format(newDateTime),
+                                  //   style: TextStyle(
+                                  //     fontSize:
+                                  //         MediaQuery.of(context).size.width >
+                                  //                 400
+                                  //             ? 22
+                                  //             : 18,
+                                  //     fontFamily: "Rubik",
+                                  //     // color:Color.fromRGBO(158, 158, 158, 1),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -809,6 +840,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
       final jsonResponse = json.decode(response.body);
       if (jsonResponse["successful"]) {
         setState(() {
+          thememode = sharedPreferences.getBool("mode") ?? false;
           tasksFound = true;
           listOfTasksWaiting = jsonResponse['data']["WAITING"];
           listOfTasksInProcess = jsonResponse['data']["IN_PROGRESS"];

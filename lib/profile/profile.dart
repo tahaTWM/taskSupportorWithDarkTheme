@@ -22,11 +22,11 @@ class _ProfileState extends State<Profile> {
   bool timeZoneSwitch = false;
   bool showAllEventSwitch = false;
   bool emailNotifSwitch = false;
-  var profileName = '';
-  String fName = '';
-  String sName = '';
-  String email = '';
-  String creationDate = '';
+  var profileName = 'unknown';
+  String fName = 'unknown';
+  String sName = 'unknown';
+  String email = 'unknown';
+  String creationDate = 'unknown';
   TextEditingController textEditingControllerFName = TextEditingController();
   TextEditingController textEditingControllerSName = TextEditingController();
   TextEditingController textEditingControllerEmail = TextEditingController();
@@ -50,8 +50,8 @@ class _ProfileState extends State<Profile> {
 
   bool imageFound = false;
 
-  String createDataDay = '';
-  String createDataTime = '';
+  String createDataDay = 'unknown';
+  String createDataTime = 'unknown';
 
   int notifications = 0;
   @override
@@ -68,6 +68,7 @@ class _ProfileState extends State<Profile> {
       key: scaffoldMessengerKey,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.grey.withOpacity(0.1),
           leading: Container(),
           title: Text(
             "Profile",
@@ -122,7 +123,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: Center(
                               child: Text(
-                                fName.toUpperCase(),
+                                fName[0].toUpperCase(),
                                 style: TextStyle(
                                     fontSize: width > 400 ? 80 : 60,
                                     fontFamily: "CCB"),

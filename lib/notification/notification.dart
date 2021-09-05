@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:app2/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:timeago/timeago.dart' as timeago;
 import '../main.dart';
 
 class Notifications extends StatefulWidget {
@@ -80,7 +81,8 @@ class _NotificationsState extends State<Notifications> {
                       return listOfNotifactions[index]["notification_type"] !=
                               "TASK"
                           ? ListTile(
-                              contentPadding: EdgeInsets.fromLTRB(5, 5, 10, 10),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 17),
                               leading: triggered_data["triggere_avatar"] ==
                                           null ||
                                       triggered_data["triggere_avatar"]
@@ -169,9 +171,47 @@ class _NotificationsState extends State<Notifications> {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(timeago.format(DateTime.parse(
-                                      listOfNotifactions[index]
-                                          ["creation_date"]))),
+
+                                  SizedBox(
+                                    height: 25,
+                                    child: DefaultTextStyle(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: width > 400 ? 22 : 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.primaries[Random()
+                                            .nextInt(Colors.primaries.length)],
+                                      ),
+                                      child: AnimatedTextKit(
+                                        repeatForever: true,
+                                        animatedTexts: [
+                                          FadeAnimatedText("Notification"),
+                                          FadeAnimatedText("Receive At"),
+                                          FadeAnimatedText(
+                                              listOfNotifactions[index]
+                                                      ["creation_date"]
+                                                  .toString()
+                                                  .split('T')[0]),
+                                          FadeAnimatedText(
+                                              listOfNotifactions[index]
+                                                      ["creation_date"]
+                                                  .toString()
+                                                  .split('T')[1]
+                                                  .split('.')[0]),
+                                          // FadeAnimatedText(
+                                          //     'do it RIGHT NOW!!!'),
+                                        ],
+                                      ),
+                                    ),
+                                  ) // Text(
+                                  //   timeago.format(
+                                  //     DateTime.parse(
+                                  //       listOfNotifactions[index]
+                                  //           ["creation_date"],
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               subtitle: Padding(
@@ -228,7 +268,8 @@ class _NotificationsState extends State<Notifications> {
                               ),
                             )
                           : ListTile(
-                              contentPadding: EdgeInsets.fromLTRB(5, 5, 10, 10),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 17),
                               leading: triggered_data["triggere_avatar"] ==
                                           null ||
                                       triggered_data["triggere_avatar"]
@@ -316,9 +357,44 @@ class _NotificationsState extends State<Notifications> {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(timeago.format(DateTime.parse(
-                                      listOfNotifactions[index]
-                                          ["creation_date"]))),
+                                  DefaultTextStyle(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: width > 400 ? 22 : 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.primaries[Random()
+                                          .nextInt(Colors.primaries.length)],
+                                    ),
+                                    child: AnimatedTextKit(
+                                      repeatForever: true,
+                                      animatedTexts: [
+                                        FadeAnimatedText("Notification"),
+                                        FadeAnimatedText("Receive At"),
+                                        FadeAnimatedText(
+                                            listOfNotifactions[index]
+                                                    ["creation_date"]
+                                                .toString()
+                                                .split('T')[0]),
+                                        FadeAnimatedText(
+                                            listOfNotifactions[index]
+                                                    ["creation_date"]
+                                                .toString()
+                                                .split('T')[1]
+                                                .split('.')[0]),
+                                        // FadeAnimatedText(
+                                        //     'do it RIGHT NOW!!!'),
+                                      ],
+                                    ),
+                                  )
+                                  // Text(
+                                  //   timeago.format(
+                                  //     DateTime.parse(
+                                  //       listOfNotifactions[index]
+                                  //           ["creation_date"],
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             );

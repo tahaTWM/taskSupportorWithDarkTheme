@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:toast/toast.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -46,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   bool likeIt = false;
 
   var msg = "No Workspace Add yet!!";
-
+  bool thememode;
   TextEditingController _fName = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   String fName = 'Unknown';
@@ -779,15 +781,46 @@ class _HomePageState extends State<HomePage> {
                                     // color:  Color.fromRGBO(112, 112, 112, 1),
                                   ),
                                   SizedBox(width: 10),
-                                  Text(
-                                    listOfWorkspace[index]["creation_date"]
-                                        .toString()
-                                        .split('T')[0],
+                                  DefaultTextStyle(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      // color:  Color.fromRGBO(112, 112, 112, 1),
+                                        fontSize: 20,
+                                        color: thememode == false
+                                            ? Colors.black
+                                            : Colors.white
+                                        // color: Colors.primaries[Random()
+                                        //     .nextInt(Colors.primaries.length)],
+                                        ),
+                                    child: AnimatedTextKit(
+                                      repeatForever: true,
+                                      animatedTexts: [
+                                        FadeAnimatedText("WorkSpace"),
+                                        FadeAnimatedText("Is Created At"),
+                                        FadeAnimatedText(listOfWorkspace[index]
+                                                ["creation_date"]
+                                            .toString()
+                                            .split('T')[0]),
+                                        FadeAnimatedText(listOfWorkspace[index]
+                                                ["creation_date"]
+                                            .toString()
+                                            .split('T')[1]
+                                            .split('.')[0]),
+                                        // FadeAnimatedText(
+                                        //     'do it RIGHT NOW!!!'),
+                                      ],
                                     ),
                                   )
+
+                                  // Text(
+                                  //   listOfWorkspace[index]["creation_date"]
+                                  //       .toString()
+                                  //       .split('T')[0],
+                                  //   style: TextStyle(
+                                  //     fontSize: 20,
+                                  //     // color:  Color.fromRGBO(112, 112, 112, 1),
+                                  //   ),
+                                  // )
                                 ])),
                               ],
                             ),
@@ -863,6 +896,8 @@ class _HomePageState extends State<HomePage> {
           });
         } else {
           setState(() {
+            thememode = sharedPreferences.getBool("mode") ?? false;
+
             notWorkspacefound = true;
             // ignore: unnecessary_statements
             if (jsonResponse['data'] != null) {
@@ -963,6 +998,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   //invite employee
+  // ignore: unused_element
   _inviteEmployee(int workspaceId, int employeeID, BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
@@ -1109,6 +1145,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // ignore: missing_return
   Widget memberStack(List list, BuildContext context) {
     if (list.length > 3) {
       return Stack(
@@ -1206,7 +1243,7 @@ class _HomePageState extends State<HomePage> {
                             margin: EdgeInsets.only(right: 5),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(),
+                              // border: Border.all(),
                             ),
                             child: Center(
                                 child: Text(list[index]["firstName"]
@@ -1360,9 +1397,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
         );
-        setState(() {
-          checkWorkSpaces();
-        });
+
         setState(() {
           checkWorkSpaces();
         });

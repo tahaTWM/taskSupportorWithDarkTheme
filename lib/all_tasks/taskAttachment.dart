@@ -110,6 +110,26 @@ class _AttachmentState extends State<Attachment> {
                         ],
                       ),
                     ),
+                    PopupMenuItem(
+                      value: 3,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.refresh,
+                            size: 30,
+                            //  color: Color.fromRGBO(158, 158, 158, 1),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "Refresh",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: "RubicB",
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                   onSelected: (item) {
                     switch (item) {
@@ -123,6 +143,12 @@ class _AttachmentState extends State<Attachment> {
                           setState(() {
                             upload = true;
                           });
+                        }
+
+                        break;
+                      case 3:
+                        {
+                          checkIfThereAnyAttachment();
                         }
 
                         break;

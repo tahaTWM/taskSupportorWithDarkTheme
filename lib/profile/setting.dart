@@ -65,6 +65,7 @@ class _SettingState extends State<Setting> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          backgroundColor: Colors.grey.withOpacity(0.1),
           elevation: 0,
           title: Text(
             "Settings",
@@ -343,7 +344,6 @@ class _SettingState extends State<Setting> {
   }
 
   _changeTheme(bool mode) async {
-    print("mode : " + mode.toString());
     SharedPreferences _pref = await SharedPreferences.getInstance();
     _pref.setBool("mode", mode);
   }

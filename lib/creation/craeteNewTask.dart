@@ -72,6 +72,8 @@ class _CreateNewTaskState extends State<CreateNewTask> {
   bool keyboard = false;
   FocusNode inputNode = FocusNode();
 
+  List<Map<String, dynamic>> iconList = [];
+
   Icon addMemberToTask = Icon(
     Icons.person_add_rounded,
     //  color:Colors.green,
@@ -609,6 +611,10 @@ class _CreateNewTaskState extends State<CreateNewTask> {
   var listOfWorkspaceMembers = [];
 
   _showDialogInvition(int workSpaceID) {
+    for (var i = 0; i < listOfWorkspaceMembers.length; i++) {
+      iconList.add({"user$i": false});
+    }
+    print(listOfWorkspaceMembers);
     var w = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
@@ -641,57 +647,61 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: image == null
-                                              ? Container(
-                                                  width: w > 400 ? 60 : 40,
-                                                  height: w > 400 ? 60 : 40,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      listOfWorkspaceMembers[
-                                                                  index]
-                                                              ["firstName"][0]
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: TextStyle(
-                                                          fontFamily: "CCB",
-                                                          fontSize: 24),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: image == null
+                                                ? Container(
+                                                    width: w > 400 ? 60 : 40,
+                                                    height: w > 400 ? 60 : 40,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(),
                                                     ),
-                                                  ),
-                                                )
-                                              : Image.network(
-                                                  "${MyApp.url}$image",
-                                                  fit: BoxFit.cover,
-                                                  width: w > 400 ? 60 : 40,
-                                                  height: w > 400 ? 60 : 40,
-                                                  loadingBuilder:
-                                                      (BuildContext context,
-                                                          Widget child,
-                                                          ImageChunkEvent
-                                                              loadingProgress) {
-                                                    if (loadingProgress == null)
-                                                      return child;
-                                                    return Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        value: loadingProgress
-                                                                    .expectedTotalBytes !=
-                                                                null
-                                                            ? loadingProgress
-                                                                    .cumulativeBytesLoaded /
-                                                                loadingProgress
-                                                                    .expectedTotalBytes
-                                                            : null,
+                                                    child: Center(
+                                                      child: Text(
+                                                        listOfWorkspaceMembers[
+                                                                    index]
+                                                                ["firstName"][0]
+                                                            .toString()
+                                                            .toUpperCase(),
+                                                        style: TextStyle(
+                                                            fontFamily: "CCB",
+                                                            fontSize: 24),
                                                       ),
-                                                    );
-                                                  },
-                                                ),
+                                                    ),
+                                                  )
+                                                : Image.network(
+                                                    "${MyApp.url}$image",
+                                                    fit: BoxFit.cover,
+                                                    width: w > 400 ? 60 : 40,
+                                                    height: w > 400 ? 60 : 40,
+                                                    loadingBuilder: (BuildContext
+                                                            context,
+                                                        Widget child,
+                                                        ImageChunkEvent
+                                                            loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) return child;
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          value: loadingProgress
+                                                                      .expectedTotalBytes !=
+                                                                  null
+                                                              ? loadingProgress
+                                                                      .cumulativeBytesLoaded /
+                                                                  loadingProgress
+                                                                      .expectedTotalBytes
+                                                              : null,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                          ),
                                         ),
                                         Flexible(
                                           child: Text(
@@ -779,7 +789,6 @@ class _CreateNewTaskState extends State<CreateNewTask> {
       headers: requestHeaders,
     );
     jsonResponse = json.decode(response.body);
-    print(jsonResponse);
     setState(() {
       if (widget.workspaceId != null) {
         listOfWorkspaceMembers = jsonResponse["data"];

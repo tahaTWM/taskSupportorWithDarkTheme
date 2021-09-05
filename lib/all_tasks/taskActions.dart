@@ -1,25 +1,24 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../main.dart';
-
 import 'package:http/http.dart' as http;
 
-import 'package:timeago/timeago.dart' as timeago;
-
-class TaskHistory extends StatefulWidget {
+// ignore: must_be_immutable
+class TaskActions extends StatefulWidget {
   String title;
   String prority;
   int taskID;
 
-  TaskHistory({@required this.title, @required this.prority, this.taskID});
+  TaskActions({@required this.title, @required this.prority, this.taskID});
 
   @override
-  _TaskHistoryState createState() => _TaskHistoryState();
+  _TaskActionsState createState() => _TaskActionsState();
 }
 
-class _TaskHistoryState extends State<TaskHistory>
+class _TaskActionsState extends State<TaskActions>
     with SingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   TabController _tabController;
@@ -28,7 +27,7 @@ class _TaskHistoryState extends State<TaskHistory>
   var _timeSort = [];
 
   bool historyFound = false;
-
+  bool thememode;
   @override
   void initState() {
     getHistory();
@@ -42,6 +41,9 @@ class _TaskHistoryState extends State<TaskHistory>
     var padding = EdgeInsets.symmetric(vertical: 10, horizontal: 20);
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () => getHistory(), icon: Icon(Icons.refresh))
+        ],
         elevation: 0.0,
         title: Text(
           widget.title,
@@ -124,8 +126,40 @@ class _TaskHistoryState extends State<TaskHistory>
                                 // overflow: TextOverflow.ellipsis,
                                 // maxLines: 3,
                               ),
-                              trailing: Text(timeago.format(DateTime.parse(
-                                  _history[index]["actionCreationDate"])))),
+                              trailing: DefaultTextStyle(
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: w > 400 ? 22 : 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: thememode == false
+                                      ? Colors.black
+                                      : Colors.white,
+                                  // color: Colors.primaries[Random()
+                                  //     .nextInt(Colors.primaries.length)],
+                                ),
+                                child: AnimatedTextKit(
+                                  repeatForever: true,
+                                  animatedTexts: [
+                                    FadeAnimatedText("Task"),
+                                    FadeAnimatedText("Created At"),
+                                    FadeAnimatedText(
+                                        _history[index]["actionCreationDate"]),
+                                    FadeAnimatedText(
+                                        _history[index]["actionCreationDate"]),
+                                    // FadeAnimatedText(
+                                    //     'do it RIGHT NOW!!!'),
+                                  ],
+                                ),
+                              )
+                              // Text(
+                              //   timeago.format(
+                              //     DateTime.parse(
+                              //       _history[index]["actionCreationDate"],
+                              //     ),
+                              //   ),
+                              // ),
+                              ),
                           Divider(
                             //  color:Colors.black,
                             thickness: 1,
@@ -160,8 +194,11 @@ class _TaskHistoryState extends State<TaskHistory>
     );
 
     final jsonResponse = json.decode(response.body);
+    print(jsonResponse);
     if (jsonResponse["successful"] == true && jsonResponse['type'] == "ok") {
       setState(() {
+        thememode = sharedPreferences.getBool("mode") ?? false;
+
         historyFound = true;
       });
       if (jsonResponse["data"]["taskActions"] != null) {
