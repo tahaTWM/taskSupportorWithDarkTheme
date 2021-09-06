@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:toast/toast.dart';
 import 'package:path/path.dart';
@@ -80,166 +79,168 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  padding: const EdgeInsets.only(
-                      top: 10, left: 0, right: 25, bottom: 20),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20))),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 10, bottom: 5),
-                          //logo and search icon
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              imageFound == false ||
-                                      userAvatar == null ||
-                                      userAvatar == "null"
-                                  ? Container(
-                                      width: width > 400 ? 60 : 40,
-                                      height: width > 400 ? 60 : 40,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all()),
-                                      child: Center(
-                                        child: Text(
-                                          fName[0].toUpperCase(),
-                                          style: TextStyle(
-                                            fontSize: 26,
-                                            // color: Colors.red,
-                                            fontFamily: "CCB",
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: Image.network(
-                                        "${MyApp.url}$userAvatar",
-                                        fit: BoxFit.cover,
-                                        width: width > 400 ? 60 : 50,
-                                        height: width > 400 ? 60 : 50,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Center(
-                                            child: Container(
-                                              width: width > 400 ? 60 : 40,
-                                              height: width > 400 ? 60 : 40,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  fName
-                                                      .toString()
-                                                      .split('')[0]
-                                                      .toUpperCase(),
-                                                  style: TextStyle(
-                                                    fontSize: 26,
-                                                    // color: Colors.red,
-                                                    fontFamily: "CCB",
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
+                padding: const EdgeInsets.only(
+                    top: 10, left: 0, right: 25, bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 10, bottom: 5),
+                      //logo and search icon
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          imageFound == false ||
+                                  userAvatar == null ||
+                                  userAvatar == "null"
+                              ? Container(
+                                  width: width > 400 ? 60 : 40,
+                                  height: width > 400 ? 60 : 40,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all()),
+                                  child: Center(
+                                    child: Text(
+                                      fName[0].toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 26,
+                                        // color: Colors.red,
                                       ),
                                     ),
-                              InkWell(
-                                child: Image(
-                                    image: AssetImage("asset/newLogo3.png"),
-                                    width: width > 350 ? 60 : 50,
-                                    height: width > 350 ? 60 : 50),
-                              ),
-                            ],
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    "${MyApp.url}$userAvatar",
+                                    fit: BoxFit.cover,
+                                    width: width > 400 ? 60 : 50,
+                                    height: width > 400 ? 60 : 50,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: Container(
+                                          width: width > 400 ? 60 : 40,
+                                          height: width > 400 ? 60 : 40,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              fName
+                                                  .toString()
+                                                  .split('')[0]
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: 26,
+                                                // color: Colors.red,
+                                                fontFamily: "CCB",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                          InkWell(
+                            child: Image(
+                                image: AssetImage("asset/newLogo3.png"),
+                                width: width > 350 ? 55 : 45,
+                                height: width > 350 ? 55 : 45),
                           ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                      //account text
+                      child: Text(
+                        "Hello, ${fName}!",
+                        style: TextStyle(
+                          fontSize: width > 400 ? 30 : 25,
+                          fontFamily: "Rubik",
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 10, bottom: 10),
-                          //account text
-                          child: Text(
-                            "Hello, ${fName}!",
-                            style: TextStyle(
-                              fontSize: width > 400 ? 30 : 25,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                      //wellcomeing message
+                      child: Text(
+                        "Are you ready to do\nsomething amazing?",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: "Rubik",
+                          // color:  Color.fromRGBO(158, 158, 158, 1),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
-                          //wellcomeing message
-                          child: Text(
-                            "Are you ready to do\nsomething amazing?",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontFamily: "Rubik",
-                              // color:  Color.fromRGBO(158, 158, 158, 1),
-                            ),
-                          ),
-                        ),
-                        //search
-                        // Container(
-                        //   height: 75,
-                        //   margin: EdgeInsets.symmetric(vertical: 10),
-                        //   padding: EdgeInsets.symmetric(horizontal: 10),
-                        //   decoration: BoxDecoration(
-                        //      // color:  Color.fromRGBO(243, 246, 255, 1),
-                        //       borderRadius: BorderRadius.circular(10)),
-                        //   child: Center(
-                        //     child: TextFormField(
-                        //       autofocus: keyboard,
-                        //       controller: _search,
-                        //       focusNode: inputNode,
-                        //       onFieldSubmitted: (_) {
-                        //         if (_formkey.currentState.validate())
-                        //           return ScaffoldMessenger.of(context)
-                        //               .showSnackBar(SnackBar(
-                        //                   duration: Duration(seconds: 2),
-                        //                   content: Text('search seccessful')));
-                        //         else
-                        //           return ScaffoldMessenger.of(context)
-                        //               .showSnackBar(SnackBar(
-                        //                   duration: Duration(seconds: 2),
-                        //                   content: Text('search fail')));
-                        //       },
-                        //       validator: (value) {
-                        //         if (value == null || value.isEmpty) {
-                        //           return 'search box is Empty';
-                        //         }
-                        //         return null;
-                        //       },
-                        //       style: TextStyle(
-                        //         fontSize: 25,
-                        //        // color:  Color.fromRGBO(0, 82, 205, 1),
-                        //       ),
-                        //       decoration: InputDecoration(
-                        //         border: InputBorder.none,
-                        //         hintText: "Search workspaces...",
-                        //         // hintStyle: TextStyle(
-                        //         //   fontSize: 25,
-                        //         // ),
-                        //         icon: Icon(Icons.search, size: 30),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 100,
-                        //   height: 100,
-                        //   child: image(),
-                        // ),
-                      ])),
+                      ),
+                    ),
+                    //search
+                    // Container(
+                    //   height: 75,
+                    //   margin: EdgeInsets.symmetric(vertical: 10),
+                    //   padding: EdgeInsets.symmetric(horizontal: 10),
+                    //   decoration: BoxDecoration(
+                    //      // color:  Color.fromRGBO(243, 246, 255, 1),
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: Center(
+                    //     child: TextFormField(
+                    //       autofocus: keyboard,
+                    //       controller: _search,
+                    //       focusNode: inputNode,
+                    //       onFieldSubmitted: (_) {
+                    //         if (_formkey.currentState.validate())
+                    //           return ScaffoldMessenger.of(context)
+                    //               .showSnackBar(SnackBar(
+                    //                   duration: Duration(seconds: 2),
+                    //                   content: Text('search seccessful')));
+                    //         else
+                    //           return ScaffoldMessenger.of(context)
+                    //               .showSnackBar(SnackBar(
+                    //                   duration: Duration(seconds: 2),
+                    //                   content: Text('search fail')));
+                    //       },
+                    //       validator: (value) {
+                    //         if (value == null || value.isEmpty) {
+                    //           return 'search box is Empty';
+                    //         }
+                    //         return null;
+                    //       },
+                    //       style: TextStyle(
+                    //         fontSize: 25,
+                    //        // color:  Color.fromRGBO(0, 82, 205, 1),
+                    //       ),
+                    //       decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         hintText: "Search workspaces...",
+                    //         // hintStyle: TextStyle(
+                    //         //   fontSize: 25,
+                    //         // ),
+                    //         icon: Icon(Icons.search, size: 30),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   width: 100,
+                    //   height: 100,
+                    //   child: image(),
+                    // ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.only(top: 15, left: 30, right: 30),
@@ -427,8 +428,8 @@ class _HomePageState extends State<HomePage> {
                         Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(
-                                  width: 2, color: Colors.deepOrangeAccent),
+                              // border: Border.all(
+                              //     width: 2, color: Colors.deepOrangeAccent),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
@@ -1223,9 +1224,9 @@ class _HomePageState extends State<HomePage> {
                 )))
             : Container(
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border:
-                        Border.all(width: 1, color: Colors.deepOrangeAccent)),
+                  shape: BoxShape.circle,
+                  // border: Border.all(width: 1, color: Colors.deepOrangeAccent),
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50.0),
                   child: Image.network(
@@ -1261,11 +1262,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _confirmDeleteOrleaveWorkspace(
-    BuildContext context,
-    String _delete,
-    String workspace,
-    int id,
-  ) async {
+      BuildContext context, String _delete, String workspace, int id) async {
     SharedPreferences _pred = await SharedPreferences.getInstance();
     _fName.clear();
     return _delete == "delete"

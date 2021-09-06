@@ -58,13 +58,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - asset/illustration.png
-    - asset/logo.png
-    - asset/logo2.png
-    - asset/image.png
-    - asset/newLogo.png
-    - asset/newLogowithName.png
-    - asset/newLogoWithName2.png
     - asset/newLogo3.png
     - asset/google.png
     - asset/facebook.png

@@ -31,9 +31,9 @@ class _SettingState extends State<Setting> {
   bool showAllEventSwitch = false;
   bool emailNotifSwitch = false;
   var profileName = '';
-  String fName = '';
-  String sName = '';
-  String email = '';
+  String fName = 'test';
+  String sName = 'test';
+  String email = 'test';
   TextEditingController textEditingControllerFName = TextEditingController();
   TextEditingController textEditingControllerSName = TextEditingController();
   TextEditingController textEditingControllerEmail = TextEditingController();
@@ -49,7 +49,7 @@ class _SettingState extends State<Setting> {
 
   String workspaces = "0";
   String tasks = "0";
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
   bool skip = false;
   @override
   void initState() {
@@ -104,29 +104,22 @@ class _SettingState extends State<Setting> {
                                     BorderRadius.all(Radius.circular(55)),
                                 // color: Colors.red,
                               ),
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.deepOrangeAccent,
-                                child:
-                                    userAvatar == null || userAvatar == "null"
-                                        ? Text(
-                                            widget.title
-                                                .toString()[0]
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 25,
-                                                fontFamily: "RubikB"),
-                                          )
-                                        : ClipOval(
-                                            child: Image.network(
-                                              "${MyApp.url}$userAvatar",
-                                              height: 55,
-                                              width: 55,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                              ),
+                              child: userAvatar == null || userAvatar == "null"
+                                  ? Text(
+                                      widget.title.toString()[0].toUpperCase(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25,
+                                          fontFamily: "RubikB"),
+                                    )
+                                  : ClipOval(
+                                      child: Image.network(
+                                        "${MyApp.url}$userAvatar",
+                                        height: 50,
+                                        width: 50,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                             ),
                             SizedBox(width: 20),
                             Text(

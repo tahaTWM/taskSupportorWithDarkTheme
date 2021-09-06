@@ -16,6 +16,7 @@ class _NotificationsState extends State<Notifications> {
   List listOfNotifactions = [];
   bool notFoundNotification = false;
   bool value = false;
+  bool thememode;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _NotificationsState extends State<Notifications> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         backgroundColor: Colors.grey.withOpacity(0.1),
         actions: [
           Padding(
@@ -172,17 +174,20 @@ class _NotificationsState extends State<Notifications> {
                                   ),
                                   SizedBox(height: 5),
 
-                                  SizedBox(
+                                  Container(
                                     height: 25,
                                     child: DefaultTextStyle(
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontSize: width > 400 ? 22 : 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.primaries[Random()
-                                            .nextInt(Colors.primaries.length)],
-                                      ),
+                                          fontSize: width > 400 ? 22 : 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: thememode == false
+                                              ? Colors.black
+                                              : Colors.white
+                                          // color: Colors.primaries[Random()
+                                          //     .nextInt(Colors.primaries.length)],
+                                          ),
                                       child: AnimatedTextKit(
                                         repeatForever: true,
                                         animatedTexts: [
@@ -357,34 +362,40 @@ class _NotificationsState extends State<Notifications> {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  DefaultTextStyle(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: width > 400 ? 22 : 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.primaries[Random()
-                                          .nextInt(Colors.primaries.length)],
-                                    ),
-                                    child: AnimatedTextKit(
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        FadeAnimatedText("Notification"),
-                                        FadeAnimatedText("Receive At"),
-                                        FadeAnimatedText(
-                                            listOfNotifactions[index]
-                                                    ["creation_date"]
-                                                .toString()
-                                                .split('T')[0]),
-                                        FadeAnimatedText(
-                                            listOfNotifactions[index]
-                                                    ["creation_date"]
-                                                .toString()
-                                                .split('T')[1]
-                                                .split('.')[0]),
-                                        // FadeAnimatedText(
-                                        //     'do it RIGHT NOW!!!'),
-                                      ],
+                                  Container(
+                                    height: 25,
+                                    child: DefaultTextStyle(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: width > 400 ? 22 : 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: thememode == false
+                                              ? Colors.black
+                                              : Colors.white
+                                          // color: Colors.primaries[Random()
+                                          //     .nextInt(Colors.primaries.length)],
+                                          ),
+                                      child: AnimatedTextKit(
+                                        repeatForever: true,
+                                        animatedTexts: [
+                                          FadeAnimatedText("Notification"),
+                                          FadeAnimatedText("Receive At"),
+                                          FadeAnimatedText(
+                                              listOfNotifactions[index]
+                                                      ["creation_date"]
+                                                  .toString()
+                                                  .split('T')[0]),
+                                          FadeAnimatedText(
+                                              listOfNotifactions[index]
+                                                      ["creation_date"]
+                                                  .toString()
+                                                  .split('T')[1]
+                                                  .split('.')[0]),
+                                          // FadeAnimatedText(
+                                          //     'do it RIGHT NOW!!!'),
+                                        ],
+                                      ),
                                     ),
                                   )
                                   // Text(
@@ -419,6 +430,8 @@ class _NotificationsState extends State<Notifications> {
     final jsonResponse = json.decode(response.body);
     if (jsonResponse["successful"] == true) {
       setState(() {
+        thememode = sharedPreferences.getBool("mode") ?? false;
+
         notFoundNotification = true;
       });
       if (jsonResponse["data"] != null)

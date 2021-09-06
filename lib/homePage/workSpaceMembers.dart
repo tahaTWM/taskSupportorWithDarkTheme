@@ -202,7 +202,7 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                                     widget.title == "Add Member to Workspace"
                                         ? listOfWorkspaceMembers[index]["role"] ==
                                                 "employer"
-                                            ? Container()
+                                            ? Text("Owner")
                                             : listOfWorkspaceMembers[index]
                                                         ["isJoined"] ==
                                                     0
@@ -288,7 +288,10 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                     itemBuilder: (BuildContext context, int index) {
                       var image = listOfWorkspaceMembers[index]["user_avatar"];
                       print(listOfWorkspaceMembers);
-                      return listOfWorkspaceMembers[index]["isInTask"] == 1
+                      return listOfWorkspaceMembers[index]["isInTask"] == 1 ||
+                              listOfWorkspaceMembers[index]
+                                      ["isWorkspaceOwner"] ==
+                                  1
                           ? Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 20),
@@ -367,17 +370,25 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                                         ),
                                       ],
                                     ),
-                                    IconButton(
-                                        onPressed: () =>
-                                            _kickUserfromTaskOrWorkspace(
-                                                widget.taskId,
-                                                listOfWorkspaceMembers[index]
-                                                    ["userId"]),
-                                        icon: Icon(
-                                          Icons.remove,
-                                          size: width < 400 ? 25 : 35,
-                                          color: Colors.red,
-                                        ))
+                                    listOfWorkspaceMembers[index]
+                                                ["isWorkspaceOwner"] ==
+                                            1
+                                        ? Text(
+                                            "Workspace\nOwner",
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : IconButton(
+                                            onPressed: () =>
+                                                _kickUserfromTaskOrWorkspace(
+                                                    widget.taskId,
+                                                    listOfWorkspaceMembers[
+                                                        index]["userId"]),
+                                            icon: Icon(
+                                              Icons.remove,
+                                              size: width < 400 ? 25 : 35,
+                                              color: Colors.red,
+                                            ))
                                   ]),
                             )
                           : Container();

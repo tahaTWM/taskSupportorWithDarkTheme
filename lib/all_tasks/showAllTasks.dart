@@ -98,9 +98,12 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           backgroundColor: Colors.grey.withOpacity(0.1),
           elevation: 0.0,
           actions: [
-            IconButton(
-                onPressed: () => checkIfThereAnyTaskes(),
-                icon: Icon(Icons.refresh))
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: IconButton(
+                  onPressed: () => checkIfThereAnyTaskes(),
+                  icon: Icon(Icons.refresh)),
+            )
           ],
           toolbarHeight: 70,
 

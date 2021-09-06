@@ -125,8 +125,8 @@ class _ProfileState extends State<Profile> {
                               child: Text(
                                 fName[0].toUpperCase(),
                                 style: TextStyle(
-                                    fontSize: width > 400 ? 80 : 60,
-                                    fontFamily: "CCB"),
+                                  fontSize: width > 400 ? 80 : 60,
+                                ),
                               ),
                             ))
                         : ClipRRect(
@@ -295,7 +295,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         SizedBox(width: 30),
                         Text(
-                          "Available",
+                          "Online",
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: width > 400 ? 22 : 18),

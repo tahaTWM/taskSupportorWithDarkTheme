@@ -175,7 +175,6 @@ class _AttachmentState extends State<Attachment> {
                           itemBuilder: (context, index) {
                             var url =
                                 "${MyApp.url}${res[index]["user_avatar"]}";
-
                             return Column(
                               children: [
                                 ListTile(
@@ -213,17 +212,12 @@ class _AttachmentState extends State<Attachment> {
                                               .toString()
                                               .toUpperCase()),
                                         )
-                                      : CircleAvatar(
-                                          radius: 30,
-                                          backgroundColor:
-                                              Colors.deepOrangeAccent,
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              url,
-                                              height: 53,
-                                              width: 53,
-                                              fit: BoxFit.cover,
-                                            ),
+                                      : ClipOval(
+                                          child: Image.network(
+                                            url,
+                                            height: 53,
+                                            width: 53,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
 
