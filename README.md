@@ -2,7 +2,7 @@
 
 - [Download](#download) :arrow_down:
 
-<table>
+<table border="1">
   <tr>
     <td><img src="https://github.com/tahaTWM/taskSupportorWithDarkTheme/blob/master/screenshots/login.png?raw=true" width=320 height=600></td>
     <td><img src="https://github.com/tahaTWM/taskSupportorWithDarkTheme/blob/master/screenshots/register.png?raw=true" width=320 height=600></td>
