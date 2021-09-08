@@ -65,7 +65,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     'DONE': 'DONE'
   };
 
-  String _selectedStatus;
+  String _selectedStatus = '';
   bool thememode;
   void onStatusSelected(String statusKey) {
     setState(() {
@@ -420,6 +420,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
               List<dynamic> newListReversed = listOfTasks.reversed.toList();
               // var newDateTime =
               //     DateTime.parse(newListReversed[index]["taskCreationDate"]);
+
               var dataTime = newListReversed[index]["taskCreationDate"]
                   .toString()
                   .split(' ');
@@ -1037,6 +1038,8 @@ class _ShowAllTasksState extends State<ShowAllTasks>
   }
 
   _updateTaskAction(String oldStatus, int taskid) async {
+    print(oldStatus);
+    print(_selectedStatus);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {
       "Content-type": "application/json; charset=UTF-8",
@@ -1044,8 +1047,11 @@ class _ShowAllTasksState extends State<ShowAllTasks>
     };
     var url = Uri.parse("${MyApp.url}/task/action");
     var jsonResponse;
-    if (_selectedStatus != null) {
-      final respnse = await http.post(
+    var respnse;
+    if (_selectedStatus != null &&
+        _selectedStatus != oldStatus &&
+        _selectedStatus != '') {
+      respnse = await http.post(
         url,
         headers: requestHeaders,
         body: jsonEncode(
@@ -1058,8 +1064,8 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           },
         ),
       );
-
       jsonResponse = json.decode(respnse.body);
+      print(jsonResponse);
       if (jsonResponse["successful"])
         Toast.show(
           "Status Change",
@@ -1068,7 +1074,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
           duration: Toast.LENGTH_SHORT,
         );
     } else if (_action.text.isNotEmpty) {
-      final respnse = await http.post(
+      respnse = await http.post(
         url,
         headers: requestHeaders,
         body: jsonEncode(
@@ -1082,11 +1088,38 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
       jsonResponse = json.decode(respnse.body);
+      print(jsonResponse);
       if (jsonResponse["successful"])
         Toast.show(
           "Commint done",
           context,
           backgroundColor: Colors.green,
+          duration: Toast.LENGTH_SHORT,
+        );
+    } else if (_selectedStatus != null &&
+        _selectedStatus != oldStatus &&
+        _selectedStatus != '' &&
+        _action.text.isNotEmpty) {
+      respnse = await http.post(
+        url,
+        headers: requestHeaders,
+        body: jsonEncode(
+          <String, dynamic>{
+            "comment": _action.text,
+            "old_task_status": oldStatus,
+            "new_task_status": _selectedStatus,
+            "action_type": "OPEN",
+            "task_id": taskid
+          },
+        ),
+      );
+      jsonResponse = json.decode(respnse.body);
+      print(jsonResponse);
+      if (jsonResponse["successful"])
+        Toast.show(
+          "Status Change and and add Commint",
+          context,
+          backgroundColor: Colors.purple,
           duration: Toast.LENGTH_SHORT,
         );
     } else {

@@ -80,6 +80,7 @@ class _TaskActionsState extends State<TaskActions>
                                       _history[index]["user_avatar"] == null ||
                                       _history[index]["user_avatar"] == "null"
                                   ? Container(
+                                      margin: EdgeInsets.only(left: 8),
                                       padding: EdgeInsets.all(14),
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -95,9 +96,8 @@ class _TaskActionsState extends State<TaskActions>
                                           .toString()[0]
                                           .toUpperCase()),
                                     )
-                                  : CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.deepOrangeAccent,
+                                  : Container(
+                                      margin: EdgeInsets.only(left: 8),
                                       child: ClipOval(
                                         child: Image.network(
                                           url,
@@ -126,30 +126,38 @@ class _TaskActionsState extends State<TaskActions>
                                 // overflow: TextOverflow.ellipsis,
                                 // maxLines: 3,
                               ),
-                              trailing: DefaultTextStyle(
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: w > 400 ? 22 : 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: thememode == false
-                                      ? Colors.black
-                                      : Colors.white,
-                                  // color: Colors.primaries[Random()
-                                  //     .nextInt(Colors.primaries.length)],
-                                ),
-                                child: AnimatedTextKit(
-                                  repeatForever: true,
-                                  animatedTexts: [
-                                    FadeAnimatedText("Task"),
-                                    FadeAnimatedText("Created At"),
-                                    FadeAnimatedText(
-                                        _history[index]["actionCreationDate"]),
-                                    FadeAnimatedText(
-                                        _history[index]["actionCreationDate"]),
-                                    // FadeAnimatedText(
-                                    //     'do it RIGHT NOW!!!'),
-                                  ],
+                              trailing: Container(
+                                width: w * 0.3,
+                                child: DefaultTextStyle(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: w > 400 ? 22 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: thememode == false
+                                        ? Colors.black
+                                        : Colors.white,
+                                    // color: Colors.primaries[Random()
+                                    //     .nextInt(Colors.primaries.length)],
+                                  ),
+                                  child: AnimatedTextKit(
+                                    repeatForever: true,
+                                    animatedTexts: [
+                                      FadeAnimatedText("Task"),
+                                      FadeAnimatedText("Created At"),
+                                      FadeAnimatedText(_history[index]
+                                              ["actionCreationDate"]
+                                          .toString()
+                                          .split(' ')[0]),
+                                      FadeAnimatedText(_history[index]
+                                              ["actionCreationDate"]
+                                          .toString()
+                                          .split(' ')[1]
+                                          .split('.')[0]),
+                                      // FadeAnimatedText(
+                                      //     'do it RIGHT NOW!!!'),
+                                    ],
+                                  ),
                                 ),
                               )
                               // Text(
@@ -202,8 +210,9 @@ class _TaskActionsState extends State<TaskActions>
         historyFound = true;
       });
       if (jsonResponse["data"]["taskActions"] != null) {
+        List<dynamic> notRev = jsonResponse["data"]["taskActions"];
         setState(() {
-          _history = jsonResponse["data"]["taskActions"];
+          _history = notRev.reversed.toList();
         });
       }
     }

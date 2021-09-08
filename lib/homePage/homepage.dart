@@ -340,7 +340,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       //list view of all workspaces
-
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.only(top: 10),
@@ -373,6 +372,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: unused_element
   _changeTheme(bool mode, BuildContext context) async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
     _pref.setBool("mode", mode);
@@ -697,10 +697,11 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ShowAllTasks(
-                              listOfWorkspace[index]["workspaceName"],
-                              listOfWorkspace[index]["workspaceId"],
-                              listOfWorkspace[index]["role"],
-                              userAvatar)));
+                                listOfWorkspace[index]["workspaceName"],
+                                listOfWorkspace[index]["workspaceId"],
+                                listOfWorkspace[index]["role"],
+                                userAvatar,
+                              )));
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -1244,7 +1245,7 @@ class _HomePageState extends State<HomePage> {
                             margin: EdgeInsets.only(right: 5),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              // border: Border.all(),
+                              border: Border.all(),
                             ),
                             child: Center(
                                 child: Text(list[index]["firstName"]

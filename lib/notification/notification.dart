@@ -114,16 +114,12 @@ class _NotificationsState extends State<Notifications> {
                                         ),
                                       ),
                                     )
-                                  : CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.deepOrangeAccent,
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          "${MyApp.url}${triggered_data["triggere_avatar"]}",
-                                          height: 53,
-                                          width: 53,
-                                          fit: BoxFit.cover,
-                                        ),
+                                  : ClipOval(
+                                      child: Image.network(
+                                        "${MyApp.url}${triggered_data["triggere_avatar"]}",
+                                        height: 53,
+                                        width: 53,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                               // Container(
@@ -304,16 +300,12 @@ class _NotificationsState extends State<Notifications> {
                                         ),
                                       ),
                                     )
-                                  : CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.deepOrangeAccent,
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          "${MyApp.url}${triggered_data["triggere_avatar"]}",
-                                          height: 53,
-                                          width: 53,
-                                          fit: BoxFit.cover,
-                                        ),
+                                  : ClipOval(
+                                      child: Image.network(
+                                        "${MyApp.url}${triggered_data["triggere_avatar"]}",
+                                        height: 53,
+                                        width: 53,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                               // Container(

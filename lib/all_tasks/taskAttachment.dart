@@ -18,7 +18,6 @@ import '../main.dart';
 class Attachment extends StatefulWidget {
   int taskID;
   String prority;
-
   Attachment(this.taskID, this.prority);
 
   @override
@@ -37,6 +36,7 @@ class _AttachmentState extends State<Attachment> {
   @override
   void initState() {
     checkIfThereAnyAttachment();
+
     super.initState();
   }
 
@@ -507,7 +507,7 @@ class _AttachmentState extends State<Attachment> {
   }
 
   Future<void> checkIfThereAnyAttachment() async {
-    var jsonResponse = null;
+    var jsonResponse;
     List<dynamic> _res = [];
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map<String, String> requestHeaders = {

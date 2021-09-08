@@ -66,12 +66,12 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                             height: width < 400 ? 50 : 75,
                             margin: EdgeInsets.all(15),
                             padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              //  color:Color.fromRGBO(243, 246, 255, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: Colors.lightBlue, width: 2),
-                            ),
+                            // decoration: BoxDecoration(
+                            //   color: Colors.grey.withOpacity(0.3),
+                            //   borderRadius: BorderRadius.circular(10),
+                            //   // border:
+                            //   //     Border.all(color: Colors.lightBlue, width: 2),
+                            // ),
                             child: Center(
                               child: TextFormField(
                                 autofocus: keyboard,
@@ -378,17 +378,25 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.center,
                                           )
-                                        : IconButton(
-                                            onPressed: () =>
-                                                _kickUserfromTaskOrWorkspace(
-                                                    widget.taskId,
-                                                    listOfWorkspaceMembers[
-                                                        index]["userId"]),
-                                            icon: Icon(
-                                              Icons.remove,
-                                              size: width < 400 ? 25 : 35,
-                                              color: Colors.red,
-                                            ))
+                                        : listOfWorkspaceMembers[index]
+                                                    ["isTaskOwner"] ==
+                                                1
+                                            ? Text(
+                                                "Task\nOwner",
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            : IconButton(
+                                                onPressed: () =>
+                                                    _kickUserfromTaskOrWorkspace(
+                                                        widget.taskId,
+                                                        listOfWorkspaceMembers[
+                                                            index]["userId"]),
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: width < 400 ? 25 : 35,
+                                                  color: Colors.red,
+                                                ))
                                   ]),
                             )
                           : Container();
@@ -507,8 +515,8 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
 
   _kickUserfromTaskOrWorkspace(int taskID, int memberID) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    // ignore: avoid_init_to_null
-    var jsonResponse = null;
+    // ignore: unused_local_variable
+    var jsonResponse;
     try {
       var url;
       if (widget.title == "Task Members" ||
