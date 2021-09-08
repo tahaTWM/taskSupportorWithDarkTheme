@@ -1,6 +1,6 @@
 <h2>Screen Shots form task Supportor App</h2>
 
-- [Download](#download)
+- [Download](#download) - (:arrow_down:)
 
 <table>
   <tr>
