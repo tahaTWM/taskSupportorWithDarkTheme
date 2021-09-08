@@ -1,5 +1,5 @@
 <h2>Screen Shots form task Supportor App</h2>
-- [Download](#donwload)
+[Download](#donwload)
 <table>
   <tr>
     <td><img src="https://github.com/tahaTWM/taskSupportorWithDarkTheme/blob/master/screenshots/login.png?raw=true" width=320 height=600></td>
