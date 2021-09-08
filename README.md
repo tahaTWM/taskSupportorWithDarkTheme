@@ -41,6 +41,6 @@
    </tr>
 </table>
 <h2>Download App</h2><br>
-[Google Play](https://play.google.com/store/apps/details?id=com.urtask.msmar) - You can download app from google play and test for `Free`
+[Google Play](https://play.google.com/store/apps/details?id=com.urtask.msmar) - You can download app from google play and test for <h3>Free</h3>
 
 
