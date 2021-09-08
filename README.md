@@ -38,6 +38,9 @@
 
    <tr>
     <td><img src="https://github.com/tahaTWM/taskSupportorWithDarkTheme/blob/master/screenshots/settings.png?raw=true" width=320 height=600></td>
-    </tr>
- </table>
+   </tr>
+</table>
+
+[Google Play](https://play.google.com/store/apps/details?id=com.urtask.msmar) - You can download app from google play and test for `Free`
+
 
