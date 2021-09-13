@@ -253,6 +253,7 @@ class _Logn extends State<Logn> {
               // register
               SizedBox(
                 width: double.infinity,
+                // ignore: deprecated_member_use
                 child: RaisedButton(
                   color: Colors.grey[600],
                   onPressed: () async {
@@ -284,15 +285,7 @@ class _Logn extends State<Logn> {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Toast.show(
-                      //   "Toast plugin app",
-                      //   context,
-                      //   duration: Toast.LENGTH_SHORT,
-                      //   gravity: Toast.BOTTOM,
-                      //   backgroundColor: Colors.lightBlue,
-                      //   textColor: Colors.black,
-                      //   backgroundRadius: 20,
-                      // );
+                      
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -311,38 +304,7 @@ class _Logn extends State<Logn> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () => print("tapped"),
-                      child: Image(
-                        image: AssetImage("asset/facebook.png"),
-                        width: 55,
-                        height: 55,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => print("tapped"),
-                      child: Image(
-                        image: AssetImage("asset/github.png"),
-                        width: 55,
-                        height: 55,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => print("tapped"),
-                      child: Image(
-                        image: AssetImage("asset/google.png"),
-                        width: 66,
-                        height: 66,
-                      ),
-                    ),
-                  ],
-                ),
-              )
+           
             ],
           ),
         ),

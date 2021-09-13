@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:app2/all_tasks/taskAttachment.dart';
 import 'package:app2/all_tasks/taskActions.dart';
 import 'package:app2/homePage/workSpaceMembers.dart';
@@ -155,7 +154,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                     ),
               SizedBox(width: 20),
               Text(
-                widget.workSpaceTitle,
+                widget.workSpaceTitle.split(' ')[0],
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 22,
@@ -418,8 +417,6 @@ class _ShowAllTasksState extends State<ShowAllTasks>
             physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               List<dynamic> newListReversed = listOfTasks.reversed.toList();
-              // var newDateTime =
-              //     DateTime.parse(newListReversed[index]["taskCreationDate"]);
 
               var dataTime = newListReversed[index]["taskCreationDate"]
                   .toString()
@@ -660,48 +657,26 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                         fontFamily: "RubikB",
                                       ),
                                       overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                     ),
                                   ),
 
-                                  DefaultTextStyle(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: width > 400 ? 22 : 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: thememode == false
-                                            ? Colors.black
-                                            : Colors.white
-                                        // color: Colors.primaries[Random()
-                                        //     .nextInt(Colors.primaries.length)],
-                                        ),
-                                    child: AnimatedTextKit(
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        FadeAnimatedText("Task"),
-                                        FadeAnimatedText("Created At"),
-                                        FadeAnimatedText(dataTime[0]),
-                                        FadeAnimatedText(dataTime[1]
-                                            .toString()
-                                            .split('.')[0]),
-                                        // FadeAnimatedText(
-                                        //     'do it RIGHT NOW!!!'),
-                                      ],
-                                    ),
-                                  )
                                   // task creation date
-                                  // Text(
-                                  //   timeago.format(newDateTime),
-                                  //   style: TextStyle(
-                                  //     fontSize:
-                                  //         MediaQuery.of(context).size.width >
-                                  //                 400
-                                  //             ? 22
-                                  //             : 18,
-                                  //     fontFamily: "Rubik",
-                                  //     // color:Color.fromRGBO(158, 158, 158, 1),
-                                  //   ),
-                                  // ),
+                                  Text(
+                                    timeago.format(
+                                        DateTime.parse(newListReversed[index]
+                                            ["taskCreationDate"]),
+                                        locale: 'en_short'),
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width >
+                                                  400
+                                              ? 22
+                                              : 18,
+                                      fontFamily: "Rubik",
+                                      // color:Color.fromRGBO(158, 158, 158, 1),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -934,6 +909,8 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
         SizedBox(height: 10),
         CupertinoRadioChoice(
+          notSelectedColor: Colors.grey,
+          selectedColor: Colors.green,
           choices: status,
           onChange: onStatusSelected,
           initialKeyValue: 'DONE',

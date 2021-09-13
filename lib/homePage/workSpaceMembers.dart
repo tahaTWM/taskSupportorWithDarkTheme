@@ -36,6 +36,7 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
   FocusNode inputNode = FocusNode();
   TextEditingController _search = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+  bool membersFounds = false;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -56,355 +57,401 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
             ),
       ),
       body: SafeArea(
-        child: Form(
-          key: _formkey,
-          child: widget.title != "Task Members"
-              ? Column(
-                  children: [
-                    widget.title == "Add Member to Workspace"
-                        ? Container(
-                            height: width < 400 ? 50 : 75,
-                            margin: EdgeInsets.all(15),
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            // decoration: BoxDecoration(
-                            //   color: Colors.grey.withOpacity(0.3),
-                            //   borderRadius: BorderRadius.circular(10),
-                            //   // border:
-                            //   //     Border.all(color: Colors.lightBlue, width: 2),
-                            // ),
-                            child: Center(
-                              child: TextFormField(
-                                autofocus: keyboard,
-                                controller: _search,
-                                focusNode: inputNode,
-                                onFieldSubmitted: (_) {
-                                  if (_formkey.currentState.validate()) {
-                                    _searchForMemberInTask(
-                                        widget.workspaceID, _search.text);
-                                    return ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            duration: Duration(seconds: 2),
-                                            content:
-                                                Text('search seccessful')));
-                                  } else
-                                    return ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            duration: Duration(seconds: 2),
-                                            content: Text('search fail')));
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'search box is Empty';
-                                  }
-                                  return null;
-                                },
-                                style: TextStyle(
-                                  fontSize: width < 400 ? 18 : 25,
-                                  //  color:Color.fromRGBO(0, 82, 205, 1),
-                                ),
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Search for Member",
-                                  // hintStyle: TextStyle(
-                                  //   fontSize: 25,
+        child: membersFounds == false
+            ? Center(child: CircularProgressIndicator())
+            : Form(
+                key: _formkey,
+                child: widget.title != "Task Members"
+                    ? Column(
+                        children: [
+                          widget.title == "Add Member to Workspace"
+                              ? Container(
+                                  height: width < 400 ? 50 : 75,
+                                  margin: EdgeInsets.all(15),
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  // decoration: BoxDecoration(
+                                  //   color: Colors.grey.withOpacity(0.3),
+                                  //   borderRadius: BorderRadius.circular(10),
+                                  //   // border:
+                                  //   //     Border.all(color: Colors.lightBlue, width: 2),
                                   // ),
-                                  icon: Icon(Icons.search, size: 30),
-                                ),
+                                  child: Center(
+                                    child: TextFormField(
+                                      autofocus: keyboard,
+                                      controller: _search,
+                                      focusNode: inputNode,
+                                      onFieldSubmitted: (_) {
+                                        if (_formkey.currentState.validate()) {
+                                          _searchForMemberInTask(
+                                              widget.workspaceID, _search.text);
+                                          return ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                  content: Text(
+                                                      'search seccessful')));
+                                        } else
+                                          return ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                  content:
+                                                      Text('search fail')));
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'search box is Empty';
+                                        }
+                                        return null;
+                                      },
+                                      style: TextStyle(
+                                        fontSize: width < 400 ? 18 : 25,
+                                        //  color:Color.fromRGBO(0, 82, 205, 1),
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Search for Member",
+                                        // hintStyle: TextStyle(
+                                        //   fontSize: 25,
+                                        // ),
+                                        icon: Icon(Icons.search, size: 30),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          Expanded(
+                            child: Container(
+                              width: width,
+                              child: ListView.builder(
+                                itemBuilder: (context, index) {
+                                  var image = listOfWorkspaceMembers[index]
+                                      ["user_avatar"];
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius
+                                                      .circular(100),
+                                                  child: listOfWorkspaceMembers[
+                                                                  index][
+                                                              "user_avatar"] ==
+                                                          null
+                                                      ? Container(
+                                                          width:
+                                                              width < 400
+                                                                  ? 50
+                                                                  : 60,
+                                                          height: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border:
+                                                                Border.all(),
+                                                          ),
+                                                          child: Center(
+                                                              child: Text(listOfWorkspaceMembers[
+                                                                          index]
+                                                                      ["firstName"]
+                                                                  .toString()
+                                                                  .split('')[0]
+                                                                  .toUpperCase())))
+                                                      : Image.network(
+                                                          "${MyApp.url}$image",
+                                                          fit: BoxFit.cover,
+                                                          width: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                          height: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                        )),
+                                              SizedBox(width: 10),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                        index]['firstName'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          width < 400 ? 18 : 22,
+                                                      //  color:Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                        index]['secondName'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          width < 400 ? 18 : 22,
+                                                      //  color:Colors.black,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                                    index][
+                                                                "isAccpeted"] ==
+                                                            0
+                                                        ? " (pending)"
+                                                        : "",
+                                                    style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontSize: 15,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          widget.title ==
+                                                  "Add Member to Workspace"
+                                              ? listOfWorkspaceMembers[index]["role"] ==
+                                                      "employer"
+                                                  ? Text("Owner")
+                                                  : listOfWorkspaceMembers[index]
+                                                              ["isJoined"] ==
+                                                          0
+                                                      ? IconButton(
+                                                          onPressed: () {
+                                                            _inviteEmployeeToWorkspace(
+                                                                listOfWorkspaceMembers[
+                                                                        index]
+                                                                    ["userId"]);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons
+                                                                .person_add_rounded,
+                                                            size: width < 400
+                                                                ? 25
+                                                                : 35,
+                                                            //  color:Colors.green,
+                                                          ))
+                                                      : listOfWorkspaceMembers[index][
+                                                                  "isAccepted"] ==
+                                                              0
+                                                          ? Text("Pendding")
+                                                          : IconButton(
+                                                              onPressed: () => _kickUserfromTaskOrWorkspace(
+                                                                  widget.taskId,
+                                                                  listOfWorkspaceMembers[index][
+                                                                      "userId"]),
+                                                              icon: Icon(
+                                                                Icons.remove,
+                                                                size:
+                                                                    width < 400
+                                                                        ? 25
+                                                                        : 35,
+                                                                color:
+                                                                    Colors.red,
+                                                              ))
+                                              : widget.title ==
+                                                      "Add Member to Task"
+                                                  ? listOfWorkspaceMembers[index][
+                                                              "isWorkspaceOwner"] ==
+                                                          0
+                                                      ? listOfWorkspaceMembers[index]
+                                                                  ["isInTask"] ==
+                                                              1
+                                                          ? IconButton(
+                                                              onPressed: () => _kickUserfromTaskOrWorkspace(widget.taskId, listOfWorkspaceMembers[index]["userId"]),
+                                                              icon: Icon(
+                                                                Icons.remove,
+                                                                size:
+                                                                    width < 400
+                                                                        ? 25
+                                                                        : 35,
+                                                                color:
+                                                                    Colors.red,
+                                                              ))
+                                                          : IconButton(
+                                                              onPressed: () {
+                                                                _inviteEmployeeToTask(
+                                                                    widget
+                                                                        .taskId,
+                                                                    listOfWorkspaceMembers[
+                                                                            index]
+                                                                        [
+                                                                        "userId"]);
+                                                              },
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .person_add_rounded,
+                                                                size:
+                                                                    width < 400
+                                                                        ? 25
+                                                                        : 35,
+                                                                //  color:Colors.green,
+                                                              ))
+                                                      : Container()
+                                                  : Container()
+                                        ]),
+                                  );
+                                },
+                                itemCount: listOfWorkspaceMembers.length,
                               ),
                             ),
-                          )
-                        : Container(),
-                    Expanded(
-                      child: Container(
-                        width: width,
+                          ),
+                        ],
+                      )
+                    : Container(
                         child: ListView.builder(
-                          itemBuilder: (context, index) {
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          itemBuilder: (BuildContext context, int index) {
                             var image =
                                 listOfWorkspaceMembers[index]["user_avatar"];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 20),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: listOfWorkspaceMembers[index]
-                                                        ["user_avatar"] ==
-                                                    null
-                                                ? Container(
-                                                    width:
-                                                        width < 400 ? 50 : 60,
-                                                    height:
-                                                        width < 400 ? 50 : 60,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(),
+                            print(listOfWorkspaceMembers);
+                            return listOfWorkspaceMembers[index]["isInTask"] ==
+                                        1 ||
+                                    listOfWorkspaceMembers[index]
+                                            ["isWorkspaceOwner"] ==
+                                        1
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius
+                                                      .circular(100),
+                                                  child: listOfWorkspaceMembers[
+                                                                  index][
+                                                              "user_avatar"] ==
+                                                          null
+                                                      ? Container(
+                                                          width:
+                                                              width < 400
+                                                                  ? 50
+                                                                  : 60,
+                                                          height: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border:
+                                                                Border.all(),
+                                                          ),
+                                                          child: Center(
+                                                              child: Text(listOfWorkspaceMembers[
+                                                                          index]
+                                                                      ["firstName"]
+                                                                  .toString()
+                                                                  .split('')[0]
+                                                                  .toUpperCase())))
+                                                      : Image.network(
+                                                          "${MyApp.url}$image",
+                                                          fit: BoxFit.cover,
+                                                          width: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                          height: width < 400
+                                                              ? 50
+                                                              : 60,
+                                                        )),
+                                              SizedBox(width: 10),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                        index]['firstName'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          width < 400 ? 18 : 22,
+                                                      //  color:Colors.black,
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                            listOfWorkspaceMembers[
-                                                                        index][
-                                                                    "firstName"]
-                                                                .toString()
-                                                                .split('')[0]
-                                                                .toUpperCase())))
-                                                : Image.network(
-                                                    "${MyApp.url}$image",
-                                                    fit: BoxFit.cover,
-                                                    width:
-                                                        width < 400 ? 50 : 60,
-                                                    height:
-                                                        width < 400 ? 50 : 60,
-                                                  )),
-                                        SizedBox(width: 10),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                  ['firstName'],
-                                              style: TextStyle(
-                                                fontSize: width < 400 ? 18 : 22,
-                                                //  color:Colors.black,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                        index]['secondName'],
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          width < 400 ? 18 : 22,
+                                                      //  color:Colors.black,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    listOfWorkspaceMembers[
+                                                                    index][
+                                                                "isAccpeted"] ==
+                                                            0
+                                                        ? " (pending)"
+                                                        : "",
+                                                    style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontSize: 15,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                  ['secondName'],
-                                              style: TextStyle(
-                                                fontSize: width < 400 ? 18 : 22,
-                                                //  color:Colors.black,
-                                              ),
-                                            ),
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                          ["isAccpeted"] ==
-                                                      0
-                                                  ? " (pending)"
-                                                  : "",
-                                              style: TextStyle(
-                                                fontStyle: FontStyle.italic,
-                                                fontSize: 15,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    widget.title == "Add Member to Workspace"
-                                        ? listOfWorkspaceMembers[index]["role"] ==
-                                                "employer"
-                                            ? Text("Owner")
-                                            : listOfWorkspaceMembers[index]
-                                                        ["isJoined"] ==
-                                                    0
-                                                ? IconButton(
-                                                    onPressed: () {
-                                                      _inviteEmployeeToWorkspace(
-                                                          listOfWorkspaceMembers[
-                                                              index]["userId"]);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.person_add_rounded,
-                                                      size:
-                                                          width < 400 ? 25 : 35,
-                                                      //  color:Colors.green,
-                                                    ))
-                                                : listOfWorkspaceMembers[index]
-                                                            ["isAccepted"] ==
-                                                        0
-                                                    ? Text("Pendding")
-                                                    : IconButton(
-                                                        onPressed: () =>
-                                                            _kickUserfromTaskOrWorkspace(
-                                                                widget.taskId,
-                                                                listOfWorkspaceMembers[index]
-                                                                    ["userId"]),
-                                                        icon: Icon(
-                                                          Icons.remove,
-                                                          size: width < 400
-                                                              ? 25
-                                                              : 35,
-                                                          color: Colors.red,
-                                                        ))
-                                        : widget.title == "Add Member to Task"
-                                            ? listOfWorkspaceMembers[index]
-                                                        ["isWorkspaceOwner"] ==
-                                                    0
-                                                ? listOfWorkspaceMembers[index]
-                                                            ["isInTask"] ==
-                                                        1
-                                                    ? IconButton(
-                                                        onPressed: () =>
-                                                            _kickUserfromTaskOrWorkspace(
-                                                                widget.taskId,
-                                                                listOfWorkspaceMembers[index]
-                                                                    ["userId"]),
-                                                        icon: Icon(
-                                                          Icons.remove,
-                                                          size: width < 400
-                                                              ? 25
-                                                              : 35,
-                                                          color: Colors.red,
-                                                        ))
-                                                    : IconButton(
-                                                        onPressed: () {
-                                                          _inviteEmployeeToTask(
+                                            ],
+                                          ),
+                                          listOfWorkspaceMembers[index]
+                                                      ["isWorkspaceOwner"] ==
+                                                  1
+                                              ? Text(
+                                                  "Workspace\nOwner",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.center,
+                                                )
+                                              : listOfWorkspaceMembers[index]
+                                                          ["isTaskOwner"] ==
+                                                      1
+                                                  ? Text(
+                                                      "Task\nOwner",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    )
+                                                  : IconButton(
+                                                      onPressed: () =>
+                                                          _kickUserfromTaskOrWorkspace(
                                                               widget.taskId,
                                                               listOfWorkspaceMembers[
                                                                       index]
-                                                                  ["userId"]);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons
-                                                              .person_add_rounded,
-                                                          size: width < 400
-                                                              ? 25
-                                                              : 35,
-                                                          //  color:Colors.green,
-                                                        ))
-                                                : Container()
-                                            : Container()
-                                  ]),
-                            );
+                                                                  ["userId"]),
+                                                      icon: Icon(
+                                                        Icons.remove,
+                                                        size: width < 400
+                                                            ? 25
+                                                            : 35,
+                                                        color: Colors.red,
+                                                      ))
+                                        ]),
+                                  )
+                                : Container();
                           },
                           itemCount: listOfWorkspaceMembers.length,
                         ),
                       ),
-                    ),
-                  ],
-                )
-              : Container(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    itemBuilder: (BuildContext context, int index) {
-                      var image = listOfWorkspaceMembers[index]["user_avatar"];
-                      print(listOfWorkspaceMembers);
-                      return listOfWorkspaceMembers[index]["isInTask"] == 1 ||
-                              listOfWorkspaceMembers[index]
-                                      ["isWorkspaceOwner"] ==
-                                  1
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: listOfWorkspaceMembers[index]
-                                                        ["user_avatar"] ==
-                                                    null
-                                                ? Container(
-                                                    width:
-                                                        width < 400 ? 50 : 60,
-                                                    height:
-                                                        width < 400 ? 50 : 60,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(),
-                                                    ),
-                                                    child: Center(
-                                                        child: Text(
-                                                            listOfWorkspaceMembers[
-                                                                        index][
-                                                                    "firstName"]
-                                                                .toString()
-                                                                .split('')[0]
-                                                                .toUpperCase())))
-                                                : Image.network(
-                                                    "${MyApp.url}$image",
-                                                    fit: BoxFit.cover,
-                                                    width:
-                                                        width < 400 ? 50 : 60,
-                                                    height:
-                                                        width < 400 ? 50 : 60,
-                                                  )),
-                                        SizedBox(width: 10),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                  ['firstName'],
-                                              style: TextStyle(
-                                                fontSize: width < 400 ? 18 : 22,
-                                                //  color:Colors.black,
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                  ['secondName'],
-                                              style: TextStyle(
-                                                fontSize: width < 400 ? 18 : 22,
-                                                //  color:Colors.black,
-                                              ),
-                                            ),
-                                            Text(
-                                              listOfWorkspaceMembers[index]
-                                                          ["isAccpeted"] ==
-                                                      0
-                                                  ? " (pending)"
-                                                  : "",
-                                              style: TextStyle(
-                                                fontStyle: FontStyle.italic,
-                                                fontSize: 15,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    listOfWorkspaceMembers[index]
-                                                ["isWorkspaceOwner"] ==
-                                            1
-                                        ? Text(
-                                            "Workspace\nOwner",
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        : listOfWorkspaceMembers[index]
-                                                    ["isTaskOwner"] ==
-                                                1
-                                            ? Text(
-                                                "Task\nOwner",
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
-                                              )
-                                            : IconButton(
-                                                onPressed: () =>
-                                                    _kickUserfromTaskOrWorkspace(
-                                                        widget.taskId,
-                                                        listOfWorkspaceMembers[
-                                                            index]["userId"]),
-                                                icon: Icon(
-                                                  Icons.remove,
-                                                  size: width < 400 ? 25 : 35,
-                                                  color: Colors.red,
-                                                ))
-                                  ]),
-                            )
-                          : Container();
-                    },
-                    itemCount: listOfWorkspaceMembers.length,
-                  ),
-                ),
-        ),
+              ),
       ),
     );
   }
@@ -461,6 +508,7 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
           widget.title == "Add Member to Task" || widget.title == "Task Members"
               ? jsonResponse["data"]
               : jsonResponse["data"]["users"];
+      membersFounds = true;
     });
   }
 

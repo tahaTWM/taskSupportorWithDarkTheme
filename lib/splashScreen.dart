@@ -25,20 +25,20 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            flex: 4,
-            child: AnimatedSplashScreen(
-              splash: Lottie.network(
-                // "https://assets4.lottiefiles.com/packages/lf20_lQfkLu.json",
-                "https://assets9.lottiefiles.com/packages/lf20_jy1bgnpp.json",
+          Expanded(flex: 4,child:
+               AnimatedSplashScreen(
+                splash: Lottie.network(
+                  // "https://assets4.lottiefiles.com/packages/lf20_lQfkLu.json",
+                  // "https://assets9.lottiefiles.com/packages/lf20_jy1bgnpp.json",
+                    "https://assets10.lottiefiles.com/packages/lf20_mf5j5kua.json"
+                ),
+                nextScreen: tokenFound == true ? NavBar(0) : Logn(),
+                splashIconSize:
+                    MediaQuery.of(context).size.width > 400 ? 500 : 400,
+                duration: 5000,
+                // pageTransitionType: PageTransitionType.rightToLeft,
               ),
-              nextScreen: tokenFound == true ? NavBar(0) : Logn(),
-              splashIconSize:
-                  MediaQuery.of(context).size.width > 400 ? 500 : 400,
-              duration: 5000,
-              // pageTransitionType: PageTransitionType.rightToLeft,
-            ),
-          ),
+              ),
           CheckboxListTile(
             title: Text("Skip the Intero Next Time"),
             onChanged: (bool value) {

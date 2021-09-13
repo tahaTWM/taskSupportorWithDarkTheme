@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:toast/toast.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -783,38 +784,14 @@ class _HomePageState extends State<HomePage> {
                                     // color:  Color.fromRGBO(112, 112, 112, 1),
                                   ),
                                   SizedBox(width: 10),
-                                  DefaultTextStyle(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: thememode == false
-                                            ? Colors.black
-                                            : Colors.white
-                                        // color: Colors.primaries[Random()
-                                        //     .nextInt(Colors.primaries.length)],
-                                        ),
-                                    child: AnimatedTextKit(
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        FadeAnimatedText("WorkSpace"),
-                                        FadeAnimatedText("Is Created At"),
-                                        FadeAnimatedText(listOfWorkspace[index]
-                                                ["creation_date"]
-                                            .toString()
-                                            .split('T')[0]),
-                                        FadeAnimatedText(listOfWorkspace[index]
-                                                ["creation_date"]
-                                            .toString()
-                                            .split('T')[1]
-                                            .split('.')[0]),
-                                        // FadeAnimatedText(
-                                        //     'do it RIGHT NOW!!!'),
-                                      ],
-                                    ),
-                                  )
 
+                                  Text(timeago
+                                      .format(DateTime.parse(
+                                          listOfWorkspace[index]
+                                              ["creation_date"]))
+                                      .toString()),
                                   // Text(
+
                                   //   listOfWorkspace[index]["creation_date"]
                                   //       .toString()
                                   //       .split('T')[0],
@@ -1273,26 +1250,24 @@ class _HomePageState extends State<HomePage> {
               return AlertDialog(
                 title: Text("Upload Attachment"),
                 content: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    RichText(
-                      text: new TextSpan(
-                        style: TextStyle(
-                            color: !_pred.getBool('mode')
-                                ? Colors.black
-                                : Colors.white),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Enter Your First Name to Delete this '),
-                          TextSpan(
-                            text: workspace,
-                            style: new TextStyle(
-                              fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        child: Row(
+                          children: [
+                            Text('Enter Your First Name to Delete this '),
+                            Text(
+                              workspace,
+                              style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          TextSpan(text: ' workspace?\n'),
-                          TextSpan(text: '\nEnter your First Name: '),
-                        ],
+                            Text(' workspace?'),
+                          ],
+                        ),
                       ),
                     ),
                     Container(

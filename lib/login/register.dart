@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
 import 'logn.dart';
@@ -119,39 +118,39 @@ class _Register extends State<Register> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        onTap: () => print("tapped"),
-                        child: Image(
-                          image: AssetImage("asset/facebook.png"),
-                          width: 55,
-                          height: 55,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => print("tapped"),
-                        child: Image(
-                          image: AssetImage("asset/github.png"),
-                          width: 55,
-                          height: 55,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => print("tapped"),
-                        child: Image(
-                          image: AssetImage("asset/google.png"),
-                          width: 66,
-                          height: 66,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                // SizedBox(height: 10),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(vertical: 10),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     children: [
+                //       InkWell(
+                //         onTap: () => print("tapped"),
+                //         child: Image(
+                //           image: AssetImage("asset/facebook.png"),
+                //           width: 55,
+                //           height: 55,
+                //         ),
+                //       ),
+                //       InkWell(
+                //         onTap: () => print("tapped"),
+                //         child: Image(
+                //           image: AssetImage("asset/github.png"),
+                //           width: 55,
+                //           height: 55,
+                //         ),
+                //       ),
+                //       InkWell(
+                //         onTap: () => print("tapped"),
+                //         child: Image(
+                //           image: AssetImage("asset/google.png"),
+                //           width: 66,
+                //           height: 66,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // )
                 // ),
               ],
             ),

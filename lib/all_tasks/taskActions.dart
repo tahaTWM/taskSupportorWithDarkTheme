@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
@@ -74,100 +73,111 @@ class _TaskActionsState extends State<TaskActions>
                       return Column(
                         children: [
                           ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              leading: url.contains('null') ||
-                                      _history[index]["user_avatar"] == null ||
-                                      _history[index]["user_avatar"] == "null"
-                                  ? Container(
-                                      margin: EdgeInsets.only(left: 8),
-                                      padding: EdgeInsets.all(14),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 2,
-                                          color: widget.prority == "URGENT"
-                                              ? Color.fromRGBO(248, 135, 135, 1)
-                                              : Color.fromRGBO(46, 204, 113, 1),
-                                        ),
-                                        color: Colors.grey.withOpacity(0.2),
-                                        shape: BoxShape.circle,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
+                            leading: url.contains('null') ||
+                                    _history[index]["user_avatar"] == null ||
+                                    _history[index]["user_avatar"] == "null"
+                                ? Container(
+                                    margin: EdgeInsets.only(left: 8),
+                                    padding: EdgeInsets.all(14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 2,
+                                        color: widget.prority == "URGENT"
+                                            ? Color.fromRGBO(248, 135, 135, 1)
+                                            : Color.fromRGBO(46, 204, 113, 1),
                                       ),
-                                      child: Text(_history[index]["firstName"]
-                                          .toString()[0]
-                                          .toUpperCase()),
-                                    )
-                                  : Container(
-                                      margin: EdgeInsets.only(left: 8),
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          url,
-                                          height: 53,
-                                          width: 53,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      color: Colors.grey.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(_history[index]["firstName"]
+                                        .toString()[0]
+                                        .toUpperCase()),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.only(left: 8),
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        url,
+                                        height: 53,
+                                        width: 53,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                              title: Text(
-                                _history[index]["firstName"],
-                                overflow: TextOverflow.ellipsis,
+                                  ),
+                            title: Text(
+                              _history[index]["firstName"],
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            subtitle: Text(
+                              _history[index]["action_type"] == "COMMENT"
+                                  ? _history[index]["comment"]
+                                  : _history[index]["action_type"] == "OPEN"
+                                      ? "Changed Task Status From " +
+                                          _history[index]["old_task_status"] +
+                                          " To " +
+                                          _history[index]["new_task_status"]
+                                      : "Added Attachment to The task",
+                              // overflow: TextOverflow.ellipsis,
+                              // maxLines: 3,
+                            ),
+                            trailing:
+                                //  Container(
+                                //   width: w * 0.3,
+                                //   child: DefaultTextStyle(
+                                //     maxLines: 2,
+                                //     overflow: TextOverflow.ellipsis,
+                                //     style: TextStyle(
+                                //       fontSize: w > 400 ? 22 : 18,
+                                //       fontWeight: FontWeight.bold,
+                                //       color: thememode == false
+                                //           ? Colors.black
+                                //           : Colors.white,
+                                //       // color: Colors.primaries[Random()
+                                //       //     .nextInt(Colors.primaries.length)],
+                                //     ),
+                                //     child: AnimatedTextKit(
+                                //       repeatForever: true,
+                                //       animatedTexts: [
+                                //         FadeAnimatedText("Task"),
+                                //         FadeAnimatedText("Created At"),
+                                //         FadeAnimatedText(_history[index]
+                                //                 ["actionCreationDate"]
+                                //             .toString()
+                                //             .split(' ')[0]),
+                                //         FadeAnimatedText(_history[index]
+                                //                 ["actionCreationDate"]
+                                //             .toString()
+                                //             .split(' ')[1]
+                                //             .split('.')[0]),
+                                //         // FadeAnimatedText(
+                                //         //     'do it RIGHT NOW!!!'),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // )
+                                Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                timeago.format(
+                                    DateTime.parse(
+                                        _history[index]["actionCreationDate"]),
+                                    locale: 'en_short'),
                                 style: TextStyle(
-                                  decoration: TextDecoration.underline,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width > 400
+                                          ? 22
+                                          : 18,
+                                  fontFamily: "Rubik",
+                                  // color:Color.fromRGBO(158, 158, 158, 1),
                                 ),
                               ),
-                              subtitle: Text(
-                                _history[index]["action_type"] == "COMMENT"
-                                    ? _history[index]["comment"]
-                                    : _history[index]["action_type"] == "OPEN"
-                                        ? "Changed Task Status From " +
-                                            _history[index]["old_task_status"] +
-                                            " To " +
-                                            _history[index]["new_task_status"]
-                                        : "Added Attachment to The task",
-                                // overflow: TextOverflow.ellipsis,
-                                // maxLines: 3,
-                              ),
-                              trailing: Container(
-                                width: w * 0.3,
-                                child: DefaultTextStyle(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: w > 400 ? 22 : 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: thememode == false
-                                        ? Colors.black
-                                        : Colors.white,
-                                    // color: Colors.primaries[Random()
-                                    //     .nextInt(Colors.primaries.length)],
-                                  ),
-                                  child: AnimatedTextKit(
-                                    repeatForever: true,
-                                    animatedTexts: [
-                                      FadeAnimatedText("Task"),
-                                      FadeAnimatedText("Created At"),
-                                      FadeAnimatedText(_history[index]
-                                              ["actionCreationDate"]
-                                          .toString()
-                                          .split(' ')[0]),
-                                      FadeAnimatedText(_history[index]
-                                              ["actionCreationDate"]
-                                          .toString()
-                                          .split(' ')[1]
-                                          .split('.')[0]),
-                                      // FadeAnimatedText(
-                                      //     'do it RIGHT NOW!!!'),
-                                    ],
-                                  ),
-                                ),
-                              )
-                              // Text(
-                              //   timeago.format(
-                              //     DateTime.parse(
-                              //       _history[index]["actionCreationDate"],
-                              //     ),
-                              //   ),
-                              // ),
-                              ),
+                            ),
+                          ),
                           Divider(
                             //  color:Colors.black,
                             thickness: 1,
@@ -202,7 +212,6 @@ class _TaskActionsState extends State<TaskActions>
     );
 
     final jsonResponse = json.decode(response.body);
-    print(jsonResponse);
     if (jsonResponse["successful"] == true && jsonResponse['type'] == "ok") {
       setState(() {
         thememode = sharedPreferences.getBool("mode") ?? false;

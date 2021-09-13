@@ -175,29 +175,29 @@ class _SettingState extends State<Setting> {
                           },
                         ),
                       ),
-                      Field(
-                        onclick: () {},
-                        colur: Colors.pink[400],
-                        icon: Icon(
-                          Icons.notifications,
-                          color: Colors.white,
-                          size: 26,
-                        ),
-                        txt: "Notificatoins",
-                        endd: Switch(
-                          value: notificatoins,
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: Colors.greenAccent,
-                          activeColor: Colors.greenAccent,
-                          inactiveThumbColor: Colors.greenAccent,
-                          onChanged: (value) {
-                            _setNotifiaction(value);
-                            setState(() {
-                              notificatoins = value;
-                            });
-                          },
-                        ),
-                      ),
+                      // Field(
+                      //   onclick: () {},
+                      //   colur: Colors.pink[400],
+                      //   icon: Icon(
+                      //     Icons.notifications,
+                      //     color: Colors.white,
+                      //     size: 26,
+                      //   ),
+                      //   txt: "Notificatoins",
+                      //   endd: Switch(
+                      //     value: notificatoins,
+                      //     inactiveTrackColor: Colors.grey,
+                      //     activeTrackColor: Colors.greenAccent,
+                      //     activeColor: Colors.greenAccent,
+                      //     inactiveThumbColor: Colors.greenAccent,
+                      //     onChanged: (value) {
+                      //       _setNotifiaction(value);
+                      //       setState(() {
+                      //         notificatoins = value;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
                       Field(
                           colur: Colors.green,
                           icon: Icon(

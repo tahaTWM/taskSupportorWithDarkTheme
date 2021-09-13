@@ -417,6 +417,37 @@ class _CreateNewTaskState extends State<CreateNewTask> {
         onChange: onStatusPriorty,
         initialKeyValue: "NORMAL",
       ),
+      SizedBox(height: 20),
+      SizedBox(
+        width: double.infinity,
+        // ignore: deprecated_member_use
+        child: RaisedButton(
+          onPressed: () async {
+            widget.title == "Edit Task"
+                ? _updateTask(
+                    title: _textEditingControllerTitle.text,
+                    content: _textEditingControllerContent.text,
+                    priorty: _selectedPriorty,
+                    taskID: widget.taskID)
+                : _saveTask(
+                    title: _textEditingControllerTitle.text,
+                    content: _textEditingControllerContent.text,
+                    priorty: _selectedPriorty);
+          },
+          child: Text(
+            widget.title == "Edit Task" ? "Update" : "Save",
+            style: TextStyle(
+              fontSize: 26,
+              fontFamily: "Rubik",
+              color: Colors.white,
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 15),
+          elevation: 7,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+      ),
     ];
     return Container(
       padding: EdgeInsets.only(left: 35, top: 20),
