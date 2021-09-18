@@ -1,7 +1,7 @@
 name: app2
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.2+2
+version: 1.0.2+3
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -41,6 +41,7 @@ dependencies:
   path_provider: ^2.0.1
   permission_handler: null
   provider: ^5.0.0
+  readmore: ^2.1.0
   shared_preferences: ^2.0.0
   slider_button: null
   timeago: ^3.0.2

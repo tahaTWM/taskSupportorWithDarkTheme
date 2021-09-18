@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'login/logn.dart';
@@ -28,8 +29,7 @@ void main() async {
 
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation< AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 }
 
@@ -81,11 +81,18 @@ class _MyAppState extends State<MyApp> {
         }
       },
     );
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Notifiaction message title ${message.notification.title}');
-      print('Notifiaction message body ${message.notification.body}');
-      NavBar(1);
+      print("tapped when the app in the background");
     });
+    checkForInitialMessage();
+    // FirebaseMessaging.onMessageOpenedApp.listen(
+    //   (RemoteMessage message) {
+    //     print("the app is open ----------------");
+    //     print('Notifiaction message title ${message.notification.title}');
+    //     print('Notifiaction message body ${message.notification.body}');
+    //   },
+    // );
     super.initState();
   }
 
@@ -233,5 +240,19 @@ class _MyAppState extends State<MyApp> {
     keys.forEach((element) {
       print(element.toString() + "  " + _pref.get(element).toString());
     });
+  }
+
+  _changeRoute(BuildContext context) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => NavBar(1)));
+
+  // For handling notification when the app is in terminated state
+  checkForInitialMessage() async {
+    await Firebase.initializeApp();
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      print("tapped when the app is teminated");
+    }
   }
 }

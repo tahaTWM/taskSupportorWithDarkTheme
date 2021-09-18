@@ -121,19 +121,6 @@ class _NotificationsState extends State<Notifications> {
                                         fit: BoxFit.cover,
                                       ),
                                     ),
-                              // Container(
-                              //     width: 55,
-                              //     height: 55,
-                              //     margin: EdgeInsets.only(left: 10),
-                              //     decoration: BoxDecoration(
-                              //       shape: BoxShape.circle,
-                              //       image: DecorationImage(
-                              //         image: NetworkImage(
-                              //             "${MyApp.url}${triggered_data["triggere_avatar"]}"),
-                              //         fit: BoxFit.contain,
-                              //       ),
-                              //     ),
-                              //   ),
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -168,42 +155,6 @@ class _NotificationsState extends State<Notifications> {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-
-                                  // Container(
-                                  //   height: 25,
-                                  //   child: DefaultTextStyle(
-                                  //     maxLines: 2,
-                                  //     overflow: TextOverflow.ellipsis,
-                                  //     style: TextStyle(
-                                  //         fontSize: width > 400 ? 22 : 18,
-                                  //         fontWeight: FontWeight.bold,
-                                  //         color: thememode == false
-                                  //             ? Colors.black
-                                  //             : Colors.white
-                                  //         // color: Colors.primaries[Random()
-                                  //         //     .nextInt(Colors.primaries.length)],
-                                  //         ),
-                                  //     child: AnimatedTextKit(
-                                  //       repeatForever: true,
-                                  //       animatedTexts: [
-                                  //         FadeAnimatedText("Notification"),
-                                  //         FadeAnimatedText("Receive At"),
-                                  //         FadeAnimatedText(
-                                  //             listOfNotifactions[index]
-                                  //                     ["creation_date"]
-                                  //                 .toString()
-                                  //                 .split('T')[0]),
-                                  //         FadeAnimatedText(
-                                  //             listOfNotifactions[index]
-                                  //                     ["creation_date"]
-                                  //                 .toString()
-                                  //                 .split('T')[1]
-                                  //                 .split('.')[0]),
-                                  //         // FadeAnimatedText(
-                                  //         //     'do it RIGHT NOW!!!'),
-                                  //       ],
-                                  //     ),
-                                  //   ),
                                   Text(
                                     timeago.format(
                                         DateTime.parse(listOfNotifactions[index]
@@ -347,7 +298,6 @@ class _NotificationsState extends State<Notifications> {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                              
                                   Text(
                                     timeago.format(
                                         DateTime.parse(listOfNotifactions[index]

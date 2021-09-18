@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toast/toast.dart';
 import 'package:path/path.dart';
@@ -723,19 +723,46 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           //workspace descripition
+
                           Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 30),
-                            child: Text(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: ReadMoreText(
                               "${listOfWorkspace[index]["workspaceDescription"]}",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: width > 400 ? 24 : 22,
                                 fontFamily: "Rubik",
-                                // color:  Color.fromRGBO(112, 112, 112, 1),
+                              ),
+                              trimLines: 2,
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: 'show more',
+                              trimExpandedText: 'show less',
+                              moreStyle: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                              lessStyle: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
                               ),
                             ),
                           ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(top: 10, bottom: 30),
+                          //   child: Text(
+                          //     "${listOfWorkspace[index]["workspaceDescription"]}",
+                          //     maxLines: 2,
+                          //     overflow: TextOverflow.ellipsis,
+                          //     style: TextStyle(
+                          //       fontSize: width > 400 ? 24 : 22,
+                          //       fontFamily: "Rubik",
+                          //       // color:  Color.fromRGBO(112, 112, 112, 1),
+                          //     ),
+                          //   ),
+                          // ),
                           //done task row
                           Row(children: [
                             Icon(

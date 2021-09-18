@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:app2/all_tasks/taskAttachment.dart';
 import 'package:app2/all_tasks/taskActions.dart';
@@ -684,7 +685,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 10, bottom: 10),
-                              child: Text(
+                              child: ReadMoreText(
                                 newListReversed[index]["content"],
                                 style: TextStyle(
                                   fontSize:
@@ -692,10 +693,23 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                                           ? 22
                                           : 20,
                                   fontFamily: "Rubik",
-                                  // color:Color.fromRGBO(158, 158, 158, 1),
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                                trimLines: 2,
+                                trimMode: TrimMode.Line,
+                                trimCollapsedText: 'show more',
+                                trimExpandedText: 'show less',
+                                moreStyle: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                lessStyle: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                           ],
@@ -704,7 +718,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
                     ),
                     // members in task and attachment
                     Padding(
-                      padding: const EdgeInsets.only(top: 30, bottom: 10),
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
                       child: Row(
                         children: [
                           // task members
