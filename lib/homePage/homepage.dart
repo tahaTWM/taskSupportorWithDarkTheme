@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:readmore/readmore.dart';
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(
                     top: 10, left: 0, right: 25, bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey[700].withOpacity(0.1),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
@@ -417,25 +419,55 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: () => listOfWorkspace[index]["role"] == "employer"
-                        ? _showPicker(
-                            context, listOfWorkspace[index]["workspaceId"])
-                        : null,
-                    child: !listOfWorkspace[index]["workspaceAvatar"]
-                            .toString()
-                            .contains("null")
-                        ?
-                        // Container()
-                        Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              // border: Border.all(
-                              //     width: 2, color: Colors.deepOrangeAccent),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: image == null
-                                  ? Image.network(
+                      onTap: () => listOfWorkspace[index]["role"] == "employer"
+                          ? _showPicker(
+                              context, listOfWorkspace[index]["workspaceId"])
+                          : null,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // border: Border.all(
+                          //     width: 2, color: Colors.deepOrangeAccent),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: image != null
+                              ? Image.file(
+                                  image,
+                                  fit: BoxFit.cover,
+                                  width: 50,
+                                  height: 50,
+                                )
+                              : listOfWorkspace[index]["workspaceAvatar"]
+                                          .toString()
+                                          .contains("null") ||
+                                      listOfWorkspace[index]
+                                              ["workspaceAvatar"] ==
+                                          null
+                                  ? Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.6),
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                          width: 2,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        listOfWorkspace[index]["workspaceName"]
+                                            .toString()
+                                            .split('')[0]
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                    )
+                                  : Image.network(
                                       "${MyApp.url}${listOfWorkspace[index]['workspaceAvatar']}",
                                       loadingBuilder: (BuildContext context,
                                           Widget child,
@@ -472,41 +504,11 @@ class _HomePageState extends State<HomePage> {
                                         );
                                       },
                                       fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                    )
-                                  : Image.file(
-                                      image,
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
+                                      width: 50,
+                                      height: 50,
                                     ),
-                            ),
-                          )
-                        : Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                width: 2,
-                                color: Colors.white,
-                              ),
-                            ),
-                            child: Center(
-                                child: Text(
-                              listOfWorkspace[index]["workspaceName"]
-                                  .toString()
-                                  .split('')[0]
-                                  .toUpperCase(),
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600),
-                            )),
-                          ),
-                  ),
+                        ),
+                      )),
                   Container(
                     child: Row(
                       children: [
@@ -873,9 +875,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> checkWorkSpaces() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      fName = sharedPreferences.getStringList("firstSecond")[0];
-    });
+    if (mounted) {
+      setState(() {
+        fName = sharedPreferences.getStringList("firstSecond")[0];
+      });
+    }
     if (sharedPreferences.getString("userAvatar") != "null") {
       setState(() {
         imageFound = true;
@@ -1080,6 +1084,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showAlertDilog(BuildContext context, File _image, int workspaceID) {
+    setState(() {
+      image = _image;
+    });
     return showDialog(
         context: context,
         builder: (contect) {
@@ -1093,9 +1100,6 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 onPressed: () {
                   evictImage(imageEvictUrl);
-                  setState(() {
-                    image = _image;
-                  });
                   _updateWorkspaceAvatar(workspaceID, context);
                   Navigator.pop(context);
                 },
@@ -1132,7 +1136,7 @@ class _HomePageState extends State<HomePage> {
         final resSTR = await response.stream.bytesToString();
         jsonResponse = json.decode(resSTR);
       }
-      Future.delayed(Duration(seconds: 30), () {
+      Future.delayed(Duration(seconds: 3), () {
         if (jsonResponse["successful"]) {
           // var list = sharedPreferences.getStringList("firstSecond");
           // Navigator.push(

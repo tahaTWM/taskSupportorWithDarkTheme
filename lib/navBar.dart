@@ -27,31 +27,87 @@ class _NavBarState extends State<NavBar> {
     contents.add(Profile());
   }
 
+  PageController pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       // backgroundColor: Color.fromRGBO(250, 250, 250, 2),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        iconList: [
-          Typicons.th_large_outline,
-          Icons.notifications_active_outlined,
-          Icons.person_outline,
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
+        // selectedFontSize: 18,
+        // unselectedFontSize: 13,
+        // selectedIconTheme: IconThemeData(size: 28),
+        // unselectedIconTheme: IconThemeData(size: 20),
+        backgroundColor: Colors.transparent,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Typicons.th_large_outline,
+            ),
+            // ignore: deprecated_member_use
+            title: Text(
+              'Workspaces',
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.notifications_active_outlined,
+            ),
+            // ignore: deprecated_member_use
+            title: Text(
+              'Notifications',
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+            ),
+            // ignore: deprecated_member_use
+            title: Text(
+              'Profile',
+            ),
+          ),
         ],
-        textList: [
-          "Workspaces",
-          "Notifications",
-          "Profile",
-        ],
-        onChange: (indx) {
+        currentIndex: widget.selectedItem,
+        onTap: (index) {
+          pageController.animateToPage(index,
+              duration: Duration(milliseconds: 500), curve: Curves.ease);
+        },
+      ),
+      // bottomNavigationBar: CustomBottomNavigationBar(
+      //   iconList: [
+      //     Typicons.th_large_outline,
+      //     Icons.notifications_active_outlined,
+      //     Icons.person_outline,
+      //   ],
+      //   textList: [
+      //     "Workspaces",
+      //     "Notifications",
+      //     "Profile",
+      //   ],
+      //   onChange: (indx) {
+      //     setState(() {
+      //       widget.selectedItem = indx;
+      //     });
+      //   },
+      //   defaultSelectedIndex: widget.selectedItem,
+      // ),
+
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (index) {
           setState(() {
-            widget.selectedItem = indx;
+            widget.selectedItem = index;
           });
         },
-        defaultSelectedIndex: widget.selectedItem,
+        children: contents,
       ),
-      body: Center(
-        child: contents[widget.selectedItem],
-      ),
+
+      // body: Center(
+      //   child: contents[widget.selectedItem],
+      // ),
     );
   }
 }

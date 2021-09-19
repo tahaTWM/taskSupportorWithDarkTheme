@@ -334,17 +334,19 @@ class _NotificationsState extends State<Notifications> {
       url,
       headers: requestHeaders,
     );
-    final jsonResponse = json.decode(response.body);
+    final jsonResponse = await json.decode(response.body);
     if (jsonResponse["successful"] == true) {
-      setState(() {
-        thememode = sharedPreferences.getBool("mode") ?? false;
-
-        notFoundNotification = true;
-      });
-      if (jsonResponse["data"] != null)
+      if (mounted) {
         setState(() {
-          listOfNotifactions = jsonResponse["data"];
+          thememode = sharedPreferences.getBool("mode") ?? false;
+
+          notFoundNotification = true;
         });
+        if (jsonResponse["data"] != null)
+          setState(() {
+            listOfNotifactions = jsonResponse["data"];
+          });
+      }
     } else {
       setState(() {
         listOfNotifactions = [];

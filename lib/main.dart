@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:app2/navBar.dart';
 import 'package:app2/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +31,8 @@ void main() async {
 
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation< AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 }
 
@@ -111,12 +114,15 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.light,
         primaryColorDark: Colors.black,
         canvasColor: Colors.white,
-        accentColor: Colors.white,
+        // accentColor: Colors.black,
         primaryTextTheme: TextTheme(
           headline6: TextStyle(color: Colors.black),
         ),
         appBarTheme: AppBarTheme(
-          // backgroundColor: Color.fromRGBO(48, 48, 48, 0),
+          backgroundColor: Colors.grey.withOpacity(0.1),
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.dark),
           elevation: 0.0,
           titleTextStyle: TextStyle(color: Colors.black),
           textTheme: TextTheme(
@@ -126,8 +132,6 @@ class _MyAppState extends State<MyApp> {
           // back buttom of appbar
           iconTheme: IconThemeData(color: Colors.black),
           brightness: Brightness.light,
-          systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarColor: Colors.white),
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Color.fromRGBO(49, 91, 169, 1),
@@ -160,12 +164,26 @@ class _MyAppState extends State<MyApp> {
         ),
         // dividerTheme: DividerThemeData(color: Colors.black),
         dividerColor: Colors.black,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          unselectedLabelStyle:
+              TextStyle(fontSize: 12, color: Colors.grey[600]),
+          selectedLabelStyle:
+              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          unselectedIconTheme: IconThemeData(size: 18, color: Colors.grey[600]),
+          selectedIconTheme: IconThemeData(size: 23),
+          selectedItemColor: Color.fromRGBO(49, 91, 169, 1),
+        ),
+        bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
       ),
       darkTheme: ThemeData.dark().copyWith(
         appBarTheme: AppBarTheme(
-          brightness: Brightness.dark,
-          systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarColor: Colors.white),
+          backgroundColor: Colors.grey.withOpacity(0.1),
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.grey[700].withOpacity(0.1),
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
+          ),
         ),
         iconTheme: IconThemeData(
           color: Color.fromRGBO(26, 189, 196, 1),
@@ -178,6 +196,18 @@ class _MyAppState extends State<MyApp> {
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.grey[900],
           contentTextStyle: TextStyle(color: Colors.white),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          unselectedLabelStyle: TextStyle(fontSize: 12),
+          selectedLabelStyle:
+              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          unselectedIconTheme: IconThemeData(size: 18),
+          selectedIconTheme: IconThemeData(size: 23),
+          selectedItemColor: Color.fromRGBO(26, 189, 196, 1),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Color.fromRGBO(26, 189, 196, 1),
+          foregroundColor: Colors.black,
         ),
       ),
       home: !skip
