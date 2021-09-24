@@ -124,34 +124,33 @@ class _NotificationsState extends State<Notifications> {
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: SizedBox(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            triggered_data[
-                                                    "triggered_by_firstName"] +
-                                                " " +
-                                                triggered_data[
-                                                    "triggered_by_secondName"],
-                                            style: new TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: BouncingScrollPhysics(),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          triggered_data[
+                                                  "triggered_by_firstName"] +
+                                              " " +
+                                              triggered_data[
+                                                  "triggered_by_secondName"],
+                                          style: new TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
+                                        ),
+                                        Text(
+                                          " " +
+                                              notification_payload[
+                                                  "notify_title"],
+                                        ),
+                                        Text(
                                             " " +
                                                 notification_payload[
-                                                    "notify_title"],
-                                          ),
-                                          Text(
-                                              " " +
-                                                  notification_payload[
-                                                      "workspaceName"],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
+                                                    "workspaceName"],
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(height: 5),
@@ -164,8 +163,8 @@ class _NotificationsState extends State<Notifications> {
                                       fontSize:
                                           MediaQuery.of(context).size.width >
                                                   400
-                                              ? 22
-                                              : 18,
+                                              ? 20
+                                              : 14,
                                       fontFamily: "Rubik",
                                       // color:Color.fromRGBO(158, 158, 158, 1),
                                     ),
@@ -268,33 +267,31 @@ class _NotificationsState extends State<Notifications> {
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: SizedBox(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            triggered_data[
-                                                    "triggered_by_firstName"] +
-                                                " " +
-                                                triggered_data[
-                                                    "triggered_by_secondName"],
-                                            style: new TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          triggered_data[
+                                                  "triggered_by_firstName"] +
+                                              " " +
+                                              triggered_data[
+                                                  "triggered_by_secondName"],
+                                          style: new TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(" " +
-                                              notification_payload[
-                                                  "notify_title"] +
-                                              " "),
-                                          Text(
-                                            notification_payload["taskTitle"],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        ),
+                                        Text(" " +
+                                            notification_payload[
+                                                "notify_title"] +
+                                            " "),
+                                        Text(
+                                          notification_payload["taskTitle"],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(height: 5),

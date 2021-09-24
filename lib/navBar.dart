@@ -36,10 +36,6 @@ class _NavBarState extends State<NavBar> {
       // backgroundColor: Color.fromRGBO(250, 250, 250, 2),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
-        // selectedFontSize: 18,
-        // unselectedFontSize: 13,
-        // selectedIconTheme: IconThemeData(size: 28),
-        // unselectedIconTheme: IconThemeData(size: 20),
         backgroundColor: Colors.transparent,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -76,24 +72,6 @@ class _NavBarState extends State<NavBar> {
               duration: Duration(milliseconds: 500), curve: Curves.ease);
         },
       ),
-      // bottomNavigationBar: CustomBottomNavigationBar(
-      //   iconList: [
-      //     Typicons.th_large_outline,
-      //     Icons.notifications_active_outlined,
-      //     Icons.person_outline,
-      //   ],
-      //   textList: [
-      //     "Workspaces",
-      //     "Notifications",
-      //     "Profile",
-      //   ],
-      //   onChange: (indx) {
-      //     setState(() {
-      //       widget.selectedItem = indx;
-      //     });
-      //   },
-      //   defaultSelectedIndex: widget.selectedItem,
-      // ),
 
       body: PageView(
         controller: pageController,
@@ -103,99 +81,6 @@ class _NavBarState extends State<NavBar> {
           });
         },
         children: contents,
-      ),
-
-      // body: Center(
-      //   child: contents[widget.selectedItem],
-      // ),
-    );
-  }
-}
-
-class CustomBottomNavigationBar extends StatefulWidget {
-  final int defaultSelectedIndex;
-  final Function(int) onChange;
-  final List<IconData> iconList;
-  final List<String> textList;
-
-  CustomBottomNavigationBar(
-      {this.defaultSelectedIndex = 0,
-      @required this.iconList,
-      @required this.textList,
-      @required this.onChange});
-
-  @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
-}
-
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 0;
-  List<IconData> _iconList = [];
-  List<String> _textList = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _selectedIndex = widget.defaultSelectedIndex;
-    _iconList = widget.iconList;
-    _textList = widget.textList;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> _navBarItemList = [];
-
-    for (var i = 0; i < _iconList.length; i++) {
-      _navBarItemList.add(buildNavBarItem(_iconList[i], _textList[i], i));
-    }
-
-    return Row(
-      children: _navBarItemList,
-    );
-  }
-
-  Widget buildNavBarItem(IconData icon, String text, int index) {
-    var width = MediaQuery.of(context).size.width;
-
-    return GestureDetector(
-      onTap: () {
-        widget.onChange(index);
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      child: Container(
-        height: width < 400 ? 50 : 60,
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.1),
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(20),
-          //   topRight: Radius.circular(20),
-          // ),
-        ),
-        width: MediaQuery.of(context).size.width / _iconList.length,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Icon(
-              icon,
-              // color: index == _selectedIndex
-              //     ? Color.fromRGBO(0, 82, 205, 1)
-              //     : Colors.grey,
-              size: width < 400 ? 22 : 28,
-            ),
-            Text(
-              text,
-              style: TextStyle(
-                  // color: index == _selectedIndex
-                  //     ? Color.fromRGBO(0, 82, 205, 1)
-                  //     : Colors.grey,
-                  fontSize: width < 400 ? 14 : 18),
-            ),
-          ],
-        ),
       ),
     );
   }

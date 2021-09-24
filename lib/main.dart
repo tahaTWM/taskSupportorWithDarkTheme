@@ -1,14 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:app2/navBar.dart';
-import 'package:app2/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'login/logn.dart';
@@ -47,8 +45,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var fName = "No one";
   bool tokenFound = false;
-  bool skip = false;
-  bool notificatoins = false;
 
   @override
   void initState() {
@@ -210,11 +206,7 @@ class _MyAppState extends State<MyApp> {
           foregroundColor: Colors.black,
         ),
       ),
-      home: !skip
-          ? SplashScreen()
-          : tokenFound
-              ? NavBar(0)
-              : Logn(),
+      home: tokenFound ? NavBar(0) : Logn(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -231,11 +223,6 @@ class _MyAppState extends State<MyApp> {
     } else {
       setState(() {
         MyApp.mode = false;
-      });
-    }
-    if (_pref.getBool("skip") != null) {
-      setState(() {
-        skip = _pref.getBool("skip");
       });
     }
   }
@@ -255,11 +242,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         tokenFound = true;
         fName = list[0].toString();
-      });
-    }
-    if (pref.getBool("notifiaction") != null) {
-      setState(() {
-        notificatoins = pref.getBool("skip");
       });
     }
   }

@@ -3,7 +3,6 @@ import 'package:app2/login/logn.dart';
 import 'package:app2/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import 'dart:convert';
@@ -50,7 +49,7 @@ class _SettingState extends State<Setting> {
   String workspaces = "0";
   String tasks = "0";
   // final ImagePicker _picker = ImagePicker();
-  bool skip = false;
+  // bool skip = false;
   @override
   void initState() {
     name();
@@ -198,22 +197,22 @@ class _SettingState extends State<Setting> {
                       //     },
                       //   ),
                       // ),
-                      Field(
-                          colur: Colors.green,
-                          icon: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: Colors.white,
-                          ),
-                          txt: "Skiping Intro",
-                          endd: Checkbox(
-                            onChanged: (bool value) {
-                              _setSkip(value);
-                              setState(() {
-                                skip = value;
-                              });
-                            },
-                            value: skip,
-                          )),
+                      // Field(
+                      //     colur: Colors.green,
+                      //     icon: Icon(
+                      //       Icons.keyboard_arrow_right,
+                      //       color: Colors.white,
+                      //     ),
+                      //     txt: "Skiping Intro",
+                      //     endd: Checkbox(
+                      //       onChanged: (bool value) {
+                      //         _setSkip(value);
+                      //         setState(() {
+                      //           skip = value;
+                      //         });
+                      //       },
+                      //       value: skip,
+                      //     )),
 
                       // Align(
                       //   alignment: Alignment.centerLeft,
@@ -347,11 +346,11 @@ class _SettingState extends State<Setting> {
       isSwitched = _pref.getBool("mode") ?? false;
       userAvatar = _pref.getString("userAvatar");
     });
-    if (_pref.getBool("skip") != null) {
-      setState(() {
-        skip = _pref.getBool("skip");
-      });
-    }
+    // if (_pref.getBool("skip") != null) {
+    //   setState(() {
+    //     skip = _pref.getBool("skip");
+    //   });
+    // }
     if (_pref.getBool("notifiaction") != null) {
       setState(() {
         notificatoins = _pref.getBool("skip");
@@ -965,10 +964,10 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  _setSkip(bool value) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool("skip", value);
-  }
+  // _setSkip(bool value) async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setBool("skip", value);
+  // }
 
   _setNotifiaction(bool value) async {
     SharedPreferences pref = await SharedPreferences.getInstance();

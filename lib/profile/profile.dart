@@ -307,14 +307,19 @@ class _ProfileState extends State<Profile> {
                     padding:
                         const EdgeInsets.only(left: 35, top: 10, bottom: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.email_outlined),
                         SizedBox(width: 20),
-                        Text(
-                          textEditingControllerEmail.text,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: width > 400 ? 22 : 18),
+                        Container(
+                          width: width * 0.7,
+                          child: Text(
+                            textEditingControllerEmail.text,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: width > 400 ? 22 : 18),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -322,28 +327,45 @@ class _ProfileState extends State<Profile> {
                   Padding(
                     padding: const EdgeInsets.only(left: 35, top: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.more_time_rounded),
                         SizedBox(width: 20),
-                        Row(
-                          children: [
-                            Text(
-                              createDataDay + "  at  ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: width > 400 ? 22 : 18),
-                            ),
-                            Text(
-                              createDataTime.split('.')[0],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: width > 400 ? 22 : 18),
-                            ),
-                          ],
+                        Text(
+                          "$createDataDay at ${createDataTime.split('.')[0]}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: width > 400 ? 22 : 18),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 35, top: 10),
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(Icons.more_time_rounded),
+                  //       SizedBox(width: 20),
+                  //       Row(
+                  //         children: [
+                  //           Text(
+                  //             createDataDay + "  at  ",
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.w400,
+                  //                 fontSize: width > 400 ? 22 : 18),
+                  //           ),
+                  //           Text(
+                  //             createDataTime.split('.')[0],
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.w400,
+                  //                 fontSize: width > 400 ? 22 : 18),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
 

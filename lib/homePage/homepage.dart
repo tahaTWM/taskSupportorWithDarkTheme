@@ -610,26 +610,49 @@ class _HomePageState extends State<HomePage> {
                               ]),
                             ),
                             listOfWorkspace[index]["role"] == "employer"
-                                ? PopupMenuItem(
-                                    value: 4,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.remove,
-                                          size: 25,
-                                          color: Colors.red,
+                                ? listOfWorkspace[index]['workspaceAvatar'] !=
+                                        null
+                                    ? PopupMenuItem(
+                                        value: 4,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.remove,
+                                              size: 25,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text(
+                                              "Remove Image",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: "RubicB",
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        SizedBox(width: 12),
-                                        Text(
-                                          "Remove Image",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: "RubicB",
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
+                                      )
+                                    : PopupMenuItem(
+                                        value: 4,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.add_photo_alternate_rounded,
+                                              size: 25,
+                                              // color: Colors.green,
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text(
+                                              "workspace image",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: "RubicB",
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            )
+                                          ],
+                                        ),
+                                      )
                                 : null,
                           ],
                           onSelected: (item) {
@@ -681,9 +704,13 @@ class _HomePageState extends State<HomePage> {
                                             )));
                                 break;
                               case 4:
-                                _removeWorkspaceImage(
-                                    listOfWorkspace[index]["workspaceId"],
-                                    context);
+                                listOfWorkspace[index]['workspaceAvatar'] !=
+                                        null
+                                    ? _removeWorkspaceImage(
+                                        listOfWorkspace[index]["workspaceId"],
+                                        context)
+                                    : _showPicker(context,
+                                        listOfWorkspace[index]["workspaceId"]);
                                 break;
                             }
                           },
@@ -1084,9 +1111,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showAlertDilog(BuildContext context, File _image, int workspaceID) {
-    setState(() {
-      image = _image;
-    });
     return showDialog(
         context: context,
         builder: (contect) {
@@ -1100,7 +1124,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 onPressed: () {
                   evictImage(imageEvictUrl);
-                  _updateWorkspaceAvatar(workspaceID, context);
+                  _updateWorkspaceAvatar(workspaceID, context, _image);
                   Navigator.pop(context);
                 },
                 child: Text("Yes"),
@@ -1115,19 +1139,20 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _updateWorkspaceAvatar(int worksoaceID, BuildContext context) async {
+  _updateWorkspaceAvatar(
+      int worksoaceID, BuildContext context, File newImage) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var jsonResponse;
     try {
-      if (image != null) {
-        var imageBytes = image.readAsBytesSync();
+      if (newImage != null) {
+        var imageBytes = newImage.readAsBytesSync();
         var request = http.MultipartRequest(
             "POST", Uri.parse("${MyApp.url}/workspace/avatar/$worksoaceID"));
         request.files.add(
           http.MultipartFile.fromBytes(
             "workspaceAvatar",
             imageBytes,
-            filename: basename(image.path),
+            filename: basename(newImage.path),
             contentType: new MediaType('image', 'jpg'),
           ),
         );
@@ -1136,18 +1161,29 @@ class _HomePageState extends State<HomePage> {
         final resSTR = await response.stream.bytesToString();
         jsonResponse = json.decode(resSTR);
       }
-      Future.delayed(Duration(seconds: 3), () {
+      await Future.delayed(Duration(seconds: 2), () {
         if (jsonResponse["successful"]) {
-          // var list = sharedPreferences.getStringList("firstSecond");
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => NavBar(list[0])));
-          print("waiting");
-
-          checkWorkSpaces();
+          Toast.show(
+            "workspace avatar is added",
+            context,
+            backgroundColor: Colors.green,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
+          setState(() {
+            checkWorkSpaces();
+          });
         }
       });
 
       if (!jsonResponse["successful"]) {
+        Toast.show(
+          jsonResponse["message"],
+          context,
+          backgroundColor: Colors.red,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+        );
         print(jsonResponse["successful"]);
       }
     } catch (e) {
@@ -1391,7 +1427,10 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       );
-      jsonResponse = json.decode(response.body);
+      jsonResponse = await json.decode(response.body);
+      setState(() {
+        checkWorkSpaces();
+      });
       if (jsonResponse["successful"]) {
         Toast.show(
           jsonResponse["message"],
@@ -1401,10 +1440,6 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
         );
-
-        setState(() {
-          checkWorkSpaces();
-        });
       }
     } catch (e) {
       print(e);
