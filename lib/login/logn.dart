@@ -285,7 +285,6 @@ class _Logn extends State<Logn> {
                 children: [
                   InkWell(
                     onTap: () {
-                      
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -304,7 +303,6 @@ class _Logn extends State<Logn> {
                   ),
                 ],
               ),
-           
             ],
           ),
         ),
@@ -364,6 +362,7 @@ class _Logn extends State<Logn> {
     );
 
     var jsonResponse = json.decode(response.body);
+    print(jsonResponse);
     if (jsonResponse["successful"] == true) {
       await sharedPreferences.setString("token", jsonResponse['data']['token']);
 
