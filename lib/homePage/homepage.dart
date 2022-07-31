@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:app2/login/logn.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toast/toast.dart';
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _searchForMember.clear();
     checkWorkSpaces();
-    // Logn.getToken();
+    Logn.getToken();
     super.initState();
   }
 

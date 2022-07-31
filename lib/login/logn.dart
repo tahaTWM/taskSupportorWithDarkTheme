@@ -35,7 +35,6 @@ class Logn extends StatefulWidget {
     }
 
     String token = await _firebaseMessaging.getToken();
-    print(token);
   }
 
   @override
@@ -362,7 +361,7 @@ class _Logn extends State<Logn> {
     );
 
     var jsonResponse = json.decode(response.body);
-    print(jsonResponse);
+    //print(jsonResponse);
     if (jsonResponse["successful"] == true) {
       await sharedPreferences.setString("token", jsonResponse['data']['token']);
 
@@ -379,14 +378,13 @@ class _Logn extends State<Logn> {
       await sharedPreferences.setString(
           "creationDate", jsonResponse['data']["registrationDate"].toString());
 
-      await getToken();
-
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NavBar(0),
         ),
       );
+      await getToken();
     }
 
     if (!jsonResponse["successful"]) {
@@ -463,21 +461,27 @@ class _Logn extends State<Logn> {
     }
 
     if (await Permission.storage.request().isGranted) {
-      String token = await _firebaseMessaging.getToken();
-      var url = Uri.parse("${MyApp.url}/user/device/notification");
-      var response = await http.post(
-        url,
-        headers: requestHeaders,
-        body: jsonEncode(
-          <String, String>{"fcm_token": token},
-        ),
-      );
-      var jsonResponse = json.decode(response.body);
-      await _pref.setInt("fcmTokenId", jsonResponse['data']["user_device_id"]);
-      // showsnakbar(
-      //   jsonResponse["type"],
-      //   jsonResponse["message"],
-      // );
+      try {
+        String token = await _firebaseMessaging.getToken();
+
+        var url = Uri.parse("${MyApp.url}/user/device/notification");
+        var response = await http.post(
+          url,
+          headers: requestHeaders,
+          body: jsonEncode(
+            <String, String>{"fcm_token": token},
+          ),
+        );
+        var jsonResponse = json.decode(response.body);
+        await _pref.setInt(
+            "fcmTokenId", jsonResponse['data']["user_device_id"]);
+        // showsnakbar(
+        //   jsonResponse["type"],
+        //   jsonResponse["message"],
+        // );
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

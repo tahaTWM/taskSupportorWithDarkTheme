@@ -594,7 +594,7 @@ class _WorkSpaceMemberState extends State<WorkSpaceMember> {
                     "memberId": memberID
                   })),
           jsonResponse = json.decode(response.body);
-      print(jsonResponse);
+      //print(jsonResponse);
       if (response.statusCode == 200) {
         if (jsonResponse["successful"] == true) {
           setState(() {

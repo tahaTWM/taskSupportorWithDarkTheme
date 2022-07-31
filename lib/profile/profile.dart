@@ -412,6 +412,7 @@ class _ProfileState extends State<Profile> {
       var imageBytes = image.readAsBytesSync();
       var request =
           http.MultipartRequest("POST", Uri.parse("${MyApp.url}/user/avatar"));
+
       request.files.add(
         http.MultipartFile.fromBytes(
           "userAvatar",
@@ -421,10 +422,10 @@ class _ProfileState extends State<Profile> {
               MediaType(imageType.split('/')[0], imageType.split('/')[1]),
         ),
       );
+
       request.headers.addAll({"token": sharedPreferences.getString("token")});
       final response = await request.send();
       final resSTR = await response.stream.bytesToString();
-
       showsnakbar(json.decode(resSTR), context);
     }
   }
@@ -1061,7 +1062,7 @@ class _ProfileState extends State<Profile> {
       headers: requestHeaders,
     );
     final jsonResponse = await json.decode(response.body);
-    print(jsonResponse);
+    // print(jsonResponse);
     setState(() {
       name();
       sharedPreferences.remove("userAvatar");

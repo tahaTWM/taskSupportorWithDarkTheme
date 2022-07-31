@@ -279,7 +279,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
             autofocus: false,
             textAlign: TextAlign.start,
             // ignore: deprecated_member_use
-            autovalidate: true,
+
             style: Theme.of(context).textTheme.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 24,
@@ -346,7 +346,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
             autofocus: false,
             textAlign: TextAlign.start,
             // ignore: deprecated_member_use
-            autovalidate: true,
+
             style: Theme.of(context).textTheme.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 24,

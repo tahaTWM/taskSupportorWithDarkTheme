@@ -43,27 +43,21 @@ class _NavBarState extends State<NavBar> {
               Typicons.th_large_outline,
             ),
             // ignore: deprecated_member_use
-            title: Text(
-              'Workspaces',
-            ),
+            label: 'Workspaces',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.notifications_active_outlined,
             ),
             // ignore: deprecated_member_use
-            title: Text(
-              'Notifications',
-            ),
+            label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person_outline,
             ),
             // ignore: deprecated_member_use
-            title: Text(
-              'Profile',
-            ),
+            label: 'Profile',
           ),
         ],
         currentIndex: widget.selectedItem,

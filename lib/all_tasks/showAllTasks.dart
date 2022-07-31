@@ -1056,7 +1056,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
       jsonResponse = json.decode(respnse.body);
-      print(jsonResponse);
+      //print(jsonResponse);
       if (jsonResponse["successful"])
         Toast.show(
           "Status Change",
@@ -1079,7 +1079,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
       jsonResponse = json.decode(respnse.body);
-      print(jsonResponse);
+      //print(jsonResponse);
       if (jsonResponse["successful"])
         Toast.show(
           "Commint done",
@@ -1105,7 +1105,7 @@ class _ShowAllTasksState extends State<ShowAllTasks>
         ),
       );
       jsonResponse = json.decode(respnse.body);
-      print(jsonResponse);
+      //print(jsonResponse);
       if (jsonResponse["successful"])
         Toast.show(
           "Status Change and and add Commint",

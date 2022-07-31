@@ -667,7 +667,7 @@ class _AttachmentState extends State<Attachment> {
     );
 
     jsonResponse = json.decode(response.body);
-    print(jsonResponse);
+    //print(jsonResponse);
     if (jsonResponse["successful"]) {
       setState(() {
         checkIfThereAnyAttachment();

@@ -327,6 +327,8 @@ class _NotificationsState extends State<Notifications> {
       "token": sharedPreferences.getString("token")
     };
     var url = Uri.parse("${MyApp.url}/user/device/notification");
+    //print(sharedPreferences.getString("token"));
+    //print(url);
     final response = await http.get(
       url,
       headers: requestHeaders,
